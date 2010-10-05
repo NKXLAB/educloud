@@ -4,7 +4,7 @@
 
 <Workspace>
 	<Local Expanded="Yes">
-		<Model ID="{ABB201FA-3EB7-4A9D-9C9C-EA4CF64670F0}" Name="EduCloud" Selected="Yes" Type="{FF4B6538-9856-42CF-B9B9-304ED370CEAA}" URL="EduCloud/EduCloud.prj"/>
+		<Model Expanded="Yes" ID="{ABB201FA-3EB7-4A9D-9C9C-EA4CF64670F0}" Name="EduCloud" Type="{FF4B6538-9856-42CF-B9B9-304ED370CEAA}" URL="EduCloud/EduCloud.prj"/>
 	</Local>
 	<BrowserModule Name="Repository"/>
 </Workspace>
