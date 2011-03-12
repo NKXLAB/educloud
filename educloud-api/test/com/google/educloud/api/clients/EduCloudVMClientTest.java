@@ -8,9 +8,9 @@ import org.junit.Test;
 
 import com.google.educloud.api.EduCloudConfig;
 import com.google.educloud.api.EduCloudFactory;
-import com.google.educloud.cloudserver.api.entities.EduCloudErrorMessage;
-import com.google.educloud.cloudserver.api.entities.VirtualMachine;
-import com.google.educloud.cloudserver.api.entities.exceptions.EduCloudServerException;
+import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.api.entities.VirtualMachine;
+import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 
 public class EduCloudVMClientTest {
 

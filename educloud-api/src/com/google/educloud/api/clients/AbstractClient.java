@@ -5,8 +5,8 @@ import java.net.URI;
 import javax.ws.rs.core.UriBuilder;
 
 import com.google.educloud.api.EduCloudConfig;
-import com.google.educloud.cloudserver.api.entities.EduCloudErrorMessage;
-import com.google.educloud.cloudserver.api.entities.exceptions.EduCloudServerException;
+import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 import com.google.gson.Gson;
 
 public abstract class AbstractClient {
