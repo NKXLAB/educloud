@@ -1,4 +1,4 @@
-<project name="educloud-entities" default="clean" basedir="../">
+<project name="educloud-external-entities" default="clean" basedir="../">
 
 	<property file="build/build.properties" />
 	<buildnumber file="build/build.num" />
@@ -43,7 +43,7 @@
 	</target>
 
 	<target name="jar" depends="compile">
-		<jar jarfile="${target}/educloud-entities.jar" basedir="${bin}" manifest="${manifest}" />
+		<jar jarfile="${target}/educloud-external-entities.jar" basedir="${bin}" manifest="${manifest}" />
 	</target>
 
 	<target name="clean" depends="jar">

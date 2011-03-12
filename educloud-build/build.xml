@@ -1,0 +1,73 @@
+<project name="educloud" default="clean" basedir=".">
+
+	<echo>${java.home}</echo>
+	<echo>${java.version}</echo>
+	<echo>${java.vendor}</echo>
+
+	<property name="target" value="target" />
+	<property name="externalentities.dir" value="../educloud-external-entities" />
+	<property name="externalentities.jar" value="${externalentities.dir}/target/educloud-external-entities.jar" />
+	<property name="entities.dir" value="../educloud-entities" />
+	<property name="entities.jar" value="${entities.dir}/target/educloud-entities.jar" />
+	<property name="api.dir" value="../educloud-api" />
+	<property name="api.jar" value="${api.dir}/target/educloud-api.jar" />
+	<property name="server.dir" value="../cloudserver" />
+	<property name="server.jar" value="${server.dir}/target/cloudserver.jar" />
+	<property name="server.target" value="target/cloudserver" />
+	<property name="node.dir" value="../cloudnode" />
+	<property name="node.target" value="target/cloudnode" />
+	<property name="node.jar" value="${node.dir}/target/cloudnode.jar" />
+	<property name="gui.dir" value="../cloudserver-gui" />
+	<property name="gui.war" value="${gui.dir}/target/educloud-gui.war" />
+
+	<target name="init">
+		<delete dir="${target}" />
+		<mkdir dir="${target}" />
+		<mkdir dir="${server.target}" />
+		<mkdir dir="${server.target}/lib" />
+		<mkdir dir="${server.target}/conf" />
+		<mkdir dir="${node.target}/lib" />
+	</target>
+
+
+	<target name="build" depends="init">
+			
+		<ant antfile="build/build.xml" target="clean" dir="${externalentities.dir}"/>
+		<ant antfile="build/build.xml" target="clean" dir="${entities.dir}"/>
+		
+		<copy file="${externalentities.jar}" todir="${api.dir}/lib"/>
+		
+		<ant antfile="build/build.xml" target="clean" dir="${api.dir}"/>
+		
+		<copy file="${api.jar}" todir="${gui.dir}/WebContent/WEB-INF/lib"/>
+		
+		<ant antfile="build/build.xml" target="clean" dir="${gui.dir}"/>
+		
+		<copy file="${gui.war}" todir="${server.dir}/lib"/>
+		
+		<ant antfile="build/build.xml" target="clean" dir="${server.dir}"/>
+		<ant antfile="build/build.xml" target="clean" dir="${node.dir}"/>
+				
+	</target>
+	
+	<target name="package" depends="build">
+
+		<copy todir="${server.target}/lib">
+			<fileset dir="${server.dir}/lib"/>
+		</copy>
+		<copy todir="${server.target}/conf">
+			<fileset dir="${server.dir}/conf"/>
+		</copy>
+		<copy file="${server.jar}" todir="${server.target}"/>
+					
+		<copy todir="${node.target}/lib">
+			<fileset dir="${node.dir}/lib"/>
+		</copy>
+		<copy file="${node.jar}" todir="${node.target}"/>
+		
+	</target>
+
+	<target name="clean" depends="package">
+	</target>
+
+</project>
