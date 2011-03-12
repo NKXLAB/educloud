@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="lib/jersey-client-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jersey-core-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/gson-1.5.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/educloud-external-entities"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/educloud-external-entities"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
