@@ -1,0 +1,52 @@
+<project name="cloudserver" default="clean" basedir="../">
+
+	<property file="build/build.properties" />
+	<buildnumber file="build/build.num" />
+	
+	<property name="manifest.implementation.version" value="${major.number}.${minor.number}.0.${build.number}" />
+	
+	<!-- set global properties for this build -->
+	<tstamp>
+		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+	</tstamp>
+	
+	<echo>${java.home}</echo>
+	<echo>${java.version}</echo>
+	<echo>${java.vendor}</echo>
+
+	<property name="target" value="target" />
+	<property name="src" value="src" />
+	<property name="lib" value="lib" />
+	<property name="bin" value="${target}/bin" />
+	<property name="manifest" value="${target}/MANIFEST.MF" />
+
+	<manifest file="${manifest}">
+		<attribute name="Built-Date" value="${TODAY}" />
+		<attribute name="Main-Class" value="com.google.educloud.cloudserver.App" />
+		<attribute name="Class-Path" value=". lib/ant-1.6.5.jar lib/asm-3.1.jar lib/commons-lang-2.4.jar lib/core-3.1.1.jar lib/gson-1.5.jar lib/jersey-client-1.4.jar lib/jersey-core-1.4.jar lib/jersey-server-1.4.jar lib/jetty-6.1.25.jar lib/jetty-util-6.1.25.jar lib/jsp-2.1-glassfish-2.1.v20091210.jar lib/jsp-2.1-jetty-6.1.26.jar lib/jsp-api-2.1-glassfish-2.1.v20091210.jar lib/log4j-1.2.16.jar lib/servlet-api-2.5-20081211.jar lib/slf4j-api-1.6.1.jar lib/slf4j-log4j12-1.6.1.jar" />
+	</manifest>
+
+	<path id="project.class.path">
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init">
+		<delete dir="${bin}" />
+		<mkdir dir="${bin}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac classpathref="project.class.path" debug="true" destdir="${bin}"
+			srcdir="${src}" failonerror="true" />
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar jarfile="${target}/cloudserver.jar" basedir="${bin}" manifest="${manifest}" />
+	</target>
+
+	<target name="clean" depends="jar">
+	</target>
+
+</project>
