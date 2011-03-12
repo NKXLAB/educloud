@@ -8,9 +8,8 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 
-import com.google.educloud.cloudserver.api.entities.EduCloudErrorMessage;
-import com.google.educloud.cloudserver.entities.VirtualMachine;
-import com.google.educloud.cloudserver.entities.VirtualMachine.VMState;
+import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.api.entities.VirtualMachine;
 import com.google.gson.Gson;
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -30,7 +29,7 @@ public class VMRest {
 		LOG.debug("Application will start a new VM");
 		LOG.debug(machine);
 
-		com.google.educloud.cloudserver.api.entities.VirtualMachine externalMachine = gson.fromJson(machine, com.google.educloud.cloudserver.api.entities.VirtualMachine.class);
+		VirtualMachine externalMachine = gson.fromJson(machine, VirtualMachine.class);
 
 		int id = externalMachine.getId();
 
@@ -46,10 +45,10 @@ public class VMRest {
 		}
 
 		/* vm start logic */
-		VirtualMachine vm = new VirtualMachine();
+		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
 		vm.setTemplateId(externalMachine.getTemplateId());
 		vm.setName(externalMachine.getName());
-		vm.setState(VMState.STARTED);
+		vm.setState(com.google.educloud.internal.entities.VirtualMachine.VMState.STARTED);
 		vm.setNodeId(987);
 		vm.setUserId(567);
 		vm.setId(98);
