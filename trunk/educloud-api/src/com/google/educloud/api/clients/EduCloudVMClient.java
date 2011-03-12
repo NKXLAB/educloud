@@ -2,8 +2,8 @@ package com.google.educloud.api.clients;
 
 import javax.ws.rs.core.MediaType;
 
-import com.google.educloud.cloudserver.api.entities.VirtualMachine;
-import com.google.educloud.cloudserver.api.entities.exceptions.EduCloudServerException;
+import com.google.educloud.api.entities.VirtualMachine;
+import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
