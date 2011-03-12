@@ -11,6 +11,6 @@
 = Setup projects =
 
   # Download source code from [https://educloud.googlecode.com/svn/trunk/]
-  # Import projects from java IDE. For eclipse users: import -> existing projects into workspace -> select root diretory -> educloud -> select all projects -> finish
+  # Import projects from java IDE. For eclipse users: import -> existing projects into workspace -> select root diretory -> educloud -> select all projects -> *uncheck Copy Projects into workspace* -> finish
 
 see also: [http://code.google.com/p/educloud/wiki/RepositoryOrganization Repository Organization]
