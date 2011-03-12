@@ -1,9 +1,16 @@
 #summary This page provides information for developers
+#labels Phase-Implementation
 
 = Development Tools =
 
   * Java IDE: eg [http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/heliossr2 Eclipse]
   * [http://www.virtualbox.org/wiki/Downloads VirtualBox 4.0.4]
   * [http://www.oracle.com/technetwork/java/javase/downloads/index.html JDK 1.6]
+  * [http://tortoisesvn.net/downloads.html SVN Client]
+
+= Setup projects =
+
+  # Download source code from [https://educloud.googlecode.com/svn/trunk/]
+  # Import projects from java IDE. For eclipse users: import -> existing projects into workspace -> select root diretory -> educloud -> select all projects -> finish
 
 see also: [http://code.google.com/p/educloud/wiki/RepositoryOrganization Repository Organization]
