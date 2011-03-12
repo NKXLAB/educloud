@@ -1,4 +1,4 @@
-<project name="educloud-entities" default="clean" basedir="../">
+<project name="cloudnode" default="clean" basedir="../">
 
 	<property file="build/build.properties" />
 	<buildnumber file="build/build.num" />
@@ -30,9 +30,10 @@
 		<delete dir="${target}" />
 		<mkdir dir="${target}" />
 		<mkdir dir="${bin}" />
-		
+
 		<manifest file="${manifest}">
 			<attribute name="Built-Date" value="${TODAY}" />
+			<attribute name="Main-Class" value="com.google.educloud.cloudnode.App" />
 			<attribute name="Class-Path" value="." />
 		</manifest>
 	</target>
@@ -43,7 +44,7 @@
 	</target>
 
 	<target name="jar" depends="compile">
-		<jar jarfile="${target}/educloud-entities.jar" basedir="${bin}" manifest="${manifest}" />
+		<jar jarfile="${target}/cloudnode.jar" basedir="${bin}" manifest="${manifest}" />
 	</target>
 
 	<target name="clean" depends="jar">

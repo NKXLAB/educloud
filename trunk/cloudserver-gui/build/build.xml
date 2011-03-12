@@ -1,24 +1,24 @@
-<project name="educloud-entities" default="clean" basedir="../">
+<project name="educloud-gui" default="clean" basedir="../">
 
 	<property file="build/build.properties" />
 	<buildnumber file="build/build.num" />
-	
+
 	<property name="manifest.implementation.version" value="${major.number}.${minor.number}.0.${build.number}" />
-	
+
 	<!-- set global properties for this build -->
 	<tstamp>
 		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
 	</tstamp>
-	
+
 	<echo>${java.home}</echo>
 	<echo>${java.version}</echo>
 	<echo>${java.vendor}</echo>
 
 	<property name="target" value="target" />
 	<property name="src" value="src" />
-	<property name="lib" value="lib" />
+	<property name="lib" value="WebContent/lib" />
 	<property name="bin" value="${target}/bin" />
-	<property name="manifest" value="${target}/MANIFEST.MF" />
+	<property name="manifest" value="WebContent/META-INF/MANIFEST.MF" />
 
 	<path id="project.class.path">
 		<fileset dir="${lib}">
@@ -30,20 +30,31 @@
 		<delete dir="${target}" />
 		<mkdir dir="${target}" />
 		<mkdir dir="${bin}" />
-		
+
 		<manifest file="${manifest}">
 			<attribute name="Built-Date" value="${TODAY}" />
-			<attribute name="Class-Path" value="." />
+			<attribute name="Class-Path" value="" />
 		</manifest>
 	</target>
 
 	<target name="compile" depends="init">
 		<javac classpathref="project.class.path" debug="true" destdir="${bin}"
-			srcdir="${src}" failonerror="true" />
+					srcdir="${src}" failonerror="true" />
 	</target>
 
 	<target name="jar" depends="compile">
-		<jar jarfile="${target}/educloud-entities.jar" basedir="${bin}" manifest="${manifest}" />
+		<war warfile="${target}/educloud-gui.war" webxml="WebContent/WEB-INF/web.xml">
+			<webinf dir="WebContent/WEB-INF" excludes="web.xml, lib/**" includes="**/*" />
+			<lib dir="WebContent/WEB-INF/lib" includes="*.jar" />
+			<classes dir="${bin}">
+				<include name="**/*.class" />
+			</classes>
+			<fileset dir="WebContent/">
+				<include name="**" />
+				<exclude name="WEB-INF/**" />
+				<exclude name="META-INF/**" />
+			</fileset>
+		</war>
 	</target>
 
 	<target name="clean" depends="jar">

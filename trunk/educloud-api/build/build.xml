@@ -1,4 +1,4 @@
-<project name="educloud-entities" default="clean" basedir="../">
+<project name="educloud-api" default="clean" basedir="../">
 
 	<property file="build/build.properties" />
 	<buildnumber file="build/build.num" />
@@ -33,7 +33,7 @@
 		
 		<manifest file="${manifest}">
 			<attribute name="Built-Date" value="${TODAY}" />
-			<attribute name="Class-Path" value="." />
+			<attribute name="Class-Path" value=". lib/gson-1.5.jar lib/jersey-client-1.4.jar lib/jersey-core-1.4.jar lib/educloud-external-entities.jar" />
 		</manifest>
 	</target>
 
@@ -43,7 +43,7 @@
 	</target>
 
 	<target name="jar" depends="compile">
-		<jar jarfile="${target}/educloud-entities.jar" basedir="${bin}" manifest="${manifest}" />
+		<jar jarfile="${target}/educloud-api.jar" basedir="${bin}" manifest="${manifest}" />
 	</target>
 
 	<target name="clean" depends="jar">

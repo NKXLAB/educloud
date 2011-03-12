@@ -1,5 +1,7 @@
 package com.google.educloud.cloudserver.launchers;
 
+import java.net.URL;
+
 import org.apache.log4j.Logger;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
@@ -48,10 +50,10 @@ public class JettyLauncher {
 		server.setThreadPool(queuedThreadPool);
 
 		/* configure gui application */
-		WebAppContext wac = new WebAppContext();
-        wac.setContextPath("/ui");
-        wac.setWar("C:/workspaces/pucrs/cloudserver-gui/WebContent");
-        server.setHandler(wac);
+        final URL warUrl = JettyLauncher.class.getClassLoader().getResource("lib/educloud-gui.war");
+        final String warUrlString = warUrl.toExternalForm();
+        WebAppContext webAppContext = new WebAppContext(warUrlString, "/ui");
+		server.setHandler(webAppContext);
 
         /* configure external restfull services */
 		ServletHolder sh = new ServletHolder(ServletContainer.class);
