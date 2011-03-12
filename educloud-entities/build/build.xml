@@ -1,0 +1,52 @@
+<project name="educloud-entities" default="clean" basedir="../">
+
+	<property file="build/build.properties" />
+	<buildnumber file="build/build.num" />
+	
+	<property name="manifest.implementation.version" value="${major.number}.${minor.number}.0.${build.number}" />
+	
+	<!-- set global properties for this build -->
+	<tstamp>
+		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+	</tstamp>
+	
+	<echo>${java.home}</echo>
+	<echo>${java.version}</echo>
+	<echo>${java.vendor}</echo>
+
+	<property name="target" value="target" />
+	<property name="src" value="src" />
+	<property name="lib" value="lib" />
+	<property name="bin" value="${target}/bin" />
+	<property name="manifest" value="${target}/MANIFEST.MF" />
+
+	<manifest file="${manifest}">
+		<attribute name="Built-Date" value="${TODAY}" />
+		<attribute name="Main-Class" value="com.google.educloud.cloudserver.App" />
+		<attribute name="Class-Path" value="." />
+	</manifest>
+
+	<path id="project.class.path">
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init">
+		<delete dir="${bin}" />
+		<mkdir dir="${bin}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac classpathref="project.class.path" debug="true" destdir="${bin}"
+			srcdir="${src}" failonerror="true" />
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar jarfile="${target}/educloud-entities.jar" basedir="${bin}" manifest="${manifest}" />
+	</target>
+
+	<target name="clean" depends="jar">
+	</target>
+
+</project>
