@@ -9,7 +9,10 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 
 import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.api.entities.Template;
 import com.google.educloud.api.entities.VirtualMachine;
+import com.google.educloud.api.entities.VirtualMachine.VMState;
+import com.google.educloud.cloudserver.managers.VMManager;
 import com.google.gson.Gson;
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -21,6 +24,12 @@ public class VMRest {
 
 	private static Logger LOG = Logger.getLogger(VMRest.class);
 
+	/**
+	 * this method will schedule a new allocation of a virtual machine
+	 *
+	 * @param machine
+	 * @return
+	 */
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/start")
@@ -32,6 +41,7 @@ public class VMRest {
 		VirtualMachine externalMachine = gson.fromJson(machine, VirtualMachine.class);
 
 		int id = externalMachine.getId();
+		Template externalTemplate = externalMachine.getTemplate();
 
 		/* validations */
 		if (id != 0) {
@@ -44,16 +54,34 @@ public class VMRest {
 			return Response.status(400).entity(gson.toJson(error)).build();
 		}
 
-		/* vm start logic */
-		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
-		vm.setTemplateId(externalMachine.getTemplateId());
-		vm.setName(externalMachine.getName());
-		vm.setState(com.google.educloud.internal.entities.VirtualMachine.VMState.STARTED);
-		vm.setNodeId(987);
-		vm.setUserId(567);
-		vm.setId(98);
+		if (null == externalTemplate) {
+			EduCloudErrorMessage error = new EduCloudErrorMessage();
+			error.setCode("CS-002");
+			error.setHint("Inform a template machine and try again");
+			error.setText("Apparently you are trying to start an without inform a template");
 
+			// return error message
+			return Response.status(400).entity(gson.toJson(error)).build();
+		}
+
+		/* create internal entity (Virtual Machine) based on received */
+		com.google.educloud.internal.entities.Template template = new com.google.educloud.internal.entities.Template();
+		template.setId(externalTemplate.getId());
+		template.setName(externalTemplate.getName());
+		template.setOsType(externalTemplate.getOsType());
+		template.setOsVersion(externalTemplate.getOsVersion());
+
+		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
+		vm.setTemplate(template);
+		vm.setName(externalMachine.getName());
+
+		/* vm start logic */
+		VMManager vmManager = new VMManager();
+		vmManager.scheduleNewVM(vm);
+
+		/* update external machine to return for client */
 		externalMachine.setId(vm.getId());
+		externalMachine.setState(VMState.PENDING);
 
 		// return a new created virtual machine
 		return Response.ok(gson.toJson(externalMachine), MediaType.APPLICATION_JSON).build();

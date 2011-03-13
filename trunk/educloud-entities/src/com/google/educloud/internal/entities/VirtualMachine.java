@@ -2,11 +2,11 @@ package com.google.educloud.internal.entities;
 
 public class VirtualMachine {
 
-	public enum VMState {STARTED, STOPPED};
+	public enum VMState {PENDING, BOOT, RUNNING, SHUTDOWN, DONE};
 
 	private int id;
 
-	private int templateId;
+	private Template template;
 
 	private int userId;
 
@@ -24,12 +24,12 @@ public class VirtualMachine {
 		this.id = id;
 	}
 
-	public int getTemplateId() {
-		return templateId;
+	public Template getTemplate() {
+		return template;
 	}
 
-	public void setTemplateId(int templateId) {
-		this.templateId = templateId;
+	public void setTemplate(Template template) {
+		this.template = template;
 	}
 
 	public int getUserId() {
