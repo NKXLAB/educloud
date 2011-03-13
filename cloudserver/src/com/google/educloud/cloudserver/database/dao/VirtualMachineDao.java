@@ -13,6 +13,9 @@ public class VirtualMachineDao {
 
 	private static VirtualMachineDao dao;
 
+	private VirtualMachineDao() {
+	}
+
 	public static VirtualMachineDao getInstance() {
 		if (null == dao) {
 			dao = new VirtualMachineDao();
@@ -24,5 +27,15 @@ public class VirtualMachineDao {
 	public void insert(VirtualMachine machine) {
 		machine.setId(++currentId);
 		virtualMachines.add(machine);
+	}
+
+	public VirtualMachine findById(int id) {
+		for (VirtualMachine vm : virtualMachines) {
+			if (vm.getId() == id) {
+				return vm;
+			}
+		}
+
+		return null;
 	}
 }

@@ -45,6 +45,10 @@
 		
 		<copy file="${gui.war}" todir="${server.dir}/lib"/>
 		
+		<copy file="${externalentities.jar}" todir="${server.dir}/lib"/>
+		<copy file="${entities.jar}" todir="${server.dir}/lib"/>
+		<copy file="${entities.jar}" todir="${node.dir}/lib"/>
+		
 		<ant antfile="build/build.xml" target="clean" dir="${server.dir}"/>
 		<ant antfile="build/build.xml" target="clean" dir="${node.dir}"/>
 				
@@ -62,6 +66,9 @@
 					
 		<copy todir="${node.target}/lib">
 			<fileset dir="${node.dir}/lib"/>
+		</copy>
+		<copy todir="${node.target}/conf">
+			<fileset dir="${node.dir}/conf"/>
 		</copy>
 		<copy file="${node.jar}" todir="${node.target}"/>
 		

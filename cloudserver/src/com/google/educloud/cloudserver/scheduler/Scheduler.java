@@ -14,7 +14,7 @@ public class Scheduler implements Runnable {
 
 	private static Logger LOG = Logger.getLogger(Scheduler.class);
 
-	private static final long INTERNAL = ServerConfig.getServerPort();
+	private static final long INTERNAL = ServerConfig.getScheduleInterval();
 
 	private ExecutorService es;
 
