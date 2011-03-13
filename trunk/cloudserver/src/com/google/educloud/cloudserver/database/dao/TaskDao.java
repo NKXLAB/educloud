@@ -14,6 +14,9 @@ public class TaskDao {
 
 	private static TaskDao dao;
 
+	private TaskDao() {
+	}
+
 	public static TaskDao getInstance() {
 		if (null == dao) {
 			dao = new TaskDao();
