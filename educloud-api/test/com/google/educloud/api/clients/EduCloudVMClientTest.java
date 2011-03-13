@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.google.educloud.api.EduCloudConfig;
 import com.google.educloud.api.EduCloudFactory;
 import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.api.entities.Template;
 import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 
@@ -33,19 +34,33 @@ public class EduCloudVMClientTest {
 	@Test
 	public void testStartVM() throws EduCloudServerException {
 		// setup new virtual machine
+		Template template = new Template();
+		template.setName("lamp-server");
+		template.setOsType("linux");
+		template.setOsVersion("v6.3");
+
 		VirtualMachine machine = new VirtualMachine();
-		machine.setTemplateId(123);
+		machine.setTemplate(template);
 		machine.setName("ubuntu-machine");
 
 		// start machine
-		vmClient.startVM(machine);
+		VirtualMachine startVM = vmClient.startVM(machine);
+
+		System.out.println(startVM.getId());
+		System.out.println(startVM.getName());
+		System.out.println(startVM.getState());
 	}
 
 	@Test
 	public void testStartVMValidationError() {
 		// setup new virtual machine
+		Template template = new Template();
+		template.setName("lamp-server");
+		template.setOsType("linux");
+		template.setOsVersion("v6.3");
+
 		VirtualMachine machine = new VirtualMachine();
-		machine.setTemplateId(123);
+		machine.setTemplate(template);
 		machine.setName("ubuntu-machine");
 
 		machine.setId(77777); // introduce error

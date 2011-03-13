@@ -11,6 +11,7 @@ import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.webapp.WebAppContext;
 import org.mortbay.thread.QueuedThreadPool;
 
+import com.google.educloud.cloudserver.configuration.ServerConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 /**
@@ -26,7 +27,7 @@ public class JettyLauncher {
 		/* start jetty configuration */
 		Server server = new Server();
 
-		int port = 8000;
+		int port = ServerConfig.getServerPort();
 
 		LOG.info("Configurating jetty webserver");
 

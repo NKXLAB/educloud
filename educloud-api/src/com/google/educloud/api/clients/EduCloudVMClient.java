@@ -27,6 +27,8 @@ public class EduCloudVMClient extends AbstractClient {
 
 		handleError(status, entity);
 
+		response.close();
+
 		return gson.fromJson(entity, VirtualMachine.class);
 	}
 
