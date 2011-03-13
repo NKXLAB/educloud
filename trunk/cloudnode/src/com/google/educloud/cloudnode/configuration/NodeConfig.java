@@ -12,7 +12,9 @@ public class NodeConfig {
 
 	private static int nodePort;
 
-	private static long scheduleInterval;
+	private static String serverHost;
+
+	private static int serverPort;
 
 	public static void setup() throws InvalidConfigurationException {
 
@@ -26,23 +28,23 @@ public class NodeConfig {
 			throw new InvalidConfigurationException("Error on read file cloudnode.properties", e);
 		}
 
-		int port = 8111;
-		long interval = 1000;
+		nodePort = 8111;
+		serverPort = 8000;
+		serverHost = "localhost";
 
 		try {
-			port = Integer.parseInt(props.getProperty("node.port"));
+			nodePort = Integer.parseInt(props.getProperty("node.port"));
 		} catch (NumberFormatException e) {
-			LOG.warn("Invalid configuration server.port, " + port + " will be assumed by default");
+			LOG.warn("Invalid configuration server.port, " + nodePort + " will be assumed by default");
 		}
 
 		try {
-			interval = Long.parseLong(props.getProperty("scheduler.interval"));
+			serverPort = Integer.parseInt(props.getProperty("cloudserver.port"));
 		} catch (NumberFormatException e) {
-			LOG.warn("Invalid configuration server.port, " + interval + " will be assumed by default");
+			LOG.warn("Invalid configuration cloudserver.port, " + serverPort + " will be assumed by default");
 		}
 
-		nodePort = port;
-		scheduleInterval = interval;
+		serverHost = props.getProperty("cloudserver.host");
 
 	}
 
@@ -50,7 +52,11 @@ public class NodeConfig {
 		return nodePort;
 	}
 
-	public static long getScheduleInterval() {
-		return scheduleInterval;
+	public static String getServerHost() {
+		return serverHost;
+	}
+
+	public static int getServerPort() {
+		return serverPort;
 	}
 }

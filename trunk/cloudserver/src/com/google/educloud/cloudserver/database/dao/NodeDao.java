@@ -38,4 +38,15 @@ public class NodeDao {
 		return nodes.get(0);
 	}
 
+	public void remove(Node node) {
+		Node toRemove = null;
+		for (Node n : nodes) {
+			if (n.getId() == node.getId()) {
+				toRemove = n;
+			}
+		}
+
+		if (null != toRemove) nodes.remove(toRemove);
+	}
+
 }

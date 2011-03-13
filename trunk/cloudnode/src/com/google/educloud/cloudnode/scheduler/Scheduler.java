@@ -12,11 +12,26 @@ public class Scheduler implements Runnable {
 
 	private static Logger LOG = Logger.getLogger(Scheduler.class);
 
-	private static ArrayBlockingQueue<NodeTask> queue = new ArrayBlockingQueue<NodeTask>(300);
+	private static Scheduler scheduler;
+
+	/**
+	 * TODO define capacity of queue
+	 */
+	private static final int CAPACITY = 30;
+
+	private static ArrayBlockingQueue<NodeTask> queue = new ArrayBlockingQueue<NodeTask>(CAPACITY);
 
 	private ExecutorService es;
 
-	public Scheduler() {
+	public static Scheduler getInstance() {
+		if (null == scheduler) {
+			scheduler = new Scheduler();
+		}
+
+		return scheduler;
+	}
+
+	private Scheduler() {
 		es = Executors.newCachedThreadPool();
 	}
 

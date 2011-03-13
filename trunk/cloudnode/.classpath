@@ -13,6 +13,7 @@
 	<classpathentry kind="lib" path="lib/servlet-api-2.5-20081211.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.4.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/educloud-entities"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
