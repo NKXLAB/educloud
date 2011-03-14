@@ -1,0 +1,6 @@
+#summary On this page are found changes that require modifications in the project document
+#labels Phase-Design
+
+= Changes =
+
+  * Communication between cloudserver and cloudnode was changed from RMI to RestFull services
