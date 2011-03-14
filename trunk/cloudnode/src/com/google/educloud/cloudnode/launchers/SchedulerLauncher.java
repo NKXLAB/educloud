@@ -3,6 +3,7 @@ package com.google.educloud.cloudnode.launchers;
 import org.apache.log4j.Logger;
 
 import com.google.educloud.cloudnode.scheduler.Scheduler;
+import com.google.educloud.cloudnode.scheduler.tasks.RegisterNodeTask;
 
 public class SchedulerLauncher {
 
@@ -12,9 +13,12 @@ public class SchedulerLauncher {
 
 		LOG.debug("Starting cloud node scheduler");
 
-		new Thread(Scheduler.getInstance()).start();
+		Scheduler scheduler = Scheduler.getInstance();
 
-		LOG.debug("scheduler cloud node was started");
+		new Thread(scheduler).start();
+
+		// add register node task
+		scheduler.addTask(new RegisterNodeTask());
 	}
 
 }
