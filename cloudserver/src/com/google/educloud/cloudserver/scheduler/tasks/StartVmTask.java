@@ -4,6 +4,9 @@ import org.apache.log4j.Logger;
 
 import com.google.educloud.cloudserver.database.dao.NodeDao;
 import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
+import com.google.educloud.cloudserver.nodecllient.ClientFactory;
+import com.google.educloud.cloudserver.nodecllient.NodeComunicationException;
+import com.google.educloud.cloudserver.nodecllient.VMNodeClient;
 import com.google.educloud.internal.entities.Node;
 import com.google.educloud.internal.entities.VirtualMachine;
 
@@ -28,7 +31,12 @@ public class StartVmTask extends AbstractTask {
 		VirtualMachine vm = VirtualMachineDao.getInstance().findById(Integer.parseInt(vmId));
 
 		// 3) send requisition for host
-		// TODO create connection pool before :)
+		VMNodeClient createVMNodeClient = ClientFactory.createVMNodeClient(node);
+		try {
+			createVMNodeClient.startVM(vm);
+		} catch (NodeComunicationException e) {
+			LOG.error("An error when start virtual machine: #" + vm.getId(), e);
+		}
 
 		markAsCompleted();
 	}

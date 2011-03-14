@@ -26,6 +26,7 @@ public class Scheduler implements Runnable {
 	public static Scheduler getInstance() {
 		if (null == scheduler) {
 			scheduler = new Scheduler();
+			new Thread(scheduler).start();
 		}
 
 		return scheduler;
