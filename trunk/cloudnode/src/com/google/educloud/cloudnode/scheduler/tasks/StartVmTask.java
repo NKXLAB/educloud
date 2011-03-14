@@ -1,8 +1,13 @@
 package com.google.educloud.cloudnode.scheduler.tasks;
 
+import org.apache.log4j.Logger;
+
+import com.google.educloud.cloudnode.rs.VMRest;
 import com.google.educloud.internal.entities.VirtualMachine;
 
 public class StartVmTask extends AbstractTask {
+
+	private static Logger LOG = Logger.getLogger(VMRest.class);
 
 	private VirtualMachine vm;
 
@@ -13,6 +18,9 @@ public class StartVmTask extends AbstractTask {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+
+		LOG.debug("Running start virtual machine task");
+		LOG.debug(vm);
 
 		// 1) clone template disk
 		// 2) create a virtual machine
