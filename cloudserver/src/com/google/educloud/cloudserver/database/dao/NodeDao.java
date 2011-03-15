@@ -26,7 +26,7 @@ public class NodeDao {
 	}
 
 	public void insert(Node node) {
-		node.setId(++currentId);
+		node.setId(++currentId);		
 		nodes.add(node);
 	}
 
@@ -37,12 +37,25 @@ public class NodeDao {
 
 		return nodes.get(0);
 	}
+	
+	public Node findNodeById(int nodeId){		
+		Node toReturn = null;		
+		for( Node n : nodes ){
+			if( n.getId() == nodeId )
+			{
+				toReturn = n;
+				break;
+			}
+		}
+		return toReturn;
+	}
 
 	public void remove(Node node) {
 		Node toRemove = null;
 		for (Node n : nodes) {
 			if (n.getId() == node.getId()) {
 				toRemove = n;
+				break;
 			}
 		}
 

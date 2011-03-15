@@ -35,7 +35,10 @@ public class VirtualMachineDao {
 				return vm;
 			}
 		}
-
 		return null;
+	}
+	
+	public List<VirtualMachine> getAll(){
+		return virtualMachines;
 	}
 }

@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.google.educloud.cloudnode.scheduler.Scheduler;
 import com.google.educloud.cloudnode.scheduler.tasks.StartVmTask;
+import com.google.educloud.cloudnode.scheduler.tasks.StopVmTask;
 import com.google.educloud.internal.entities.VirtualMachine;
 import com.google.gson.Gson;
 import com.sun.jersey.spi.resource.Singleton;
@@ -44,6 +45,33 @@ public class VMRest {
 
 		/* add task to scheduler */
 		Scheduler.getInstance().addTask(startVmTask);
+
+		// return a new created virtual machine
+		return Response.ok(gson.toJson(""), MediaType.APPLICATION_JSON).build();
+	}
+	
+	/**
+	 * this method will schedule a task to stop a virtual machine.
+	 *
+	 * @param machine
+	 * @return
+	 */
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/stop")
+	public Response stopVM(String machine) {
+
+		LOG.debug("Application will stop a VM");
+		LOG.debug(machine);
+
+		VirtualMachine vm = gson.fromJson(machine, VirtualMachine.class);
+
+		/* setup task */
+		StopVmTask stopVmTask = new StopVmTask();
+		stopVmTask.setVirtualMachine(vm);
+
+		/* add task to scheduler */
+		Scheduler.getInstance().addTask(stopVmTask);
 
 		// return a new created virtual machine
 		return Response.ok(gson.toJson(""), MediaType.APPLICATION_JSON).build();

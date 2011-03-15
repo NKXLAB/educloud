@@ -20,4 +20,14 @@ public class VMNodeClient extends AbstractNodeClient {
 		return machine;
 	}
 
+	public void stopVM(VirtualMachine machine) throws NodeComunicationException {
+		
+		String jsonMachine = gson.toJson(machine);
+
+		ClientResponse response = getResouce().path("vm").path("stop").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, jsonMachine);
+
+		if (response.getStatus() != 200) {
+			throw new NodeComunicationException("Error on stop the virtual machine from node");
+		}		
+	}
 }

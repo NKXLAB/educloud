@@ -23,4 +23,9 @@ public class VMManager {
 		TaskDao.getInstance().insert(startVmTask);
 	}
 
+	public void scheduleStopVM(VirtualMachine vm) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

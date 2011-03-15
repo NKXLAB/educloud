@@ -31,5 +31,39 @@ public class EduCloudVMClient extends AbstractClient {
 
 		return gson.fromJson(entity, VirtualMachine.class);
 	}
+	
+	public void stopVM(VirtualMachine machine) throws EduCloudServerException {
+		ClientConfig config = new DefaultClientConfig();
+		Client client = Client.create(config);
+		WebResource service = client.resource(getBaseURI());
 
+		String json = gson.toJson(machine);
+
+		ClientResponse response = service.path("vm").path("stop").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, json);
+
+		int status = response.getStatus();
+		String entity = response.getEntity(String.class);
+
+		handleError(status, entity);
+
+		response.close();
+	}
+	
+	//Ajustar para retornar um array de virtual machines.
+	public VirtualMachine getAll() throws EduCloudServerException {
+		ClientConfig config = new DefaultClientConfig();
+		Client client = Client.create(config);
+		WebResource service = client.resource(getBaseURI());
+
+		ClientResponse response = service.path("vm").path("getAll").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class);
+
+		int status = response.getStatus();
+		String entity = response.getEntity(String.class);
+
+		handleError(status, entity);
+
+		response.close();
+
+		return gson.fromJson(entity, VirtualMachine.class);
+	}
 }
