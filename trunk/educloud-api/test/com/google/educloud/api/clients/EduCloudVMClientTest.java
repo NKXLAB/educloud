@@ -50,6 +50,32 @@ public class EduCloudVMClientTest {
 		System.out.println(startVM.getName());
 		System.out.println(startVM.getState());
 	}
+	
+	@Test
+	public void testgetAll() throws EduCloudServerException {
+		// Ajustar poara listar todas
+		// List all.
+		VirtualMachine vm = vmClient.getAll();
+		
+		System.out.println(vm.getId());
+		System.out.println(vm.getName());		
+	}
+	
+	@Test
+	public void testStopVM() throws EduCloudServerException {
+		// setup new virtual machine
+		Template template = new Template();
+		template.setName("lamp-server");
+		template.setOsType("linux");
+		template.setOsVersion("v6.3");
+
+		VirtualMachine machine = new VirtualMachine();
+		machine.setTemplate(template);
+		machine.setName("ubuntu-machine");
+
+		// stop machine
+		vmClient.stopVM(machine);
+	}
 
 	@Test
 	public void testStartVMValidationError() {
