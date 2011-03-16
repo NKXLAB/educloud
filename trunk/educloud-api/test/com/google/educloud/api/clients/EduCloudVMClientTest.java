@@ -44,11 +44,11 @@ public class EduCloudVMClientTest {
 		machine.setName("ubuntu-machine");
 
 		// start machine
-		VirtualMachine startVM = vmClient.startVM(machine);
+		VirtualMachine vm = vmClient.startVM(machine);
 
-		System.out.println(startVM.getId());
-		System.out.println(startVM.getName());
-		System.out.println(startVM.getState());
+		System.out.println(vm.getId());
+		System.out.println(vm.getName());
+		System.out.println(vm.getState());
 	}
 	
 	@Test

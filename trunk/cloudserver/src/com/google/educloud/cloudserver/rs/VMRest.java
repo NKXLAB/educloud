@@ -19,7 +19,6 @@ import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
 import com.google.educloud.cloudserver.managers.VMManager;
 import com.google.gson.Gson;
 import com.sun.jersey.spi.resource.Singleton;
-import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
 
 @Singleton
 @Path("/vm")
@@ -74,7 +73,6 @@ public class VMRest {
 		template.setId(externalTemplate.getId());
 		template.setName(externalTemplate.getName());
 		template.setOsType(externalTemplate.getOsType());
-		template.setOsVersion(externalTemplate.getOsVersion());
 
 		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
 		vm.setTemplate(template);
@@ -91,7 +89,7 @@ public class VMRest {
 		// return a new created virtual machine
 		return Response.ok(gson.toJson(externalMachine), MediaType.APPLICATION_JSON).build();
 	}
-	
+
 	/**
 	 * this method will schedule a new allocation of a virtual machine
 	 *
@@ -137,7 +135,6 @@ public class VMRest {
 		template.setId(externalTemplate.getId());
 		template.setName(externalTemplate.getName());
 		template.setOsType(externalTemplate.getOsType());
-		template.setOsVersion(externalTemplate.getOsVersion());
 
 		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
 		vm.setTemplate(template);
@@ -154,10 +151,10 @@ public class VMRest {
 		// return a new created virtual machine
 		return Response.ok(gson.toJson(externalMachine), MediaType.APPLICATION_JSON).build();
 	}
-	
+
 	/**
-	 * this method will retrive all started vms 
-	 * 
+	 * this method will retrive all started vms
+	 *
 	 * @return
 	 */
 	@PUT
@@ -167,13 +164,13 @@ public class VMRest {
 
 		LOG.debug("Application will list all machines");
 
-		/* Recupera a lista de máquinas virtuais */		
-		List<com.google.educloud.internal.entities.VirtualMachine> virtualMachines = 
+		/* Recupera a lista de máquinas virtuais */
+		List<com.google.educloud.internal.entities.VirtualMachine> virtualMachines =
 			VirtualMachineDao.getInstance().getAll();
-		
+
 		/* Lista para retorno */
 		List<VirtualMachine> listaMaquinasRetorno = new ArrayList<VirtualMachine>();
-		
+
 		/* Transforma a lista interna em uma lista de entidades externas */
 		for( com.google.educloud.internal.entities.VirtualMachine vmInterna : virtualMachines )
 		{
@@ -182,8 +179,8 @@ public class VMRest {
 			vmRetorno.setName(vmInterna.getName());
 			// Ajustar as conversões
 			// vmRetorno.setState(vmInterna.getState());
-			// vmRetorno.setTemplate(vmInterna.getTemplate());			
-		}		
+			// vmRetorno.setTemplate(vmInterna.getTemplate());
+		}
 
 		// Ajustar para retornar a lista inteira.
 		// Retorna a lista de máquinas virtuais.
