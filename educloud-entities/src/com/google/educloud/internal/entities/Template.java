@@ -1,14 +1,17 @@
 package com.google.educloud.internal.entities;
 
+
 public class Template {
 
 	private int id;
 
 	private String osType;
 
-	private String osVersion;
-
 	private String name;
+
+	private String location;
+
+	private String uuid;
 
 	public int getId() {
 		return id;
@@ -26,20 +29,28 @@ public class Template {
 		this.osType = osType;
 	}
 
-	public String getOsVersion() {
-		return osVersion;
-	}
-
-	public void setOsVersion(String osVersion) {
-		this.osVersion = osVersion;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getUUID() {
+		return uuid;
+	}
+
+	public void setUUID(String uuid) {
+		this.uuid = uuid;
 	}
 
 }

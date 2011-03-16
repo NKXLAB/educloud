@@ -16,6 +16,8 @@ public class NodeConfig {
 
 	private static int serverPort;
 
+	private static String virtualBoxWebservicesUrl;
+
 	public static void setup() throws InvalidConfigurationException {
 
 		LOG.debug("Node will load system properties...");
@@ -31,6 +33,7 @@ public class NodeConfig {
 		nodePort = 8111;
 		serverPort = 8000;
 		serverHost = "localhost";
+		virtualBoxWebservicesUrl = "http://localhost:18083/";
 
 		try {
 			nodePort = Integer.parseInt(props.getProperty("node.port"));
@@ -45,7 +48,7 @@ public class NodeConfig {
 		}
 
 		serverHost = props.getProperty("cloudserver.host");
-
+		virtualBoxWebservicesUrl = props.getProperty("vbox.websrv.url");
 	}
 
 	public static int getNodePort() {
@@ -58,5 +61,9 @@ public class NodeConfig {
 
 	public static int getServerPort() {
 		return serverPort;
+	}
+
+	public static String getVirtualBoxWebservicesUrl() {
+		return virtualBoxWebservicesUrl;
 	}
 }

@@ -13,11 +13,11 @@ import com.sun.jersey.spi.resource.Singleton;
 
 @Singleton
 @Path("/application")
-public class ApplicationRest {
+public class VMRest {
 
 	private static Gson gson = new Gson();
 
-	private static Logger LOG = Logger.getLogger(ApplicationRest.class);
+	private static Logger LOG = Logger.getLogger(VMRest.class);
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
