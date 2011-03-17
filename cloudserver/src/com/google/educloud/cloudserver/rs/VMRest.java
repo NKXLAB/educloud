@@ -164,15 +164,18 @@ public class VMRest {
 
 		LOG.debug("Application will list all machines");
 
-		/* Recupera a lista de máquinas virtuais */
-		List<com.google.educloud.internal.entities.VirtualMachine> virtualMachines =
+		//Recupera a lista de máquinas virtuais da base de dados.	
+		List<com.google.educloud.internal.entities.VirtualMachine> listaVirtualMachines = 
 			VirtualMachineDao.getInstance().getAll();
 
-		/* Lista para retorno */
-		List<VirtualMachine> listaMaquinasRetorno = new ArrayList<VirtualMachine>();
+		//Array para retorno
+		VirtualMachine[] virtualMachines = new VirtualMachine[listaVirtualMachines.size()];
 
-		/* Transforma a lista interna em uma lista de entidades externas */
-		for( com.google.educloud.internal.entities.VirtualMachine vmInterna : virtualMachines )
+		//Para controle do indice do array
+		int indice = 0;
+		
+		//Coloca a lista interna no array de máquinas externas
+		for( com.google.educloud.internal.entities.VirtualMachine vmInterna : listaVirtualMachines )
 		{
 			VirtualMachine vmRetorno = new VirtualMachine();
 			vmRetorno.setId(vmInterna.getId());
@@ -180,10 +183,12 @@ public class VMRest {
 			// Ajustar as conversões
 			// vmRetorno.setState(vmInterna.getState());
 			// vmRetorno.setTemplate(vmInterna.getTemplate());
-		}
-
-		// Ajustar para retornar a lista inteira.
-		// Retorna a lista de máquinas virtuais.
-		return Response.ok(gson.toJson(listaMaquinasRetorno.get(0)), MediaType.APPLICATION_JSON).build();
+			virtualMachines[indice] = vmRetorno;
+			
+			indice++;			
+		}		
+		
+		//Retorna o array de máquinas virtuais.
+		return Response.ok(gson.toJson(virtualMachines), MediaType.APPLICATION_JSON).build();
 	}
 }

@@ -41,4 +41,8 @@ public class VirtualMachineDao {
 	public List<VirtualMachine> getAll(){
 		return virtualMachines;
 	}
+
+	public void remove(VirtualMachine vm) {
+		virtualMachines.remove(vm);	
+	}
 }
