@@ -16,6 +16,10 @@ public class VirtualMachine {
 
 	private String name;
 
+	private String uuid;
+
+	private String vbox;
+
 	public int getId() {
 		return id;
 	}
@@ -61,15 +65,31 @@ public class VirtualMachine {
 	}
 
 	public void setName(String name) {
-		this.name = name;		
+		this.name = name;
 	}
-	
+
+	public String getUUID() {
+		return uuid;
+	}
+
+	public void setUUID(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public String getVboxSession() {
+		return vbox;
+	}
+
+	public void setVboxSession(String vbox) {
+		this.vbox = vbox;
+	}
+
 	public boolean equals(Object obj){
 		if( obj == null )
 			return false;
-		else if( !(obj instanceof VirtualMachine) ) 
+		else if( !(obj instanceof VirtualMachine) )
 			return false;
 		else
-			return ((VirtualMachine)obj).getId() == this.getId(); 		
-	}	
+			return ((VirtualMachine)obj).getId() == this.getId();
+	}
 }

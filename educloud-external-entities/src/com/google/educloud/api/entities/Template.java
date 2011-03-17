@@ -6,8 +6,6 @@ public class Template {
 
 	private String osType;
 
-	private String osVersion;
-
 	private String name;
 
 	public int getId() {
@@ -24,14 +22,6 @@ public class Template {
 
 	public void setOsType(String osType) {
 		this.osType = osType;
-	}
-
-	public String getOsVersion() {
-		return osVersion;
-	}
-
-	public void setOsVersion(String osVersion) {
-		this.osVersion = osVersion;
 	}
 
 	public String getName() {

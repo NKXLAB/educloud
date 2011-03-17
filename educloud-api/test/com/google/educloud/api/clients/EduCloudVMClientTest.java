@@ -38,12 +38,12 @@ public class EduCloudVMClientTest {
 		// setup new virtual machine
 		Template template = new Template();
 		template.setName("lamp-server");
-		template.setOsType("linux");
-		template.setOsVersion("v6.3");
+		template.setOsType("Ubuntu");
+		template.setId(1);
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);
-		machine.setName("ubuntu-machine");
+		machine.setName("ubuntu-machine-32");
 
 		// start machine
 		VirtualMachine vm = vmClient.startVM(machine);
@@ -52,46 +52,41 @@ public class EduCloudVMClientTest {
 		System.out.println(vm.getName());
 		System.out.println(vm.getState());
 	}
-	
-	@Test
+
 	public void testgetAll() throws EduCloudServerException {
 		// Ajustar poara listar todas
 		// List all.
 		List<VirtualMachine> listaMaquinasVirtuais = vmClient.getAll();
-		
+
 		System.out.println("Listagem das máquinas virtuais");
-		
+
 		for( VirtualMachine vm : listaMaquinasVirtuais ){
-		
+
 			System.out.println(vm.getId());
-			System.out.println(vm.getName());			
-		}				
+			System.out.println(vm.getName());
+		}
 	}
-	
-	@Test
+
 	public void testStopVM() throws EduCloudServerException {
 		// setup new virtual machine
 		Template template = new Template();
 		template.setName("lamp-server");
-		template.setOsType("linux");
-		template.setOsVersion("v6.3");
+		template.setOsType("Ubuntu");
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);
 		machine.setName("ubuntu-machine");
 
 		// stop machine
-		
+
 		vmClient.stopVM(machine);
 	}
 
-	@Test
 	public void testStartVMValidationError() {
 		// setup new virtual machine
 		Template template = new Template();
 		template.setName("lamp-server");
-		template.setOsType("linux");
-		template.setOsVersion("v6.3");
+		template.setOsType("Ubuntu");
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);
