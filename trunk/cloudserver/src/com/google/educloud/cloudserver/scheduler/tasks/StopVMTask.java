@@ -10,6 +10,7 @@ import com.google.educloud.cloudserver.nodecllient.VMNodeClient;
 import com.google.educloud.internal.entities.Node;
 import com.google.educloud.internal.entities.VirtualMachine;
 
+//Classe para representar uma tarefa de parada de máquina virtual.
 public class StopVMTask extends AbstractTask{
 	
 	public static final String VM_ID = "VM_ID";
