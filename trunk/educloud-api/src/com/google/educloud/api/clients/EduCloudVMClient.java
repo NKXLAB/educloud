@@ -1,5 +1,8 @@
 package com.google.educloud.api.clients;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.core.MediaType;
 
 import com.google.educloud.api.entities.VirtualMachine;
@@ -50,7 +53,7 @@ public class EduCloudVMClient extends AbstractClient {
 	}
 	
 	//Ajustar para retornar um array de virtual machines.
-	public VirtualMachine getAll() throws EduCloudServerException {
+	public List<VirtualMachine> getAll() throws EduCloudServerException {
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
 		WebResource service = client.resource(getBaseURI());
@@ -63,7 +66,20 @@ public class EduCloudVMClient extends AbstractClient {
 		handleError(status, entity);
 
 		response.close();
+		
+		//Recupera o array de retorno.
+		VirtualMachine[] virtualMachines =
+			gson.fromJson(entity, VirtualMachine[].class);		
+		
+		//Gera a lista de retorno. 
+		List<VirtualMachine> listaVirtualMachines = 
+			new ArrayList<VirtualMachine>();
+		
+		for( VirtualMachine vm : virtualMachines )
+		{
+			listaVirtualMachines.add(vm);			
+		}
 
-		return gson.fromJson(entity, VirtualMachine.class);
+		return listaVirtualMachines;
 	}
 }
