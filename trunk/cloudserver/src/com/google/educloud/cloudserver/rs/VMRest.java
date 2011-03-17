@@ -73,6 +73,7 @@ public class VMRest {
 		template.setId(externalTemplate.getId());
 		template.setName(externalTemplate.getName());
 		template.setOsType(externalTemplate.getOsType());
+		template.setFilename("ubuntu.vdi");
 
 		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
 		vm.setTemplate(template);

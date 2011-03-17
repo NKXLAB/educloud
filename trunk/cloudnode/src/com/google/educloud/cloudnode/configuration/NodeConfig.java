@@ -12,11 +12,17 @@ public class NodeConfig {
 
 	private static int nodePort;
 
+	private static String nodeMachineDir;
+
 	private static String serverHost;
 
 	private static int serverPort;
 
 	private static String virtualBoxWebservicesUrl;
+
+	private static String nodeTemplateDir;
+
+	private static String vboxFrontendType;
 
 	public static void setup() throws InvalidConfigurationException {
 
@@ -34,6 +40,8 @@ public class NodeConfig {
 		serverPort = 8000;
 		serverHost = "localhost";
 		virtualBoxWebservicesUrl = "http://localhost:18083/";
+		nodeMachineDir = null;
+		nodeTemplateDir = null;
 
 		try {
 			nodePort = Integer.parseInt(props.getProperty("node.port"));
@@ -49,6 +57,10 @@ public class NodeConfig {
 
 		serverHost = props.getProperty("cloudserver.host");
 		virtualBoxWebservicesUrl = props.getProperty("vbox.websrv.url");
+		nodeMachineDir = props.getProperty("node.machinedir");
+		nodeTemplateDir = props.getProperty("vbox.templatedir");
+		vboxFrontendType = props.getProperty("vbox.frontendType");
+
 	}
 
 	public static int getNodePort() {
@@ -65,5 +77,17 @@ public class NodeConfig {
 
 	public static String getVirtualBoxWebservicesUrl() {
 		return virtualBoxWebservicesUrl;
+	}
+
+	public static String getMachinesDir() {
+		return nodeMachineDir;
+	}
+
+	public static String getTemplateDir() {
+		return nodeTemplateDir;
+	}
+
+	public static String getVboxFrontendType() {
+		return vboxFrontendType;
 	}
 }

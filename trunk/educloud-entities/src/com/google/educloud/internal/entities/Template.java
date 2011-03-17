@@ -9,7 +9,7 @@ public class Template {
 
 	private String name;
 
-	private String location;
+	private String filename;
 
 	private String uuid;
 
@@ -37,12 +37,12 @@ public class Template {
 		this.name = name;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getFilename() {
+		return filename;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 
 	public String getUUID() {
