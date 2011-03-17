@@ -13,6 +13,8 @@ public class Template {
 
 	private String uuid;
 
+	private long size;
+
 	public int getId() {
 		return id;
 	}
@@ -51,6 +53,14 @@ public class Template {
 
 	public void setUUID(String uuid) {
 		this.uuid = uuid;
+	}
+
+	public long getSize() {
+		return size;
+	}
+
+	public void setSize(long size) {
+		this.size = size;
 	}
 
 }

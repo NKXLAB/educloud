@@ -40,10 +40,11 @@ public class EduCloudVMClientTest {
 		template.setName("lamp-server");
 		template.setOsType("Ubuntu");
 		template.setId(1);
+		template.setSize(8589934592L);
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);
-		machine.setName("ubuntu-machine-32");
+		machine.setName("ubuntu-machine-2");
 
 		// start machine
 		VirtualMachine vm = vmClient.startVM(machine);
@@ -67,19 +68,26 @@ public class EduCloudVMClientTest {
 		}
 	}
 
-	public void testStopVM() throws EduCloudServerException {
+
+	public void testStopVM() {
 		// setup new virtual machine
 		Template template = new Template();
 		template.setName("lamp-server");
 		template.setOsType("Ubuntu");
+		template.setSize(8589934592L);
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);
-		machine.setName("ubuntu-machine");
+		machine.setName("ubuntu-machine-2");
+		machine.setId(1);
 
 		// stop machine
-
-		vmClient.stopVM(machine);
+		try {
+			vmClient.stopVM(machine);
+		} catch (EduCloudServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void testStartVMValidationError() {
@@ -87,6 +95,7 @@ public class EduCloudVMClientTest {
 		Template template = new Template();
 		template.setName("lamp-server");
 		template.setOsType("Ubuntu");
+		template.setSize(8589934592L);
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);

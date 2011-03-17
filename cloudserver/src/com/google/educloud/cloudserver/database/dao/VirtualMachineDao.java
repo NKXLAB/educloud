@@ -37,12 +37,19 @@ public class VirtualMachineDao {
 		}
 		return null;
 	}
-	
-	public List<VirtualMachine> getAll(){
+
+	public List<VirtualMachine> getAll() {
 		return virtualMachines;
 	}
 
 	public void remove(VirtualMachine vm) {
-		virtualMachines.remove(vm);	
+		virtualMachines.remove(vm);
+	}
+
+	public void changeState(VirtualMachine machine) {
+		VirtualMachine findById = findById(machine.getId());
+		findById.setState(machine.getState());
+		findById.setUUID(machine.getUUID());
+		findById.setVboxSession(machine.getVboxSession());
 	}
 }

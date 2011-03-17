@@ -29,11 +29,12 @@ public class StartVmTask extends AbstractTask {
 		// 2) load virtual machine from database
 		String vmId = getParameter(VM_ID);
 		VirtualMachine vm = VirtualMachineDao.getInstance().findById(Integer.parseInt(vmId));
+		vm.setNodeId(node.getId());
 
 		// 3) send requisition for host
-		VMNodeClient createVMNodeClient = ClientFactory.createVMNodeClient(node);
+		VMNodeClient nodeClient = ClientFactory.createVMNodeClient(node);
 		try {
-			createVMNodeClient.startVM(vm);
+			nodeClient.startVM(vm);
 		} catch (NodeComunicationException e) {
 			LOG.error("An error when start virtual machine: #" + vm.getId(), e);
 		}
