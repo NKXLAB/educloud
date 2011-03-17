@@ -2,6 +2,8 @@ package com.google.educloud.api.clients;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,10 +57,15 @@ public class EduCloudVMClientTest {
 	public void testgetAll() throws EduCloudServerException {
 		// Ajustar poara listar todas
 		// List all.
-		VirtualMachine vm = vmClient.getAll();
+		List<VirtualMachine> listaMaquinasVirtuais = vmClient.getAll();
 		
-		System.out.println(vm.getId());
-		System.out.println(vm.getName());		
+		System.out.println("Listagem das máquinas virtuais");
+		
+		for( VirtualMachine vm : listaMaquinasVirtuais ){
+		
+			System.out.println(vm.getId());
+			System.out.println(vm.getName());			
+		}				
 	}
 	
 	@Test
@@ -74,6 +81,7 @@ public class EduCloudVMClientTest {
 		machine.setName("ubuntu-machine");
 
 		// stop machine
+		
 		vmClient.stopVM(machine);
 	}
 
