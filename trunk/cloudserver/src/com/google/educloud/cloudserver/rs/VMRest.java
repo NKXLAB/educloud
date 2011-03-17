@@ -1,6 +1,5 @@
 package com.google.educloud.cloudserver.rs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.PUT;
@@ -73,6 +72,7 @@ public class VMRest {
 		template.setId(externalTemplate.getId());
 		template.setName(externalTemplate.getName());
 		template.setOsType(externalTemplate.getOsType());
+		template.setSize(externalTemplate.getSize());
 		template.setFilename("ubuntu.vdi");
 
 		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
@@ -111,21 +111,11 @@ public class VMRest {
 		Template externalTemplate = externalMachine.getTemplate();
 
 		/* validations */
-		if (id != 0) {
+		if (id == 0) {
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
-			error.setCode("CS-001");
-			error.setHint("Set virtual machine id to zero and try again");
-			error.setText("Apparently you are trying to start an existing virtual machine");
-
-			// return error message
-			return Response.status(400).entity(gson.toJson(error)).build();
-		}
-
-		if (null == externalTemplate) {
-			EduCloudErrorMessage error = new EduCloudErrorMessage();
-			error.setCode("CS-002");
-			error.setHint("Inform a template machine and try again");
-			error.setText("Apparently you are trying to stop a VM without inform a template");
+			error.setCode("CS-003");
+			error.setHint("Set virtual machine id and try again");
+			error.setText("Apparently you are trying to stop an nonexistent virtual machine");
 
 			// return error message
 			return Response.status(400).entity(gson.toJson(error)).build();
@@ -136,18 +126,16 @@ public class VMRest {
 		template.setId(externalTemplate.getId());
 		template.setName(externalTemplate.getName());
 		template.setOsType(externalTemplate.getOsType());
+		template.setSize(externalTemplate.getSize());
 
 		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
 		vm.setTemplate(template);
 		vm.setName(externalMachine.getName());
+		vm.setId(externalMachine.getId());
 
 		/* vm start logic */
 		VMManager vmManager = new VMManager();
 		vmManager.scheduleStopVM(vm);
-
-		/* update external machine to return for client */
-		externalMachine.setId(vm.getId());
-		externalMachine.setState(VMState.PENDING);
 
 		// return a new created virtual machine
 		return Response.ok(gson.toJson(externalMachine), MediaType.APPLICATION_JSON).build();
@@ -165,8 +153,8 @@ public class VMRest {
 
 		LOG.debug("Application will list all machines");
 
-		//Recupera a lista de máquinas virtuais da base de dados.	
-		List<com.google.educloud.internal.entities.VirtualMachine> listaVirtualMachines = 
+		//Recupera a lista de máquinas virtuais da base de dados.
+		List<com.google.educloud.internal.entities.VirtualMachine> listaVirtualMachines =
 			VirtualMachineDao.getInstance().getAll();
 
 		//Array para retorno
@@ -174,7 +162,7 @@ public class VMRest {
 
 		//Para controle do indice do array
 		int indice = 0;
-		
+
 		//Coloca a lista interna no array de máquinas externas
 		for( com.google.educloud.internal.entities.VirtualMachine vmInterna : listaVirtualMachines )
 		{
@@ -185,10 +173,10 @@ public class VMRest {
 			// vmRetorno.setState(vmInterna.getState());
 			// vmRetorno.setTemplate(vmInterna.getTemplate());
 			virtualMachines[indice] = vmRetorno;
-			
-			indice++;			
-		}		
-		
+
+			indice++;
+		}
+
 		//Retorna o array de máquinas virtuais.
 		return Response.ok(gson.toJson(virtualMachines), MediaType.APPLICATION_JSON).build();
 	}

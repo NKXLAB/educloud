@@ -49,7 +49,7 @@ public class VMRest {
 		// return a new created virtual machine
 		return Response.ok(gson.toJson(""), MediaType.APPLICATION_JSON).build();
 	}
-	
+
 	/**
 	 * this method will schedule a task to stop a virtual machine.
 	 *
@@ -73,8 +73,8 @@ public class VMRest {
 		/* add task to scheduler */
 		Scheduler.getInstance().addTask(stopVmTask);
 
-		// return a new created virtual machine
-		return Response.ok(gson.toJson(""), MediaType.APPLICATION_JSON).build();
+		// return virtual machine
+		return Response.ok(gson.toJson(vm), MediaType.APPLICATION_JSON).build();
 	}
 
 }

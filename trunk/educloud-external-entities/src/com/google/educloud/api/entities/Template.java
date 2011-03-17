@@ -8,6 +8,8 @@ public class Template {
 
 	private String name;
 
+	private long size;
+
 	public int getId() {
 		return id;
 	}
@@ -30,6 +32,14 @@ public class Template {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public long getSize() {
+		return size;
+	}
+
+	public void setSize(long size) {
+		this.size = size;
 	}
 
 }

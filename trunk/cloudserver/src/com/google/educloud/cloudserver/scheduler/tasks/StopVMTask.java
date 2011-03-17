@@ -12,32 +12,33 @@ import com.google.educloud.internal.entities.VirtualMachine;
 
 //Classe para representar uma tarefa de parada de máquina virtual.
 public class StopVMTask extends AbstractTask{
-	
+
 	public static final String VM_ID = "VM_ID";
-	
+
 	private static Logger LOG = Logger.getLogger(StopVMTask.class);
 
 	@Override
 	public void run() {
-		
+
 		markAsRunning();
 
 		// 1) load virtual machine from database
 		String vmId = getParameter(VM_ID);
 		VirtualMachine vm = VirtualMachineDao.getInstance().findById(Integer.parseInt(vmId));
-		
+
 		// 2) select the node of respective VM
 		Node node = NodeDao.getInstance().findNodeById(vm.getNodeId());
 		LOG.debug("Selected node of the virtual machine: #" + node.getId());
 
 		// 3) send requisition for host
-		VMNodeClient createVMNodeClient = ClientFactory.createVMNodeClient(node);
+		VMNodeClient nodeClient = ClientFactory.createVMNodeClient(node);
 		try {
-			createVMNodeClient.stopVM(vm);
+			nodeClient.stopVM(vm);
 		} catch (NodeComunicationException e) {
 			LOG.error("An error when stop virtual machine: #" + vm.getId(), e);
 		}
 
-		markAsCompleted();		
+		VirtualMachineDao.getInstance().remove(vm);
+		markAsCompleted();
 	}
 }

@@ -16,9 +16,11 @@ import org.virtualbox.service.IVirtualBox;
 import org.virtualbox.service.IWebsessionManager;
 
 import com.google.educloud.cloudnode.configuration.NodeConfig;
+import com.google.educloud.cloudnode.serverclient.VirtualMachineClient;
 import com.google.educloud.cloudnode.virtualbox.VirtualBoxConnector;
 import com.google.educloud.internal.entities.Template;
 import com.google.educloud.internal.entities.VirtualMachine;
+import com.google.educloud.internal.entities.VirtualMachine.VMState;
 
 public class StartVmTask extends AbstractTask {
 
@@ -51,10 +53,14 @@ public class StartVmTask extends AbstractTask {
 		machine.launchVMProcess(sessionObject, NodeConfig.getVboxFrontendType(), "");
 
 		// 5) notify server that machine was started
-		String vmId = machine.getId().toString();
+		String vmUUID = machine.getId().toString();
 
-		vm.setUUID(vmId);
+		vm.setUUID(vmUUID);
 		vm.setVboxSession(vbox._this);
+		vm.setState(VMState.RUNNING);
+
+		new VirtualMachineClient().changeState(vm);
+
 	}
 
 	private IMachine createMachine(IVirtualBox vbox, String mediumLocation) {
@@ -103,11 +109,25 @@ public class StartVmTask extends AbstractTask {
 		long start = System.nanoTime();
 
 		IMedium target = vbox.createHardDisk("VDI", locationTarget);
-		IMedium src = vbox.findMedium(locationSrc, DeviceType.HARD_DISK);
-
-		IProgress progess = src.cloneTo(target, 0, null);
+		/* support only standard variant type */
+		IProgress progess = target.createBaseStorage(template.getSize(), 0);
 
 		boolean completed = false;
+		do {
+			completed = progess.getCompleted();
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				LOG.debug("create based storage was interrupted");
+			}
+		} while (!completed);
+		progess.release();
+
+		IMedium src = vbox.findMedium(locationSrc, DeviceType.HARD_DISK);
+
+		progess = src.cloneTo(target, 0, null);
+
+		completed = false;
 		do {
 			completed = progess.getCompleted();
 			try {
