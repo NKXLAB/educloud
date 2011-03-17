@@ -61,6 +61,15 @@ public class VirtualMachine {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name;		
 	}
+	
+	public boolean equals(Object obj){
+		if( obj == null )
+			return false;
+		else if( !(obj instanceof VirtualMachine) ) 
+			return false;
+		else
+			return ((VirtualMachine)obj).getId() == this.getId(); 		
+	}	
 }
