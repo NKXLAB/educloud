@@ -11,8 +11,6 @@ public class Template {
 
 	private String filename;
 
-	private String uuid;
-
 	private long size;
 
 	public int getId() {
@@ -45,14 +43,6 @@ public class Template {
 
 	public void setFilename(String filename) {
 		this.filename = filename;
-	}
-
-	public String getUUID() {
-		return uuid;
-	}
-
-	public void setUUID(String uuid) {
-		this.uuid = uuid;
 	}
 
 	public long getSize() {

@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
-import com.google.educloud.api.entities.Node;
-import com.google.educloud.api.entities.Template;
 import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 import com.sun.jersey.api.client.Client;
@@ -37,7 +35,7 @@ public class EduCloudVMClient extends AbstractClient {
 
 		return gson.fromJson(entity, VirtualMachine.class);
 	}
-	
+
 	//Para a execução de uma máquina virtual.
 	public void stopVM(VirtualMachine machine) throws EduCloudServerException {
 		ClientConfig config = new DefaultClientConfig();
@@ -55,7 +53,7 @@ public class EduCloudVMClient extends AbstractClient {
 
 		response.close();
 	}
-	
+
 	//Recupera todas as instâncias de máquinas virtuais.
 	public List<VirtualMachine> describeInstances() throws EduCloudServerException {
 		ClientConfig config = new DefaultClientConfig();
@@ -70,21 +68,21 @@ public class EduCloudVMClient extends AbstractClient {
 		handleError(status, entity);
 
 		response.close();
-		
+
 		//Recupera o array de retorno.
 		VirtualMachine[] virtualMachines =
-			gson.fromJson(entity, VirtualMachine[].class);		
-		
-		//Gera a lista de retorno. 
-		List<VirtualMachine> listaVirtualMachines = 
+			gson.fromJson(entity, VirtualMachine[].class);
+
+		//Gera a lista de retorno.
+		List<VirtualMachine> listaVirtualMachines =
 			new ArrayList<VirtualMachine>();
-		
+
 		for( VirtualMachine vm : virtualMachines )
 		{
-			listaVirtualMachines.add(vm);			
+			listaVirtualMachines.add(vm);
 		}
 
 		return listaVirtualMachines;
-	}	
-	
+	}
+
 }

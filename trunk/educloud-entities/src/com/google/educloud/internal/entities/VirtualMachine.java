@@ -16,6 +16,8 @@ public class VirtualMachine {
 
 	private String name;
 
+	private String bootableMedium;
+
 	private String uuid;
 
 	private String vbox;
@@ -66,6 +68,14 @@ public class VirtualMachine {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getBootableMedium() {
+		return bootableMedium;
+	}
+
+	public void setBootableMedium(String bootableMedium) {
+		this.bootableMedium = bootableMedium;
 	}
 
 	public String getUUID() {

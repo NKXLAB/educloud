@@ -16,4 +16,17 @@ public class ClientFactory {
 
 		return vmNodeClient;
 	}
+
+	/**
+	 * setup a new instance of NodeClient
+	 *
+	 * @param node
+	 * @return
+	 */
+	public static NodeClient createNodeClient(Node node) {
+		NodeClient nodeClient = new NodeClient();
+		nodeClient.setNode(node);
+
+		return nodeClient;
+	}
 }

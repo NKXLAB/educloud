@@ -22,7 +22,7 @@ public class Node {
 	/**
 	 * @param ip the ip to set
 	 */
-	public void setIp(String ip) {
+	public void setHostname(String ip) {
 		this.ip = ip;
 	}
 	/**

@@ -1,5 +1,7 @@
 package com.google.educloud.cloudserver.scheduler.tasks;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
@@ -16,6 +18,8 @@ public abstract class AbstractTask implements CloudTask {
 	private Status status;
 
 	private HashMap<String, String> parameters = new HashMap<String, String>();
+
+	private Date scheduleTime;
 
 	public void setId(int id) {
 		this.id = id;
@@ -45,6 +49,14 @@ public abstract class AbstractTask implements CloudTask {
 		return parameters.get(name);
 	}
 
+	public void setScheduleTime(Date date) {
+		this.scheduleTime = date;
+	}
+
+	public Date getScheduleTime() {
+		return scheduleTime == null ? Calendar.getInstance().getTime() : scheduleTime;
+	}
+
 	protected void markAsCompleted() {
 		this.setStatus(Status.COMPLETED);
 		TaskDao.getInstance().updateStatus(this);
@@ -55,5 +67,11 @@ public abstract class AbstractTask implements CloudTask {
 		this.setStatus(Status.RUNNING);
 		TaskDao.getInstance().updateStatus(this);
 		LOG.debug("Task #" + this.id + " in progress");
+	}
+
+	protected void reschedule(Date time) {
+		this.setStatus(Status.PENDING);
+		TaskDao.getInstance().updateStatus(this, time);
+		LOG.debug("Task #" + this.id + " was rescheduled");
 	}
 }

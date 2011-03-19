@@ -1,6 +1,6 @@
 package com.google.educloud.cloudnode.rs;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 
+import com.google.educloud.internal.entities.Node;
 import com.google.gson.Gson;
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -19,16 +20,16 @@ public class ApplicationRest {
 
 	private static Logger LOG = Logger.getLogger(ApplicationRest.class);
 
-	@GET
+	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/status")
-	public Response getStatus() {
+	@Path("/check")
+	public Response getStatus(String jsonNode) {
 
 		LOG.debug("Returning application status");
 
-		String json = gson.toJson(true);
+		Node node = gson.fromJson(jsonNode, Node.class);
 
-		return Response.ok(json, MediaType.APPLICATION_JSON).build();
+		return Response.ok(gson.toJson(node), MediaType.APPLICATION_JSON).build();
 	}
 
 }

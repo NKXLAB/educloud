@@ -1,5 +1,7 @@
 package com.google.educloud.internal.entities;
 
+import java.util.Date;
+
 public class Node {
 
 	private int id;
@@ -7,6 +9,10 @@ public class Node {
 	private String hostname;
 
 	private int port;
+
+	private Date lastPing;
+
+	private Date startTime;
 
 	public int getId() {
 		return id;
@@ -30,6 +36,22 @@ public class Node {
 
 	public void setPort(int port) {
 		this.port = port;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date date) {
+		startTime = date;
+	}
+
+	public void setLastPing(Date time) {
+		this.lastPing = time;
+	}
+
+	public Date getLastPing() {
+		return this.lastPing;
 	}
 
 }
