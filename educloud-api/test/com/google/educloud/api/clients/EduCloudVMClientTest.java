@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.google.educloud.api.EduCloudConfig;
 import com.google.educloud.api.EduCloudFactory;
 import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.api.entities.Node;
 import com.google.educloud.api.entities.Template;
 import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.exceptions.EduCloudServerException;
@@ -18,6 +19,8 @@ import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 public class EduCloudVMClientTest {
 
 	private EduCloudVMClient vmClient;
+	private EduCloudTemplateClient templateClient;
+	private EduCloudNodeClient nodeClient;
 
 	@Before
 	public void setUp() throws Exception {
@@ -27,6 +30,8 @@ public class EduCloudVMClientTest {
 		config.setPort(8000);
 
 		vmClient = EduCloudFactory.createVMClient(config);
+		templateClient = EduCloudFactory.createTemplateClient(config);
+		nodeClient = EduCloudFactory.createNodeClient(config);
 	}
 
 	@After
@@ -54,10 +59,10 @@ public class EduCloudVMClientTest {
 		System.out.println(vm.getState());
 	}
 
-	public void testgetAll() throws EduCloudServerException {
-		// Ajustar poara listar todas
-		// List all.
-		List<VirtualMachine> listaMaquinasVirtuais = vmClient.getAll();
+	@Test
+	public void testDescribeInstances() throws EduCloudServerException {
+
+		List<VirtualMachine> listaMaquinasVirtuais = vmClient.describeInstances();
 
 		System.out.println("Listagem das máquinas virtuais");
 
@@ -67,8 +72,37 @@ public class EduCloudVMClientTest {
 			System.out.println(vm.getName());
 		}
 	}
+	
+	@Test
+	public void testDescribeTemplates() throws EduCloudServerException {
 
+		List<Template> listaTemplates = templateClient.describeTemplates();
 
+		System.out.println("Listagem dos templates");
+
+		for( Template template : listaTemplates ){
+
+			System.out.println(template.getId());
+			System.out.println(template.getName());
+		}
+	}
+	
+	@Test	
+	public void testDescribeNodes() throws EduCloudServerException {
+
+		List<Node> listaNodos = nodeClient.decribeNodes();
+
+		System.out.println("Listagem dos nodos");
+
+		for( Node nodo : listaNodos ){
+
+			System.out.println(nodo.getId());
+			System.out.println(nodo.getIp());
+			System.out.println(nodo.getPort());
+		}
+	}
+	
+	@Test
 	public void testStopVM() {
 		// setup new virtual machine
 		Template template = new Template();
@@ -90,6 +124,7 @@ public class EduCloudVMClientTest {
 		}
 	}
 
+	@Test
 	public void testStartVMValidationError() {
 		// setup new virtual machine
 		Template template = new Template();
