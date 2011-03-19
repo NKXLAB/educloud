@@ -18,11 +18,11 @@ import com.sun.jersey.spi.resource.Singleton;
 @Singleton
 @Path("/template")
 public class TemplateRest {
-	
+
 	private static Gson gson = new Gson();
 
 	private static Logger LOG = Logger.getLogger(TemplateRest.class);
-	
+
 	/**
 	 * this method will retrive all templates
 	 *
@@ -32,7 +32,7 @@ public class TemplateRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/describeTemplates")
 	public Response describeTemplates() {
-		
+
 		LOG.debug("Application will list all templates");
 
 		//Recupera a lista de templates da base de dados.
@@ -54,13 +54,12 @@ public class TemplateRest {
 			templateRetorno.setFilename(templateInterno.getFilename());
 			templateRetorno.setOsType(templateInterno.getOsType());
 			templateRetorno.setSize(templateInterno.getSize());
-			templateRetorno.setUUID(templateInterno.getUUID());
 			templates[indice] = templateRetorno;
 
 			indice++;
 		}
 
 		//Retorna o array de templates.
-		return Response.ok(gson.toJson(templates), MediaType.APPLICATION_JSON).build();	
+		return Response.ok(gson.toJson(templates), MediaType.APPLICATION_JSON).build();
 	}
 }

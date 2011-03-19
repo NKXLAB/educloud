@@ -1,5 +1,7 @@
 package com.google.educloud.cloudserver.internalrs;
 
+import java.util.Calendar;
+
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -9,6 +11,10 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 
 import com.google.educloud.cloudserver.database.dao.NodeDao;
+import com.google.educloud.cloudserver.database.dao.TaskDao;
+import com.google.educloud.cloudserver.scheduler.tasks.AbstractTask;
+import com.google.educloud.cloudserver.scheduler.tasks.CheckNodeTask;
+import com.google.educloud.cloudserver.scheduler.tasks.CloudTask.Status;
 import com.google.educloud.internal.entities.Node;
 import com.google.gson.Gson;
 import com.sun.jersey.spi.resource.Singleton;
@@ -30,7 +36,15 @@ public class NodeRegisterRest {
 
 		Node node = gson.fromJson(jsonNode, Node.class);
 
+		// register new node from database
 		NodeDao.getInstance().insert(node);
+
+		// start a new task for check node availability
+		AbstractTask checkNodeTask = new CheckNodeTask();
+		checkNodeTask.setParameter(CheckNodeTask.PARAM_NODE_ID, String.valueOf(node.getId()));
+		checkNodeTask.setStatus(Status.PENDING);
+		checkNodeTask.setScheduleTime(Calendar.getInstance().getTime());
+		TaskDao.getInstance().insert(checkNodeTask);
 
 		jsonNode = gson.toJson(node);
 

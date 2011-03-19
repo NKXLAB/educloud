@@ -1,5 +1,6 @@
 package com.google.educloud.cloudserver.scheduler.tasks;
 
+import java.util.Date;
 import java.util.HashMap;
 
 public interface CloudTask extends Runnable {
@@ -19,5 +20,11 @@ public interface CloudTask extends Runnable {
 	void setParameter(String name, String value);
 
 	String getParameter(String name);
+
+	String getType();
+
+	void setScheduleTime(Date date);
+
+	Date getScheduleTime();
 
 }

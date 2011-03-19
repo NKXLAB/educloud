@@ -12,7 +12,6 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 
 import com.google.educloud.api.entities.EduCloudErrorMessage;
-import com.google.educloud.api.entities.Template;
 import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.VirtualMachine.VMState;
 import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
@@ -45,48 +44,29 @@ public class VMRest {
 		VirtualMachine externalMachine = gson.fromJson(machine, VirtualMachine.class);
 
 		int id = externalMachine.getId();
-		Template externalTemplate = externalMachine.getTemplate();
 
 		/* validations */
 		if (id != 0) {
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
 			error.setCode("CS-001");
-			error.setHint("Set virtual machine id to zero and try again");
-			error.setText("Apparently you are trying to start an existing virtual machine");
-
-			// return error message
-			return Response.status(400).entity(gson.toJson(error)).build();
-		}
-
-		if (null == externalTemplate) {
-			EduCloudErrorMessage error = new EduCloudErrorMessage();
-			error.setCode("CS-002");
-			error.setHint("Inform a template machine and try again");
-			error.setText("Apparently you are trying to start an without inform a template");
+			error.setHint("Set virtual machine id and try again");
+			error.setText("Apparently you are trying to start a nonexistent virtual machine");
 
 			// return error message
 			return Response.status(400).entity(gson.toJson(error)).build();
 		}
 
 		/* create internal entity (Virtual Machine) based on received */
-		com.google.educloud.internal.entities.Template template = new com.google.educloud.internal.entities.Template();
-		template.setId(externalTemplate.getId());
-		template.setName(externalTemplate.getName());
-		template.setOsType(externalTemplate.getOsType());
-		template.setSize(externalTemplate.getSize());
-		template.setFilename("ubuntu.vdi");
-
 		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
-		vm.setTemplate(template);
-		vm.setName(externalMachine.getName());
+		vm.setId(externalMachine.getId());
 
 		/* vm start logic */
 		VMManager vmManager = new VMManager();
-		vmManager.scheduleNewVM(vm);
+		vm = vmManager.scheduleStartVM(vm);
 
 		/* update external machine to return for client */
 		externalMachine.setId(vm.getId());
-		externalMachine.setState(VMState.PENDING);
+		externalMachine.setState(VMState.valueOf(vm.getState().name()));
 
 		// return a new created virtual machine
 		return Response.ok(gson.toJson(externalMachine), MediaType.APPLICATION_JSON).build();
@@ -109,34 +89,25 @@ public class VMRest {
 		VirtualMachine externalMachine = gson.fromJson(machine, VirtualMachine.class);
 
 		int id = externalMachine.getId();
-		Template externalTemplate = externalMachine.getTemplate();
 
 		/* validations */
 		if (id == 0) {
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
 			error.setCode("CS-003");
 			error.setHint("Set virtual machine id and try again");
-			error.setText("Apparently you are trying to stop an nonexistent virtual machine");
+			error.setText("Apparently you are trying to stop a nonexistent virtual machine");
 
 			// return error message
 			return Response.status(400).entity(gson.toJson(error)).build();
 		}
 
-		/* create internal entity (Virtual Machine) based on received */
-		com.google.educloud.internal.entities.Template template = new com.google.educloud.internal.entities.Template();
-		template.setId(externalTemplate.getId());
-		template.setName(externalTemplate.getName());
-		template.setOsType(externalTemplate.getOsType());
-		template.setSize(externalTemplate.getSize());
-
 		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
-		vm.setTemplate(template);
-		vm.setName(externalMachine.getName());
 		vm.setId(externalMachine.getId());
 
 		/* vm start logic */
 		VMManager vmManager = new VMManager();
-		vmManager.scheduleStopVM(vm);
+		vm = vmManager.scheduleStopVM(vm);
+		externalMachine.setState(VMState.valueOf(vm.getState().name()));
 
 		// return a new created virtual machine
 		return Response.ok(gson.toJson(externalMachine), MediaType.APPLICATION_JSON).build();

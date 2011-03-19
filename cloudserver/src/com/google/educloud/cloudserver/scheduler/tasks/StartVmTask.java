@@ -42,4 +42,9 @@ public class StartVmTask extends AbstractTask {
 		markAsCompleted();
 	}
 
+	@Override
+	public String getType() {
+		return "STARTVM";
+	}
+
 }

@@ -9,8 +9,12 @@ import com.google.educloud.cloudserver.nodecllient.NodeComunicationException;
 import com.google.educloud.cloudserver.nodecllient.VMNodeClient;
 import com.google.educloud.internal.entities.Node;
 import com.google.educloud.internal.entities.VirtualMachine;
+import com.google.educloud.internal.entities.VirtualMachine.VMState;
 
-//Classe para representar uma tarefa de parada de máquina virtual.
+/**
+ * Classe para representar uma tarefa de parada de máquina virtual.
+ *
+ */
 public class StopVMTask extends AbstractTask{
 
 	public static final String VM_ID = "VM_ID";
@@ -38,7 +42,15 @@ public class StopVMTask extends AbstractTask{
 			LOG.error("An error when stop virtual machine: #" + vm.getId(), e);
 		}
 
-		VirtualMachineDao.getInstance().remove(vm);
+		vm.setState(VMState.DONE);
+
+		VirtualMachineDao.getInstance().changeState(vm);
+
 		markAsCompleted();
+	}
+
+	@Override
+	public String getType() {
+		return "STOPVM";
 	}
 }

@@ -11,20 +11,18 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 
 import com.google.educloud.api.entities.Node;
-import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.cloudserver.database.dao.NodeDao;
-import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
 import com.google.gson.Gson;
 import com.sun.jersey.spi.resource.Singleton;
 
 @Singleton
 @Path("/node")
 public class NodeRest {
-	
+
 	private static Gson gson = new Gson();
 
 	private static Logger LOG = Logger.getLogger(NodeRest.class);
-	
+
 	/**
 	 * this method will retrive all registered nodes
 	 *
@@ -39,7 +37,7 @@ public class NodeRest {
 
 		//Recupera a lista de nodos da base de dados.
 		List<com.google.educloud.internal.entities.Node> listaNodos =
-			NodeDao.getInstance().getAll();
+			NodeDao.getInstance().getAllOnline();
 
 		//Array para retorno
 		Node[] nodes = new Node[listaNodos.size()];
@@ -52,9 +50,8 @@ public class NodeRest {
 		{
 			Node nodoRetorno = new Node();
 			nodoRetorno.setId(nodoInterno.getId());
-			//nodoRetorno.setIp(nodoInterno.getIp);
+			nodoRetorno.setHostname(nodoInterno.getHostname());
 			nodoRetorno.setPort(nodoInterno.getPort());
-			//nodoRetorno.setTemplateDir(nodoInterno.getTemplateDir);
 			nodes[indice] = nodoRetorno;
 
 			indice++;

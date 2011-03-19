@@ -1,16 +1,20 @@
 package com.google.educloud.cloudserver.database.dao;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.google.educloud.internal.entities.Node;
 
-public class NodeDao {
+public class NodeDao extends AbstractDao {
 
-	private static int currentId = 0;
-
-	private static List<Node> nodes = new ArrayList<Node>();
+	private static Logger LOG = Logger.getLogger(NodeDao.class);
 
 	private static NodeDao dao;
 
@@ -26,45 +30,138 @@ public class NodeDao {
 	}
 
 	public void insert(Node node) {
-		node.setId(++currentId);		
-		nodes.add(node);
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = getConnection().prepareStatement("values next value for seq_node_id");
+			rs = ps.executeQuery();
+			int key;
+			if (rs.next()) {
+				key = rs.getInt(1);
+
+				ps = getConnection().prepareStatement("INSERT INTO node (NODE_ID, HOSTNAME, PORT, START_TIME, LAST_PING) VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+				ps.setInt(1, key);
+				ps.setString(2, node.getHostname());
+				ps.setInt(3, node.getPort());
+				ps.execute();
+
+				node.setId(key);
+				getConnection().commit();
+			}
+		} catch (SQLException e) {
+			LOG.debug(e);
+			try {
+				getConnection().rollback();
+			} catch (SQLException e1) {
+				LOG.debug(e1);
+			}
+		} finally {
+			cleanUp(ps, rs);
+		}
 	}
 
 	public Node findRandomicNode() {
-		if (nodes.isEmpty()) { return null; }
+		List<Node> all = getAllOnline();
 
-		Collections.shuffle(nodes);
+		if (all.isEmpty()) return null;
 
-		return nodes.get(0);
+		Collections.shuffle(all);
+
+		return all.get(0);
 	}
-	
-	public Node findNodeById(int nodeId){		
-		Node toReturn = null;		
-		for( Node n : nodes ){
-			if( n.getId() == nodeId )
-			{
-				toReturn = n;
-				break;
+
+	public Node findNodeById(int nodeId){
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = getConnection().prepareStatement("SELECT * FROM NODE WHERE NODE_ID = ?");
+			ps.setInt(1, nodeId);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				Node node = new Node();
+				node.setId(rs.getInt("node_id"));
+				node.setHostname(rs.getString("hostname"));
+				node.setPort(rs.getInt("port"));
+				return node;
 			}
+		} catch (SQLException e) {
+			LOG.debug(e);
+		} finally {
+			cleanUp(ps, rs);
 		}
-		return toReturn;
+
+		return null;
 	}
 
 	public void remove(Node node) {
-		Node toRemove = null;
-		for (Node n : nodes) {
-			if (n.getId() == node.getId()) {
-				toRemove = n;
-				break;
-			}
-		}
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 
-		if (null != toRemove) nodes.remove(toRemove);
+		try {
+			ps = getConnection().prepareStatement("DELETE FROM NODE WHERE NODE_ID = ?");
+			ps.setInt(1, node.getId());
+			ps.execute();
+			getConnection().commit();
+		} catch (SQLException e) {
+			LOG.debug(e);
+			try {
+				getConnection().rollback();
+			} catch (SQLException e1) {
+				LOG.debug(e1);
+			}
+		} finally {
+			cleanUp(ps, rs);
+		}
 	}
 
-	public List<Node> getAll() {
-		// TODO Auto-generated method stub
+	public List<Node> getAllOnline() {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		List<Node> nodes = new ArrayList<Node>();
+		try {
+			ps = getConnection().prepareStatement("SELECT * FROM NODE WHERE TIMESTAMPDIFF(SQL_TSI_SECOND, LAST_PING, current_timestamp) <= 60");
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				Node node = new Node();
+				node.setId(rs.getInt("node_id"));
+				node.setHostname(rs.getString("hostname"));
+				node.setPort(rs.getInt("port"));
+				node.setStartTime(rs.getTimestamp("start_time"));
+				node.setLastPing(rs.getTimestamp("last_ping"));
+				nodes.add(node);
+			}
+		} catch (SQLException e) {
+			LOG.debug(e);
+		} finally {
+			cleanUp(ps, rs);
+		}
+
 		return nodes;
+	}
+
+	public void updateLastPing(Node node) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = getConnection().prepareStatement("UPDATE NODE SET LAST_PING=? WHERE NODE_ID = ?");
+			ps.setTimestamp(1, new Timestamp(node.getLastPing().getTime()));
+			ps.setInt(2, node.getId());
+			ps.execute();
+			getConnection().commit();
+		} catch (SQLException e) {
+			LOG.debug(e);
+			try {
+				getConnection().rollback();
+			} catch (SQLException e1) {
+				LOG.debug(e1);
+			}
+		} finally {
+			cleanUp(ps, rs);
+		}
 	}
 
 }

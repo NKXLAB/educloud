@@ -11,26 +11,36 @@ import com.google.educloud.internal.entities.VirtualMachine.VMState;
 
 public class VMManager {
 
-	public void scheduleNewVM(VirtualMachine vm) {
+	public VirtualMachine scheduleStartVM(VirtualMachine vm) {
 
+		vm = VirtualMachineDao.getInstance().findById(vm.getId());
 		vm.setState(VMState.PENDING);
-
-		VirtualMachineDao.getInstance().insert(vm);
 
 		AbstractTask startVmTask = new StartVmTask();
 		startVmTask.setStatus(Status.PENDING);
 		startVmTask.setParameter(StartVmTask.VM_ID, String.valueOf(vm.getId()));
 
+		VirtualMachineDao.getInstance().changeState(vm);
+
 		TaskDao.getInstance().insert(startVmTask);
+
+		return vm;
 	}
 
-	public void scheduleStopVM(VirtualMachine vm) {
+	public VirtualMachine scheduleStopVM(VirtualMachine vm) {
+
+		vm = VirtualMachineDao.getInstance().findById(vm.getId());
+
 		vm.setState(VMState.SHUTDOWN);
 
 		AbstractTask stopVmTask = new StopVMTask();
 		stopVmTask.setStatus(Status.PENDING);
 		stopVmTask.setParameter(StopVMTask.VM_ID, String.valueOf(vm.getId()));
 
+		VirtualMachineDao.getInstance().changeState(vm);
+
 		TaskDao.getInstance().insert(stopVmTask);
+
+		return vm;
 	}
 }

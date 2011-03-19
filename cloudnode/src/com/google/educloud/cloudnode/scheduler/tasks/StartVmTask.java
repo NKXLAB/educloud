@@ -1,17 +1,25 @@
 package com.google.educloud.cloudnode.scheduler.tasks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.virtualbox.CleanupMode;
 import org.virtualbox.DeviceType;
+import org.virtualbox.IVRDEServerInfo;
 import org.virtualbox.LockType;
 import org.virtualbox.StorageBus;
 import org.virtualbox.StorageControllerType;
+import org.virtualbox.service.IBIOSSettings;
+import org.virtualbox.service.IConsole;
 import org.virtualbox.service.IMachine;
 import org.virtualbox.service.IMedium;
 import org.virtualbox.service.IProgress;
 import org.virtualbox.service.ISession;
 import org.virtualbox.service.IStorageController;
+import org.virtualbox.service.ISystemProperties;
+import org.virtualbox.service.IVRDEServer;
 import org.virtualbox.service.IVirtualBox;
 import org.virtualbox.service.IWebsessionManager;
 
@@ -37,11 +45,19 @@ public class StartVmTask extends AbstractTask {
 		// TODO Auto-generated method stub
 
 		LOG.debug("Running start virtual machine task");
-		LOG.debug(vm);
 
 		// 1) clone template disk
 		IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
-		String mediumLocation = cloneTemplate(vbox);
+
+		String bootableMedium = vm.getBootableMedium();
+
+		String mediumLocation;
+		if (null == bootableMedium) {
+			mediumLocation = cloneTemplate(vbox);
+		} else {
+			String property = System.getProperty("file.separator");
+			mediumLocation = NodeConfig.getMachinesDir() + property + bootableMedium;
+		}
 
 		// 2) create a virtual machine
 		IMachine machine = createMachine(vbox, mediumLocation);
@@ -50,7 +66,18 @@ public class StartVmTask extends AbstractTask {
 		// 4) start virtual machine
 		ISession sessionObject = new IWebsessionManager(vbox.port).getSessionObject(vbox);
 		machine = vbox.findMachine(vm.getName());
-		machine.launchVMProcess(sessionObject, NodeConfig.getVboxFrontendType(), "");
+		IProgress process = machine.launchVMProcess(sessionObject, NodeConfig.getVboxFrontendType(), "");
+
+		boolean completed = false;
+		do {
+			completed = process.getCompleted();
+		} while (!completed);
+
+		IConsole console = sessionObject.getConsole();
+		IVRDEServerInfo vrdeServerInfo = console.getVRDEServerInfo();
+
+		boolean active = vrdeServerInfo.isActive();
+		int port = vrdeServerInfo.getPort();
 
 		// 5) notify server that machine was started
 		String vmUUID = machine.getId().toString();
@@ -64,7 +91,21 @@ public class StartVmTask extends AbstractTask {
 	}
 
 	private IMachine createMachine(IVirtualBox vbox, String mediumLocation) {
-		IMachine machine = vbox.createMachine(null, vm.getName(), vm.getTemplate().getOsType(), UUID.randomUUID(), false);
+		IMachine machine;
+
+		List<IMachine> machines = vbox.getMachines();
+
+		for (IMachine iMachine : machines) {
+			String name = iMachine.getName();
+			if (name.equals(vm.getName())) {
+				LOG.warn("Virtual machine '" + vm.getName() + "' already exists, cloudnode will remove");
+				iMachine.unregister(CleanupMode.FULL);
+				iMachine.delete(new ArrayList<IMedium>());
+			}
+			iMachine.release();
+		}
+
+		machine = vbox.createMachine(null, vm.getName(), vm.getTemplate().getOsType(), UUID.randomUUID(), false);
 
 		// 3) attach new cloned disk to new virtual machine
 		ISession sessionObject = new IWebsessionManager(vbox.port).getSessionObject(vbox);
@@ -79,8 +120,24 @@ public class StartVmTask extends AbstractTask {
 		machine.saveSettings();
 		vbox.registerMachine(machine);
 		machine.lockMachine(sessionObject, LockType.WRITE);
+		machine.release();
 
 		machine = sessionObject.getMachine();
+
+		ISystemProperties systemProperties = vbox.getSystemProperties();
+		String defaultVRDEExtPack = systemProperties.getDefaultVRDEExtPack();
+		/* add support for vrde server */
+		IVRDEServer vrdeServer = machine.getVRDEServer();
+		vrdeServer.setEnabled(true);
+		vrdeServer.setAuthTimeout(5000);
+		vrdeServer.setVRDEProperty("TCP/Ports", "3358");
+		vrdeServer.setVRDEExtPack(defaultVRDEExtPack);
+		vrdeServer.release();
+
+		IBIOSSettings biosSettings = machine.getBIOSSettings();
+		biosSettings.setACPIEnabled(true);
+		biosSettings.release();
+
 		IMedium medium = vbox.findMedium(mediumLocation, DeviceType.HARD_DISK);
 		machine.attachDevice(name, 0, 0, DeviceType.HARD_DISK, medium);
 		medium.release();
@@ -102,6 +159,8 @@ public class StartVmTask extends AbstractTask {
 		String fileName = "disk-machine-"+idVm+"-template-"+ idTemplate + ".vdi";
 		String locationSrc = NodeConfig.getTemplateDir() + property + template.getFilename();
 		String locationTarget = NodeConfig.getMachinesDir() + property + fileName;
+
+		vm.setBootableMedium(fileName);
 
 		LOG.debug("will clone: " + locationSrc + " to " + locationTarget);
 
