@@ -62,4 +62,9 @@ public class NodeDao {
 		if (null != toRemove) nodes.remove(toRemove);
 	}
 
+	public List<Node> getAll() {
+		// TODO Auto-generated method stub
+		return nodes;
+	}
+
 }

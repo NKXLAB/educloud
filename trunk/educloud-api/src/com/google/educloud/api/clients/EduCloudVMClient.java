@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
+import com.google.educloud.api.entities.Node;
+import com.google.educloud.api.entities.Template;
 import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 import com.sun.jersey.api.client.Client;
@@ -16,6 +18,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 public class EduCloudVMClient extends AbstractClient {
 
+	//Inicia a exsecução de máquina virtual.
 	public VirtualMachine startVM(VirtualMachine machine) throws EduCloudServerException {
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
@@ -35,6 +38,7 @@ public class EduCloudVMClient extends AbstractClient {
 		return gson.fromJson(entity, VirtualMachine.class);
 	}
 	
+	//Para a execução de uma máquina virtual.
 	public void stopVM(VirtualMachine machine) throws EduCloudServerException {
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
@@ -52,13 +56,13 @@ public class EduCloudVMClient extends AbstractClient {
 		response.close();
 	}
 	
-	//Ajustar para retornar um array de virtual machines.
-	public List<VirtualMachine> getAll() throws EduCloudServerException {
+	//Recupera todas as instâncias de máquinas virtuais.
+	public List<VirtualMachine> describeInstances() throws EduCloudServerException {
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
 		WebResource service = client.resource(getBaseURI());
 
-		ClientResponse response = service.path("vm").path("getAll").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class);
+		ClientResponse response = service.path("vm").path("describeInstances").accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
 		int status = response.getStatus();
 		String entity = response.getEntity(String.class);
@@ -81,5 +85,6 @@ public class EduCloudVMClient extends AbstractClient {
 		}
 
 		return listaVirtualMachines;
-	}
+	}	
+	
 }
