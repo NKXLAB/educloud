@@ -164,4 +164,28 @@ public class NodeDao extends AbstractDao {
 		}
 	}
 
+	public List<Node> findNodeByHostname(String hostname) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		List<Node> nodes = new ArrayList<Node>();
+		try {
+			ps = getConnection().prepareStatement("SELECT * FROM NODE WHERE HOSTNAME = ?");
+			ps.setString(1, hostname);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				Node node = new Node();
+				node.setId(rs.getInt("node_id"));
+				node.setHostname(rs.getString("hostname"));
+				node.setPort(rs.getInt("port"));
+				nodes.add(node);
+			}
+		} catch (SQLException e) {
+			LOG.debug(e);
+		} finally {
+			cleanUp(ps, rs);
+		}
+
+		return nodes;
+	}
 }

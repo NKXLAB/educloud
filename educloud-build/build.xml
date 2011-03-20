@@ -40,6 +40,7 @@
 		<ant antfile="build/build.xml" target="clean" dir="${api.dir}"/>
 		
 		<copy file="${api.jar}" todir="${gui.dir}/WebContent/WEB-INF/lib"/>
+		<copy file="${externalentities.jar}" todir="${gui.dir}/WebContent/WEB-INF/lib"/>
 		
 		<ant antfile="build/build.xml" target="clean" dir="${gui.dir}"/>
 		

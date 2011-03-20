@@ -56,4 +56,4 @@ INSERT INTO TEMPLATE (TEMPLATE_ID, OS_TYPE, NAME, FILENAME, SIZE)
      
 -- create default virtual machine
 INSERT INTO MACHINE (MACHINE_ID, TEMPLATE_ID, NAME, STATE) 
-     VALUES ((VALUES NEXT VALUE FOR SEQ_MACHINE_ID), 1, 'Ubuntu minimal config', 'DONE');
+     VALUES ((VALUES NEXT VALUE FOR SEQ_MACHINE_ID), 1, 'Virtual machine using ubuntu minimal', 'DONE');

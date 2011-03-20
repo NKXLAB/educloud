@@ -1,6 +1,7 @@
 package com.google.educloud.cloudserver.internalrs;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -36,8 +37,18 @@ public class NodeRegisterRest {
 
 		Node node = gson.fromJson(jsonNode, Node.class);
 
+
+		NodeDao dao = NodeDao.getInstance();
+
+		// remove last occurrences of same node
+		List<Node> nodes = dao.findNodeByHostname(node.getHostname());
+		for (Node n : nodes) {
+			dao.remove(n);
+		}
+
 		// register new node from database
-		NodeDao.getInstance().insert(node);
+		dao.insert(node);
+
 
 		// start a new task for check node availability
 		AbstractTask checkNodeTask = new CheckNodeTask();
