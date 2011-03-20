@@ -39,6 +39,8 @@ public class StartVmTask extends AbstractTask {
 			LOG.error("An error when start virtual machine: #" + vm.getId(), e);
 		}
 
+		VirtualMachineDao.getInstance().updateNode(vm.getId(), vm.getNodeId());
+
 		markAsCompleted();
 	}
 

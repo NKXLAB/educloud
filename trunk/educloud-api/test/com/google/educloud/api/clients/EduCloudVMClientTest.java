@@ -93,7 +93,7 @@ public class EduCloudVMClientTest {
 
             for( Node nodo : listaNodos ){
                     System.out.println(nodo.getId());
-                    System.out.println(nodo.getIp());
+                    System.out.println(nodo.getHostName());
                     System.out.println(nodo.getPort());
             }
     }

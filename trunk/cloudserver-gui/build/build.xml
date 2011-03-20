@@ -16,7 +16,7 @@
 
 	<property name="target" value="target" />
 	<property name="src" value="src" />
-	<property name="lib" value="WebContent/lib" />
+	<property name="lib" value="WebContent/WEB-INF/lib" />
 	<property name="bin" value="WebContent/WEB-INF/classes" />
 	<property name="manifest" value="WebContent/META-INF/MANIFEST.MF" />
 

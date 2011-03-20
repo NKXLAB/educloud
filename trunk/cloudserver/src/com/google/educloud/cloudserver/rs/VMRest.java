@@ -16,6 +16,7 @@ import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.VirtualMachine.VMState;
 import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
 import com.google.educloud.cloudserver.managers.VMManager;
+import com.google.educloud.internal.entities.Template;
 import com.google.gson.Gson;
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -141,9 +142,13 @@ public class VMRest {
 			VirtualMachine vmRetorno = new VirtualMachine();
 			vmRetorno.setId(vmInterna.getId());
 			vmRetorno.setName(vmInterna.getName());
-			// Ajustar as conversões
-			// vmRetorno.setState(vmInterna.getState());
-			// vmRetorno.setTemplate(vmInterna.getTemplate());
+			vmRetorno.setState(VMState.valueOf(vmInterna.getState().name()));
+			Template template = vmInterna.getTemplate();
+			com.google.educloud.api.entities.Template templateRetorno = new com.google.educloud.api.entities.Template();
+			templateRetorno.setId(template.getId());
+			templateRetorno.setName(template.getName());
+			templateRetorno.setOsType(template.getOsType());
+			vmRetorno.setTemplate(templateRetorno);
 			virtualMachines[indice] = vmRetorno;
 
 			indice++;

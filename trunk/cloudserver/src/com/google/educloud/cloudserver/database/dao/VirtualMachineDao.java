@@ -103,7 +103,7 @@ public class VirtualMachineDao extends AbstractDao {
 				VirtualMachine vm = new VirtualMachine();
 				vm.setId(rs.getInt("machine_id"));
 				vm.setBootableMedium(rs.getString("bootable_medium"));
-				vm.setName(rs.getString("state"));
+				vm.setName(rs.getString("name"));
 				vm.setNodeId(rs.getInt("node_id"));
 				vm.setState(VMState.valueOf(rs.getString("state")));
 				vm.setTemplate(TemplateDao.getInstance().findById(rs.getInt("template_id")));
@@ -153,6 +153,29 @@ public class VirtualMachineDao extends AbstractDao {
 			ps.setString(3, machine.getVboxSession());
 			ps.setString(4, machine.getBootableMedium());
 			ps.setInt(5, machine.getId());
+			ps.execute();
+
+			getConnection().commit();
+		} catch (SQLException e) {
+			LOG.debug(e);
+			try {
+				getConnection().rollback();
+			} catch (SQLException e1) {
+				LOG.debug(e1);
+			}
+		} finally {
+			cleanUp(ps, rs);
+		}
+	}
+
+	public void updateNode(int vmId, int nodeId) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = getConnection().prepareStatement("UPDATE MACHINE SET NODE_ID=? WHERE MACHINE_ID=?");
+			ps.setInt(1, nodeId);
+			ps.setInt(2, vmId);
 			ps.execute();
 
 			getConnection().commit();

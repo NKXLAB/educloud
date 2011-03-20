@@ -1,12 +1,15 @@
 package com.google.educloud.api.entities;
 
-//Classe para representar um nodo da nuvem.
+/**
+ * Classe para representar um nodo da nuvem.
+ *
+ */
 public class Node {
-	
+
 	private int id;
 	private String ip;
 	private int port;
-	private String templateDir;
+
 	/**
 	 * @param id the id to set
 	 */
@@ -28,7 +31,7 @@ public class Node {
 	/**
 	 * @return the ip
 	 */
-	public String getIp() {
+	public String getHostName() {
 		return ip;
 	}
 	/**
@@ -42,17 +45,5 @@ public class Node {
 	 */
 	public int getPort() {
 		return port;
-	}
-	/**
-	 * @param templateDir the templateDir to set
-	 */
-	public void setTemplateDir(String templateDir) {
-		this.templateDir = templateDir;
-	}
-	/**
-	 * @return the templateDir
-	 */
-	public String getTemplateDir() {
-		return templateDir;
 	}
 }
