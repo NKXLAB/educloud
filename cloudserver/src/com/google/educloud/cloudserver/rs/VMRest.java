@@ -46,7 +46,7 @@ public class VMRest {
 		int id = externalMachine.getId();
 
 		/* validations */
-		if (id != 0) {
+		if (id == 0) {
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
 			error.setCode("CS-001");
 			error.setHint("Set virtual machine id and try again");
