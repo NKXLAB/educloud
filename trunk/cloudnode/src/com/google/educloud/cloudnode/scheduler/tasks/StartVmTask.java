@@ -1,10 +1,12 @@
 package com.google.educloud.cloudnode.scheduler.tasks;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.virtualbox.AccessMode;
 import org.virtualbox.CleanupMode;
 import org.virtualbox.DeviceType;
 import org.virtualbox.IVRDEServerInfo;
@@ -138,7 +140,7 @@ public class StartVmTask extends AbstractTask {
 		biosSettings.setACPIEnabled(true);
 		biosSettings.release();
 
-		IMedium medium = vbox.findMedium(mediumLocation, DeviceType.HARD_DISK);
+		IMedium medium = getSrcMedium(vbox, mediumLocation);
 		machine.attachDevice(name, 0, 0, DeviceType.HARD_DISK, medium);
 		medium.release();
 
@@ -162,27 +164,18 @@ public class StartVmTask extends AbstractTask {
 
 		vm.setBootableMedium(fileName);
 
-		LOG.debug("will clone: " + locationSrc + " to " + locationTarget);
-
 		LOG.debug("waiting template clone...");
 		long start = System.nanoTime();
 
 		IMedium target = vbox.createHardDisk("VDI", locationTarget);
 		/* support only standard variant type */
-		IProgress progess = target.createBaseStorage(template.getSize(), 0);
-
+		IProgress progess = null;
 		boolean completed = false;
-		do {
-			completed = progess.getCompleted();
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				LOG.debug("create based storage was interrupted");
-			}
-		} while (!completed);
-		progess.release();
 
-		IMedium src = vbox.findMedium(locationSrc, DeviceType.HARD_DISK);
+		IMedium src = getSrcMedium(vbox, locationSrc);
+		locationSrc = src.getLocation();
+
+		LOG.debug("will clone: " + locationSrc + " to " + locationTarget);
 
 		progess = src.cloneTo(target, 0, null);
 
@@ -205,6 +198,40 @@ public class StartVmTask extends AbstractTask {
 		target.release();
 
 		return locationTarget;
+	}
+
+	/**
+	 * Gets src medium registered or not
+	 *
+	 * @param vbox
+	 * @param locationSrc
+	 * @return
+	 */
+	private IMedium getSrcMedium(IVirtualBox vbox, String locationSrc) {
+		List<IMedium> hardDisks = vbox.getHardDisks();
+
+		String uuid = null;
+		for (IMedium iMedium : hardDisks) {
+			String location = iMedium.getLocation();
+
+			String registeredName = new File(location).getName();
+			String srcName = new File(locationSrc).getName();
+
+			if (registeredName.equals(srcName)) {
+				uuid = iMedium.getId().toString();
+			}
+
+			iMedium.release();
+		}
+
+		IMedium medium = null;
+		if (uuid != null) {
+			medium = vbox.findMedium(uuid, DeviceType.HARD_DISK);
+		} else {
+			medium = vbox.openMedium(locationSrc, DeviceType.HARD_DISK, AccessMode.READ_ONLY);
+		}
+
+		return medium;
 	}
 
 }
