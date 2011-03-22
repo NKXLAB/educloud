@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.educloud.api.EduCloudAuthorization;
 import com.google.educloud.api.EduCloudConfig;
 import com.google.educloud.api.EduCloudFactory;
 import com.google.educloud.api.entities.Template;
@@ -20,8 +21,11 @@ public class EduCloudRestartVMClientTest {
 		EduCloudConfig config = new EduCloudConfig();
 		config.setHost("localhost");
 		config.setPort(8000);
+		config.setLogin("admin");
+		config.setPass("123");
 
-		vmClient = EduCloudFactory.createVMClient(config);
+		EduCloudAuthorization auth = EduCloudFactory.createAuthorization(config);
+		vmClient = EduCloudFactory.createVMClient(auth);
 	}
 
 	@After

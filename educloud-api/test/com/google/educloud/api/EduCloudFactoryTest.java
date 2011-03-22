@@ -18,6 +18,8 @@ public class EduCloudFactoryTest {
 		config = new EduCloudConfig();
 		config.setHost("localhost");
 		config.setPort(8000);
+		config.setLogin("admin");
+		config.setPass("123");
 	}
 
 	@After
@@ -27,7 +29,8 @@ public class EduCloudFactoryTest {
 	@Test
 	public void testCreateVMClient() {
 		// create vm client
-		AbstractClient vmClient = EduCloudFactory.createVMClient(config);
+		EduCloudAuthorization auth = EduCloudFactory.createAuthorization(config);
+		AbstractClient vmClient = EduCloudFactory.createVMClient(auth);
 		assertNotNull(vmClient);
 	}
 

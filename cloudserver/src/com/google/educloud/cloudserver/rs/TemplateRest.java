@@ -12,14 +12,11 @@ import org.apache.log4j.Logger;
 
 import com.google.educloud.cloudserver.database.dao.TemplateDao;
 import com.google.educloud.internal.entities.Template;
-import com.google.gson.Gson;
-import com.sun.jersey.spi.resource.Singleton;
+import com.sun.jersey.spi.container.servlet.PerSession;
 
-@Singleton
+@PerSession
 @Path("/template")
-public class TemplateRest {
-
-	private static Gson gson = new Gson();
+public class TemplateRest extends CloudResource {
 
 	private static Logger LOG = Logger.getLogger(TemplateRest.class);
 

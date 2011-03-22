@@ -33,7 +33,7 @@
 		
 		<manifest file="${manifest}">
 			<attribute name="Built-Date" value="${TODAY}" />
-			<attribute name="Class-Path" value=". lib/gson-1.5.jar lib/jersey-client-1.4.jar lib/jersey-core-1.4.jar lib/educloud-external-entities.jar" />
+			<attribute name="Class-Path" value=". lib/commons-codec-1.4.jar lib/commons-httpclient.jar lib/commons-logging-1.1.1.jar lib/educloud-external-entities.jar lib/gson-1.5.jar lib/jersey-apache-client-1.4.jar lib/jersey-client-1.4.jar lib/jersey-core-1.4.jar" />
 		</manifest>
 	</target>
 

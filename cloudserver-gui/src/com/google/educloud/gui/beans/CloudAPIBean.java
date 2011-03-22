@@ -1,5 +1,6 @@
 package com.google.educloud.gui.beans;
 
+import com.google.educloud.api.EduCloudAuthorization;
 import com.google.educloud.api.EduCloudConfig;
 import com.google.educloud.api.EduCloudFactory;
 import com.google.educloud.api.clients.EduCloudNodeClient;
@@ -17,7 +18,10 @@ public class CloudAPIBean {
 			EduCloudConfig config = new EduCloudConfig();
 			config.setHost("localhost");
 			config.setPort(8000);
-			templateClient = EduCloudFactory.createTemplateClient(config);
+			config.setLogin("admin");
+			config.setPass("123");
+			EduCloudAuthorization auth = EduCloudFactory.createAuthorization(config);
+			templateClient = EduCloudFactory.createTemplateClient(auth);
 		}
 		return  templateClient;
 	}
@@ -27,7 +31,10 @@ public class CloudAPIBean {
 			EduCloudConfig config = new EduCloudConfig();
 			config.setHost("localhost");
 			config.setPort(8000);
-			vmClient = EduCloudFactory.createVMClient(config);
+			config.setLogin("admin");
+			config.setPass("123");
+			EduCloudAuthorization auth = EduCloudFactory.createAuthorization(config);
+			vmClient = EduCloudFactory.createVMClient(auth);
 		}
 		return vmClient;
 	}
@@ -37,7 +44,10 @@ public class CloudAPIBean {
 			EduCloudConfig config = new EduCloudConfig();
 			config.setHost("localhost");
 			config.setPort(8000);
-			nodeClient = EduCloudFactory.createNodeClient(config);
+			config.setLogin("admin");
+			config.setPass("123");
+			EduCloudAuthorization auth = EduCloudFactory.createAuthorization(config);
+			nodeClient = EduCloudFactory.createNodeClient(auth);
 		}
 		return  nodeClient;
 	}

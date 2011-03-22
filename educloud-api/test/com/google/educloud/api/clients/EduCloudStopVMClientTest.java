@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.educloud.api.EduCloudAuthorization;
 import com.google.educloud.api.EduCloudConfig;
 import com.google.educloud.api.EduCloudFactory;
 import com.google.educloud.api.entities.VirtualMachine;
@@ -12,7 +13,6 @@ import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 public class EduCloudStopVMClientTest {
 
 	private EduCloudVMClient vmClient;
-	private String name;
 
 	@Before
 	public void setUp() throws Exception {
@@ -20,10 +20,11 @@ public class EduCloudStopVMClientTest {
 		EduCloudConfig config = new EduCloudConfig();
 		config.setHost("localhost");
 		config.setPort(8000);
+		config.setLogin("admin");
+		config.setPass("123");
 
-		name = "ubuntu-machine";
-
-		vmClient = EduCloudFactory.createVMClient(config);
+		EduCloudAuthorization auth = EduCloudFactory.createAuthorization(config);
+		vmClient = EduCloudFactory.createVMClient(auth);
 	}
 
 	@After
