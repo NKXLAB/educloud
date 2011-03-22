@@ -6,6 +6,7 @@ import com.google.educloud.api.EduCloudFactory;
 import com.google.educloud.api.clients.EduCloudNodeClient;
 import com.google.educloud.api.clients.EduCloudTemplateClient;
 import com.google.educloud.api.clients.EduCloudVMClient;
+import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 
 public class CloudAPIBean {
 
@@ -13,7 +14,7 @@ public class CloudAPIBean {
 	private EduCloudTemplateClient templateClient;
     private EduCloudNodeClient nodeClient;
 
-	public EduCloudTemplateClient getTemplateClient() {
+	public EduCloudTemplateClient getTemplateClient() throws EduCloudServerException {
 		if (templateClient == null) {
 			EduCloudConfig config = new EduCloudConfig();
 			config.setHost("localhost");
@@ -26,7 +27,7 @@ public class CloudAPIBean {
 		return  templateClient;
 	}
 
-	public EduCloudVMClient getVMClient() {
+	public EduCloudVMClient getVMClient() throws EduCloudServerException {
 		if (vmClient == null) {
 			EduCloudConfig config = new EduCloudConfig();
 			config.setHost("localhost");
@@ -39,7 +40,7 @@ public class CloudAPIBean {
 		return vmClient;
 	}
 
-	public EduCloudNodeClient getNodeClient() {
+	public EduCloudNodeClient getNodeClient() throws EduCloudServerException {
 		if (nodeClient == null) {
 			EduCloudConfig config = new EduCloudConfig();
 			config.setHost("localhost");

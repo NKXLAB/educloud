@@ -2,6 +2,8 @@ package com.google.educloud.cloudserver.servlet.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -13,27 +15,33 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
+import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.cloudserver.database.dao.SessionDao;
 import com.google.educloud.cloudserver.entity.CloudSession;
+import com.google.gson.Gson;
 
 public class RestSecurityFilter implements Filter {
 
 	private static Logger LOG = Logger.getLogger(RestSecurityFilter.class);
-	private List<String> list;
+	private static List<String> list;
+	private Gson gson = new Gson();
+
+	static {
+		list = new ArrayList<String>();
+		list.add("/application.wadl");
+		list.add("/user/login");
+	}
 
 	@Override
-	public void destroy() {
-		// TODO Auto-generated method stub
-
-	}
+	public void destroy() {}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-
-		LOG.debug("will filter request from: " + request.getRemoteHost());
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -48,16 +56,43 @@ public class RestSecurityFilter implements Filter {
 		}
 
 		HttpSession session = httpRequest.getSession(true);
-		LOG.debug("sessionId: " + session.getId());
 
 		if (!allowedPublicRequest) {
 			CloudSession cloudSession = (CloudSession)session.getAttribute(CloudSession.HTTP_ATTR_NAME);
 			if (null == cloudSession) {
-				LOG.debug("user not authorized");
-				httpResponse.getOutputStream().print("nao autenticado");
+				// session expired
+				EduCloudErrorMessage error = new EduCloudErrorMessage();
+				error.setCode("CS-300");
+				error.setHint("Create a new session and try again");
+				error.setText("You need a valid session");
+
+				LOG.debug("A client from '" + httpRequest.getRemoteAddr() + "' is try access resource '" + httpRequest.getPathInfo() + "' without start a session.");
+
+				httpResponse.setContentType(MediaType.APPLICATION_JSON);
+				httpResponse.getOutputStream().print(gson.toJson(error));
 			} else {
-				LOG.debug("user authorized");
-				authenticated = true;
+				Date currentTime = Calendar.getInstance().getTime();
+
+				long lastTimestamp = cloudSession.getLastUpdate().getTime();
+				long currentTimestamp = currentTime.getTime();
+
+				// 1 hour
+				long expirationTime = 3600 * 1000;
+				if ((currentTimestamp - lastTimestamp) > expirationTime) {
+					// session expired
+					EduCloudErrorMessage error = new EduCloudErrorMessage();
+					error.setCode("CS-300");
+					error.setHint("Create a new session");
+					error.setText("Your session was expired");
+
+					LOG.debug("Session '" + cloudSession.getId() + "' is expired");
+					httpResponse.setContentType(MediaType.APPLICATION_JSON);
+					httpResponse.getOutputStream().print(gson.toJson(error));
+				} else {
+					SessionDao.getInstance().updateLastUpdate(cloudSession);
+					authenticated = true;
+				}
+
 			}
 		}
 
@@ -67,10 +102,6 @@ public class RestSecurityFilter implements Filter {
 	}
 
 	@Override
-	public void init(FilterConfig arg0) throws ServletException {
-		list = new ArrayList<String>();
-		list.add("/application.wadl");
-		list.add("/user/login");
-	}
+	public void init(FilterConfig arg0) throws ServletException {}
 
 }

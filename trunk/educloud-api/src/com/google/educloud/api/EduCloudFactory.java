@@ -8,6 +8,9 @@ import javax.ws.rs.core.UriBuilder;
 import com.google.educloud.api.clients.EduCloudNodeClient;
 import com.google.educloud.api.clients.EduCloudTemplateClient;
 import com.google.educloud.api.clients.EduCloudVMClient;
+import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.api.entities.exceptions.EduCloudServerException;
+import com.google.gson.Gson;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.LoggingFilter;
@@ -16,7 +19,9 @@ import com.sun.jersey.client.apache.config.DefaultApacheHttpClientConfig;
 
 public class EduCloudFactory {
 
-	public static EduCloudAuthorization createAuthorization(EduCloudConfig eduCloudConfig) {
+	private static Gson gson = new Gson();
+
+	public static EduCloudAuthorization createAuthorization(EduCloudConfig eduCloudConfig) throws EduCloudServerException {
 		DefaultApacheHttpClientConfig apcc = new  DefaultApacheHttpClientConfig();
         apcc.getProperties().put(DefaultApacheHttpClientConfig.PROPERTY_HANDLE_COOKIES, true);
 
@@ -34,9 +39,13 @@ public class EduCloudFactory {
 
 		WebResource service = client.resource(uri);
 
-		ClientResponse response = service.path("user").path("login").accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+		ClientResponse response = service.path("user").path("login")
+			.queryParam("login", eduCloudConfig.getLogin())
+			.queryParam("pass", eduCloudConfig.getPass())
+			.accept(MediaType.APPLICATION_JSON)
+			.get(ClientResponse.class);
 
-		// TODO handle errors from response
+		handleError(response.getStatus(), response.getEntity(String.class));
 
 		EduCloudAuthorization eduCloudAuthorization = new EduCloudAuthorization();
 		eduCloudAuthorization.config = eduCloudConfig;
@@ -71,5 +80,17 @@ public class EduCloudFactory {
 		client.setBaseURI(auth.uri);
 
 		return client;
+	}
+
+	protected static void handleError(int status, String entity) throws EduCloudServerException {
+		if (status == 400) {
+			EduCloudErrorMessage message = gson.fromJson(entity, EduCloudErrorMessage.class);
+			throw new EduCloudServerException(message);
+		}
+
+		if (status != 200) {
+			EduCloudErrorMessage message = gson.fromJson(entity, EduCloudErrorMessage.class);
+			throw new EduCloudServerException(message);
+		}
 	}
 }
