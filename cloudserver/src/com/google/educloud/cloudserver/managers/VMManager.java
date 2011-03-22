@@ -10,6 +10,11 @@ import com.google.educloud.internal.entities.VirtualMachine;
 import com.google.educloud.internal.entities.VirtualMachine.VMState;
 
 public class VMManager {
+	
+	public void CreateVM(VirtualMachine vm) {
+		
+		VirtualMachineDao.getInstance().insert(vm);		
+	}
 
 	public VirtualMachine scheduleStartVM(VirtualMachine vm) {
 
@@ -42,5 +47,5 @@ public class VMManager {
 		TaskDao.getInstance().insert(stopVmTask);
 
 		return vm;
-	}
+	}	
 }

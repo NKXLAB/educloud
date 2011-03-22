@@ -12,8 +12,27 @@ import com.sun.jersey.api.client.WebResource;
 
 
 public class EduCloudVMClient extends AbstractClient {
+	
+	//Cria uma máquina virtual
+	public VirtualMachine createVM(VirtualMachine machine) throws EduCloudServerException {
+		
+		WebResource service = getWebResouce();
 
-	//Inicia a exsecução de máquina virtual.
+		String json = gson.toJson(machine);
+
+		ClientResponse response = service.path("vm").path("create").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, json);
+
+		int status = response.getStatus();
+		String entity = response.getEntity(String.class);
+
+		handleError(status, entity);
+
+		response.close();
+		
+		return gson.fromJson(entity, VirtualMachine.class);
+	}
+
+	//Inicia a execução de uma máquina virtual.
 	public VirtualMachine startVM(VirtualMachine machine) throws EduCloudServerException {
 		WebResource service = getWebResouce();
 
@@ -29,7 +48,7 @@ public class EduCloudVMClient extends AbstractClient {
 		response.close();
 
 		return gson.fromJson(entity, VirtualMachine.class);
-	}
+	}	
 
 	//Para a execução de uma máquina virtual.
 	public void stopVM(VirtualMachine machine) throws EduCloudServerException {

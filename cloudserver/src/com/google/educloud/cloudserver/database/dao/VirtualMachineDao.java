@@ -43,7 +43,7 @@ public class VirtualMachineDao extends AbstractDao {
 				ps.setInt(1, key);
 				ps.setInt(2, machine.getTemplate().getId());
 				ps.setString(3, machine.getName());
-				ps.setString(3, machine.getState().name());
+				ps.setString(4, machine.getState().name());
 				ps.execute();
 
 				machine.setId(key);
