@@ -24,6 +24,47 @@ import com.sun.jersey.spi.container.servlet.PerSession;
 public class VMRest extends CloudResource {
 
 	private static Logger LOG = Logger.getLogger(VMRest.class);
+	
+	/**
+	 * this method will create a virtual machine.
+	 *
+	 * @param machine
+	 * @return
+	 */
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/create")
+	public Response createVM(String machine) {
+
+		LOG.debug("Application will create a new VM");
+		LOG.debug(machine);
+
+		VirtualMachine externalMachine = gson.fromJson(machine, VirtualMachine.class);
+
+		/* create internal entity (Virtual Machine) based on received */
+		com.google.educloud.internal.entities.VirtualMachine vm = 
+			new com.google.educloud.internal.entities.VirtualMachine();
+		
+		/* create internal entity (Template) based on received */
+		com.google.educloud.internal.entities.Template tpt =
+			new com.google.educloud.internal.entities.Template();		
+		tpt.setId(externalMachine.getTemplate().getId());
+		
+		vm.setTemplate(tpt);
+		vm.setName(externalMachine.getName());
+		vm.setState(com.google.educloud.internal.entities.VirtualMachine.VMState.DONE);
+
+		/* vm start logic */
+		VMManager vmManager = new VMManager();
+		vmManager.CreateVM(vm);
+
+		/* update external machine to return for client */
+		externalMachine.setId(vm.getId());
+		externalMachine.setState(VMState.valueOf(vm.getState().name()));
+
+		// return a new created virtual machine
+		return Response.ok(gson.toJson(externalMachine), MediaType.APPLICATION_JSON).build();
+	}
 
 	/**
 	 * this method will schedule a new allocation of a virtual machine
