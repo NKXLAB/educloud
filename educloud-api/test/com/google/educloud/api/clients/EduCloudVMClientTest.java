@@ -30,7 +30,7 @@ public class EduCloudVMClientTest {
 		config.setHost("localhost");
 		config.setPort(8000);
 		config.setLogin("admin");
-		config.setPass("123");
+		config.setPass("admin");
 
 		EduCloudAuthorization auth = EduCloudFactory.createAuthorization(config);
 

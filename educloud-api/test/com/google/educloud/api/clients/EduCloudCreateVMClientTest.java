@@ -15,7 +15,7 @@ import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 
 
 public class EduCloudCreateVMClientTest {
-	
+
 	private EduCloudVMClient vmClient;
 
 	@Before
@@ -25,7 +25,7 @@ public class EduCloudCreateVMClientTest {
 		config.setHost("localhost");
 		config.setPort(8000);
 		config.setLogin("admin");
-		config.setPass("123");
+		config.setPass("admin");
 
 		EduCloudAuthorization auth = EduCloudFactory.createAuthorization(config);
 		vmClient = EduCloudFactory.createVMClient(auth);
@@ -50,9 +50,9 @@ public class EduCloudCreateVMClientTest {
 
 		// create machine
 		VirtualMachine vmCriada = vmClient.createVM(machine);
-		
+
 		//Verifica apenas se criou um id e se o nome é o mesmo.
-		Assert.assertTrue(vmCriada.getId() > 0 && 
+		Assert.assertTrue(vmCriada.getId() > 0 &&
 				vmCriada.getName().equals(machine.getName()));
 	}
 

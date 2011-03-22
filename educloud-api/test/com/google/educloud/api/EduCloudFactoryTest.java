@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.educloud.api.clients.AbstractClient;
+import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 
 public class EduCloudFactoryTest {
 
@@ -19,7 +21,7 @@ public class EduCloudFactoryTest {
 		config.setHost("localhost");
 		config.setPort(8000);
 		config.setLogin("admin");
-		config.setPass("123");
+		config.setPass("admin");
 	}
 
 	@After
@@ -29,7 +31,16 @@ public class EduCloudFactoryTest {
 	@Test
 	public void testCreateVMClient() {
 		// create vm client
-		EduCloudAuthorization auth = EduCloudFactory.createAuthorization(config);
+		EduCloudAuthorization auth = null;
+		try {
+			auth = EduCloudFactory.createAuthorization(config);
+		} catch (EduCloudServerException e) {
+			EduCloudErrorMessage errorMessage = e.getErrorMessage();
+			System.out.println(errorMessage.getText());
+			System.out.println(errorMessage.getHint());
+			return;
+		}
+
 		AbstractClient vmClient = EduCloudFactory.createVMClient(auth);
 		assertNotNull(vmClient);
 	}
