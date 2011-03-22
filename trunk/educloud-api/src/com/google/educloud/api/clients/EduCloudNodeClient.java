@@ -7,19 +7,14 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.educloud.api.entities.Node;
 import com.google.educloud.api.entities.exceptions.EduCloudServerException;
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 
-public class EduCloudNodeClient extends AbstractClient{
-	
+public class EduCloudNodeClient extends AbstractClient {
+
 	//Recupera todos os nodos registrados.
-	public List<Node> decribeNodes() throws EduCloudServerException{		
-		ClientConfig config = new DefaultClientConfig();
-		Client client = Client.create(config);
-		WebResource service = client.resource(getBaseURI());
+	public List<Node> decribeNodes() throws EduCloudServerException{
+		WebResource service = getWebResouce();
 
 		ClientResponse response = service.path("node").path("describeNodes").accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
@@ -29,18 +24,18 @@ public class EduCloudNodeClient extends AbstractClient{
 		handleError(status, entity);
 
 		response.close();
-		
+
 		//Recupera o array de retorno.
 		Node[] cloudNodes =
-			gson.fromJson(entity, Node[].class);		
-		
-		//Gera a lista de retorno. 
-		List<Node> listaCloudNodes = 
+			gson.fromJson(entity, Node[].class);
+
+		//Gera a lista de retorno.
+		List<Node> listaCloudNodes =
 			new ArrayList<Node>();
-		
+
 		for( Node vm : cloudNodes )
 		{
-			listaCloudNodes.add(vm);			
+			listaCloudNodes.add(vm);
 		}
 
 		return listaCloudNodes;

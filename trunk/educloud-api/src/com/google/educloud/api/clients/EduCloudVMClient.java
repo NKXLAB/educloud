@@ -7,20 +7,15 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.exceptions.EduCloudServerException;
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 
 public class EduCloudVMClient extends AbstractClient {
 
 	//Inicia a exsecução de máquina virtual.
 	public VirtualMachine startVM(VirtualMachine machine) throws EduCloudServerException {
-		ClientConfig config = new DefaultClientConfig();
-		Client client = Client.create(config);
-		WebResource service = client.resource(getBaseURI());
+		WebResource service = getWebResouce();
 
 		String json = gson.toJson(machine);
 
@@ -38,9 +33,7 @@ public class EduCloudVMClient extends AbstractClient {
 
 	//Para a execução de uma máquina virtual.
 	public void stopVM(VirtualMachine machine) throws EduCloudServerException {
-		ClientConfig config = new DefaultClientConfig();
-		Client client = Client.create(config);
-		WebResource service = client.resource(getBaseURI());
+		WebResource service = getWebResouce();
 
 		String json = gson.toJson(machine);
 
@@ -56,9 +49,7 @@ public class EduCloudVMClient extends AbstractClient {
 
 	//Recupera todas as instâncias de máquinas virtuais.
 	public List<VirtualMachine> describeInstances() throws EduCloudServerException {
-		ClientConfig config = new DefaultClientConfig();
-		Client client = Client.create(config);
-		WebResource service = client.resource(getBaseURI());
+		WebResource service = getWebResouce();
 
 		ClientResponse response = service.path("vm").path("describeInstances").accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 

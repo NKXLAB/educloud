@@ -7,11 +7,13 @@ import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.servlet.Context;
+import org.mortbay.jetty.servlet.FilterHolder;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.webapp.WebAppContext;
 import org.mortbay.thread.QueuedThreadPool;
 
 import com.google.educloud.cloudserver.configuration.ServerConfig;
+import com.google.educloud.cloudserver.servlet.filter.RestSecurityFilter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 /**
@@ -60,14 +62,18 @@ public class JettyLauncher {
 		ServletHolder sh = new ServletHolder(ServletContainer.class);
 		sh.setInitParameter("com.sun.jersey.config.property.resourceConfigClass", "com.sun.jersey.api.core.PackagesResourceConfig");
 		sh.setInitParameter("com.sun.jersey.config.property.packages", "com.google.educloud.cloudserver.rs");
+
 		Context context = new Context(server, "/rs", Context.SESSIONS);
+
+		FilterHolder filterHolder = new FilterHolder(RestSecurityFilter.class);
+		context.addFilter(filterHolder, "/*", org.mortbay.jetty.Handler.DEFAULT);
 		context.addServlet(sh, "/*");
 
 		/* configure internal restfull services */
 		sh = new ServletHolder(ServletContainer.class);
 		sh.setInitParameter("com.sun.jersey.config.property.resourceConfigClass", "com.sun.jersey.api.core.PackagesResourceConfig");
 		sh.setInitParameter("com.sun.jersey.config.property.packages", "com.google.educloud.cloudserver.internalrs");
-		context = new Context(server, "/internalrs", Context.SESSIONS);
+		context = new Context(server, "/internalrs", Context.NO_SESSIONS);
 		context.addServlet(sh, "/*");
 
 		try {

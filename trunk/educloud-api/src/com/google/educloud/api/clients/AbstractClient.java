@@ -2,32 +2,26 @@ package com.google.educloud.api.clients;
 
 import java.net.URI;
 
-import javax.ws.rs.core.UriBuilder;
-
-import com.google.educloud.api.EduCloudConfig;
 import com.google.educloud.api.entities.EduCloudErrorMessage;
 import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 import com.google.gson.Gson;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.client.apache.ApacheHttpClient;
 
 public abstract class AbstractClient {
 
-	protected EduCloudConfig config;
+	private ApacheHttpClient client;
 
-	protected static Gson gson = new Gson();
+	private URI uri;
 
-	public void setConfig(EduCloudConfig config) {
-		this.config = config;
+	protected Gson gson = new Gson();
+
+	public void setClient(ApacheHttpClient client) {
+		this.client = client;
 	}
 
-	protected URI getBaseURI() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("http://");
-		builder.append(config.getHost());
-		builder.append(':');
-		builder.append(config.getPort());
-		builder.append("/rs");
-
-		return UriBuilder.fromUri(builder.toString()).build();
+	public void setBaseURI(URI uri) {
+		this.uri = uri;
 	}
 
 	protected void handleError(int status, String entity) throws EduCloudServerException {
@@ -40,6 +34,10 @@ public abstract class AbstractClient {
 			EduCloudErrorMessage message = gson.fromJson(entity, EduCloudErrorMessage.class);
 			throw new EduCloudServerException(message);
 		}
+	}
+
+	protected WebResource getWebResouce() {
+		return client.resource(uri);
 	}
 
 }

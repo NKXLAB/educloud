@@ -8,14 +8,11 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
-import com.sun.jersey.spi.resource.Singleton;
+import com.sun.jersey.spi.container.servlet.PerSession;
 
-@Singleton
+@PerSession
 @Path("/application")
-public class ApplicationRest {
-
-	private static Gson gson = new Gson();
+public class ApplicationRest extends CloudResource {
 
 	private static Logger LOG = Logger.getLogger(ApplicationRest.class);
 

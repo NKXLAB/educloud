@@ -6,6 +6,8 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/educloud-api"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/educloud-external-entities"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
