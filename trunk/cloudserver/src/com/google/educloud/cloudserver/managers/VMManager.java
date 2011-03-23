@@ -4,6 +4,7 @@ import com.google.educloud.cloudserver.database.dao.TaskDao;
 import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
 import com.google.educloud.cloudserver.scheduler.tasks.AbstractTask;
 import com.google.educloud.cloudserver.scheduler.tasks.CloudTask.Status;
+import com.google.educloud.cloudserver.scheduler.tasks.RemoveVmTask;
 import com.google.educloud.cloudserver.scheduler.tasks.StartVmTask;
 import com.google.educloud.cloudserver.scheduler.tasks.StopVMTask;
 import com.google.educloud.internal.entities.VirtualMachine;
@@ -47,5 +48,20 @@ public class VMManager {
 		TaskDao.getInstance().insert(stopVmTask);
 
 		return vm;
+	}
+
+	//Escalona uma tarefa de remoção de máquina virtual.
+	public void scheduleRemoveVM(VirtualMachine vm) {
+		
+		vm = VirtualMachineDao.getInstance().findById(vm.getId());
+
+		AbstractTask removeVmTask = new RemoveVmTask();
+		removeVmTask.setStatus(Status.PENDING);
+		removeVmTask.setParameter(RemoveVmTask.VM_ID, String.valueOf(vm.getId()));
+
+		//Criamos um status para remoção?
+		//VirtualMachineDao.getInstance().changeState(vm);
+
+		TaskDao.getInstance().insert(removeVmTask);		
 	}	
 }

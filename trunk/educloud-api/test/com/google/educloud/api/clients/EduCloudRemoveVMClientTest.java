@@ -10,8 +10,8 @@ import com.google.educloud.api.EduCloudFactory;
 import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 
-public class EduCloudStopVMClientTest {
-
+public class EduCloudRemoveVMClientTest {
+	
 	private EduCloudVMClient vmClient;
 
 	@Before
@@ -21,7 +21,7 @@ public class EduCloudStopVMClientTest {
 		config.setHost("localhost");
 		config.setPort(8000);
 		config.setLogin("admin");
-		config.setPass("admin");
+		config.setPass("123");
 
 		EduCloudAuthorization auth = EduCloudFactory.createAuthorization(config);
 		vmClient = EduCloudFactory.createVMClient(auth);
@@ -32,17 +32,12 @@ public class EduCloudStopVMClientTest {
 	}
 
 	@Test
-	public void testStopVM() {
+	public void testRemoveVM() throws EduCloudServerException {
 		VirtualMachine machine = new VirtualMachine();
 		machine.setId(VariaveisCompartilhadas.VM_ID);
 
-		// stop machine
-		try {
-			vmClient.stopVM(machine);
-		} catch (EduCloudServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// remove machine
+		vmClient.removeVM(machine);	
 	}
 
 }

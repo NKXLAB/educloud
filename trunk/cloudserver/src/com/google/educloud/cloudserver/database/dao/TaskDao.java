@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import com.google.educloud.cloudserver.scheduler.tasks.AbstractTask;
 import com.google.educloud.cloudserver.scheduler.tasks.CheckNodeTask;
 import com.google.educloud.cloudserver.scheduler.tasks.CloudTask;
+import com.google.educloud.cloudserver.scheduler.tasks.RemoveVmTask;
 import com.google.educloud.cloudserver.scheduler.tasks.CloudTask.Status;
 import com.google.educloud.cloudserver.scheduler.tasks.StartVmTask;
 import com.google.educloud.cloudserver.scheduler.tasks.StopVMTask;
@@ -54,8 +55,11 @@ public class TaskDao extends AbstractDao {
 				} else if (type.equals("STOPVM")) {
 					task = new StopVMTask();
 				} else if (type.equals("CHECKNODE")) {
-					task = new CheckNodeTask();
-				} else {
+					task = new CheckNodeTask();					
+				} else if(type.equals("REMOVEVM")){
+					task = new RemoveVmTask();
+				}
+				else {
 					LOG.error("Unsupported task type");
 					throw new RuntimeException("Unsupported task type");
 				}

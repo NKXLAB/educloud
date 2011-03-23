@@ -66,6 +66,22 @@ public class EduCloudVMClient extends AbstractClient {
 		response.close();
 	}
 
+	//Remove uma máquina virtual.
+	public void removeVM( VirtualMachine machine ) throws EduCloudServerException{
+		WebResource service = getWebResouce();
+
+		String json = gson.toJson(machine);
+
+		ClientResponse response = service.path("vm").path("remove").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, json);
+
+		int status = response.getStatus();
+		String entity = response.getEntity(String.class);
+
+		handleError(status, entity);
+
+		response.close();		
+	}
+	
 	//Recupera todas as instâncias de máquinas virtuais.
 	public List<VirtualMachine> describeInstances() throws EduCloudServerException {
 		WebResource service = getWebResouce();

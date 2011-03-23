@@ -43,4 +43,22 @@ public class VMNodeClient extends AbstractNodeClient {
 			throw new NodeComunicationException("Error on stop the virtual machine from node");
 		}
 	}
+
+	public void removeVM(VirtualMachine machine) throws NodeComunicationException {
+		
+		String jsonMachine = gson.toJson(machine);
+
+		ClientResponse response;
+
+		try {
+			response = getResouce().path("vm").path("remove").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, jsonMachine);
+		} catch (ClientHandlerException e) {
+			throw new NodeComunicationException("Error on remove the virtual machine from node", e);
+		}
+
+		if (response.getStatus() != 200) {
+			throw new NodeComunicationException("Error on remove the virtual machine from node");
+		}
+		
+	}
 }

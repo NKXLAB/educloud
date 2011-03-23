@@ -148,8 +148,65 @@ public class VMRest extends CloudResource {
 		vm = vmManager.scheduleStopVM(vm);
 		externalMachine.setState(VMState.valueOf(vm.getState().name()));
 
-		// return a new created virtual machine
+		// return the stoped virtual machine
 		return Response.ok(gson.toJson(externalMachine), MediaType.APPLICATION_JSON).build();
+	}
+	
+	/**
+	 * this method will schedule a task to remove a virtual machine.
+	 *
+	 * @param machine
+	 * @return
+	 */
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/remove")
+	public Response removeVM(String machine) {
+
+		LOG.debug("Application will remove a VM");
+		LOG.debug(machine);
+
+		VirtualMachine externalMachine = gson.fromJson(machine, VirtualMachine.class);
+
+		int id = externalMachine.getId();
+
+		/* validations */
+		if (id == 0) {
+			EduCloudErrorMessage error = new EduCloudErrorMessage();
+			error.setCode("CS-004");
+			error.setHint("Set virtual machine id and try again");
+			error.setText("Apparently you are trying to stop a nonexistent virtual machine");
+
+			// return error message
+			return Response.status(400).entity(gson.toJson(error)).build();
+		}
+
+		com.google.educloud.internal.entities.VirtualMachine vm = 
+			new com.google.educloud.internal.entities.VirtualMachine();
+		vm.setId(externalMachine.getId());
+		
+		//Recupera a máquina virtual a ser removida questão.
+		vm = VirtualMachineDao.getInstance().findById(vm.getId());
+
+		if( vm.getState() == com.google.educloud.internal.entities.VirtualMachine.VMState.DONE )
+		{		
+			/* vm start logic */
+			VMManager vmManager = new VMManager();
+			vmManager.scheduleRemoveVM(vm);
+		}
+		else
+		{
+			EduCloudErrorMessage error = new EduCloudErrorMessage();
+			error.setCode("CS-005");
+			error.setHint("The virtual machine that will be removed must have the state = 'DONE'");
+			error.setText("Apparently you are trying to stop a nonexistent virtual machine");
+
+			// return error message
+			return Response.status(400).entity(gson.toJson(error)).build();			
+		}
+		
+		// return ok.
+		return Response.ok().build();
 	}
 
 	/**
