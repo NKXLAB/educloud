@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 
 import com.google.educloud.cloudnode.scheduler.Scheduler;
+import com.google.educloud.cloudnode.scheduler.tasks.RemoveVmTask;
 import com.google.educloud.cloudnode.scheduler.tasks.StartVmTask;
 import com.google.educloud.cloudnode.scheduler.tasks.StopVmTask;
 import com.google.educloud.internal.entities.VirtualMachine;
@@ -72,6 +73,33 @@ public class VMRest {
 
 		/* add task to scheduler */
 		Scheduler.getInstance().addTask(stopVmTask);
+
+		// return virtual machine
+		return Response.ok(gson.toJson(vm), MediaType.APPLICATION_JSON).build();
+	}
+	
+	/**
+	 * this method will schedule a task to remove a virtual machine.
+	 *
+	 * @param machine
+	 * @return
+	 */
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/remove")
+	public Response removeVM(String machine) {
+
+		LOG.debug("Application will remove a VM");
+		LOG.debug(machine);
+
+		VirtualMachine vm = gson.fromJson(machine, VirtualMachine.class);
+
+		/* setup task */
+		RemoveVmTask removeVmTask = new RemoveVmTask();
+		removeVmTask.setVirtualMachine(vm);
+
+		/* add task to scheduler */
+		Scheduler.getInstance().addTask(removeVmTask);
 
 		// return virtual machine
 		return Response.ok(gson.toJson(vm), MediaType.APPLICATION_JSON).build();

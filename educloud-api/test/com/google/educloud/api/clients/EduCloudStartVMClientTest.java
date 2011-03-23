@@ -34,7 +34,7 @@ public class EduCloudStartVMClientTest {
 	@Test
 	public void testStartVM() throws EduCloudServerException {
 		VirtualMachine machine = new VirtualMachine();
-		machine.setId(1);
+		machine.setId(VariaveisCompartilhadas.VM_ID);
 
 		// start machine
 		VirtualMachine vm = vmClient.startVM(machine);

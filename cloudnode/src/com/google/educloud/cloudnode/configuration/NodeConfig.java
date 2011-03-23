@@ -13,14 +13,16 @@ public class NodeConfig {
 	private static int nodePort;
 
 	private static String nodeMachineDir;
+	
+	private static String nodeTemplateDir;
+	
+	private static String nodeStorageDir;
 
 	private static String serverHost;
 
 	private static int serverPort;
 
 	private static String virtualBoxWebservicesUrl;
-
-	private static String nodeTemplateDir;
 
 	private static String vboxFrontendType;
 
@@ -42,6 +44,7 @@ public class NodeConfig {
 		virtualBoxWebservicesUrl = "http://localhost:18083/";
 		nodeMachineDir = null;
 		nodeTemplateDir = null;
+		nodeStorageDir = null;
 
 		try {
 			nodePort = Integer.parseInt(props.getProperty("node.port"));
@@ -58,6 +61,7 @@ public class NodeConfig {
 		serverHost = props.getProperty("cloudserver.host");
 		virtualBoxWebservicesUrl = props.getProperty("vbox.websrv.url");
 		nodeMachineDir = props.getProperty("node.machinedir");
+		nodeStorageDir = props.getProperty("node.storagedir");
 		nodeTemplateDir = props.getProperty("vbox.templatedir");
 		vboxFrontendType = props.getProperty("vbox.frontendType");
 
@@ -81,6 +85,10 @@ public class NodeConfig {
 
 	public static String getMachinesDir() {
 		return nodeMachineDir;
+	}
+	
+	public static String getStorageDir(){
+		return nodeStorageDir;
 	}
 
 	public static String getTemplateDir() {

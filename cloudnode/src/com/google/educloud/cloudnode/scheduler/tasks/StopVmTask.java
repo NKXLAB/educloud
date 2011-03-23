@@ -1,5 +1,6 @@
 package com.google.educloud.cloudnode.scheduler.tasks;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
@@ -12,6 +13,7 @@ import org.virtualbox.service.ISession;
 import org.virtualbox.service.IVirtualBox;
 import org.virtualbox.service.IWebsessionManager;
 
+import com.google.educloud.cloudnode.configuration.NodeConfig;
 import com.google.educloud.cloudnode.virtualbox.VirtualBoxConnector;
 import com.google.educloud.internal.entities.VirtualMachine;
 
@@ -56,8 +58,27 @@ public class StopVmTask extends AbstractTask {
 		machine.unregister(CleanupMode.FULL);
 		machine.delete(new ArrayList<IMedium>());
 		machine.release();
+		
+		// 3) put the virtual machine back to machine storage dir
+		String separador = System.getProperty("file.separator");
+		File arquivoOrigem = new File(NodeConfig.getMachinesDir() + separador + vm.getBootableMedium());
+		File arquivoDestino = new File( NodeConfig.getStorageDir() + separador + vm.getBootableMedium());
+		
+		if( arquivoOrigem.exists() ){
+			
+			if( arquivoDestino.exists() ){
+				//Remove o arquivo de destino.
+				arquivoDestino.delete();
+			}
+			
+			//Move para o storage.
+			arquivoOrigem.renameTo(arquivoDestino);
+		}
+		else
+		{
+			//Arquivo de origem não existe.
+		}
 
-		// 3) Remove virtual machine
 		// 4) notify server that machine was dropped
 		session.release();
 		vbox.release();
