@@ -53,8 +53,14 @@ public class JettyLauncher {
 		server.setThreadPool(queuedThreadPool);
 
 		/* configure gui application */
-        final URL warUrl = JettyLauncher.class.getClassLoader().getResource("lib/educloud-gui.war");
-        final String warUrlString = warUrl.toExternalForm();
+		String warUrlString;
+		if (false) {
+	        final URL warUrl = JettyLauncher.class.getClassLoader().getResource("lib/educloud-gui.war");
+	        warUrlString = warUrl.toExternalForm();
+		} else {
+	        warUrlString = "C:\\workspaces\\pucrs\\educloud\\cloudserver-gui\\WebContent";
+		}
+
         WebAppContext webAppContext = new WebAppContext(warUrlString, "/ui");
 		server.setHandler(webAppContext);
 
