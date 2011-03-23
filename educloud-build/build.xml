@@ -26,6 +26,9 @@
 		<mkdir dir="${server.target}" />
 		<mkdir dir="${server.target}/lib" />
 		<mkdir dir="${server.target}/conf" />
+		<mkdir dir="${server.target}/data" />
+		<mkdir dir="${server.target}/scripts" />
+		<mkdir dir="${server.target}/tmp" />
 		<mkdir dir="${node.target}/lib" />
 	</target>
 
@@ -59,6 +62,9 @@
 
 		<copy todir="${server.target}/lib">
 			<fileset dir="${server.dir}/lib"/>
+		</copy>
+		<copy todir="${server.target}/scripts">
+			<fileset dir="${server.dir}/scripts"/>
 		</copy>
 		<copy todir="${server.target}/conf">
 			<fileset dir="${server.dir}/conf"/>
