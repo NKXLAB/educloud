@@ -5,5 +5,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/educloud-external-entities"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/cloudserver/lib/servlet-api-2.5-20081211.jar"/>
+	<classpathentry kind="lib" path="/cloudserver/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="/cloudserver/lib/gson-1.5.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

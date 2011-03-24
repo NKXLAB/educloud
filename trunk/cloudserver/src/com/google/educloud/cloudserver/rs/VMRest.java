@@ -2,9 +2,11 @@ package com.google.educloud.cloudserver.rs;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -15,6 +17,8 @@ import com.google.educloud.api.entities.EduCloudErrorMessage;
 import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.VirtualMachine.VMState;
 import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
+import com.google.educloud.cloudserver.entity.CloudSession;
+import com.google.educloud.cloudserver.entity.User;
 import com.google.educloud.cloudserver.managers.VMManager;
 import com.google.educloud.internal.entities.Template;
 import com.sun.jersey.spi.container.servlet.PerSession;
@@ -24,7 +28,7 @@ import com.sun.jersey.spi.container.servlet.PerSession;
 public class VMRest extends CloudResource {
 
 	private static Logger LOG = Logger.getLogger(VMRest.class);
-	
+
 	/**
 	 * this method will create a virtual machine.
 	 *
@@ -42,14 +46,14 @@ public class VMRest extends CloudResource {
 		VirtualMachine externalMachine = gson.fromJson(machine, VirtualMachine.class);
 
 		/* create internal entity (Virtual Machine) based on received */
-		com.google.educloud.internal.entities.VirtualMachine vm = 
+		com.google.educloud.internal.entities.VirtualMachine vm =
 			new com.google.educloud.internal.entities.VirtualMachine();
-		
+
 		/* create internal entity (Template) based on received */
 		com.google.educloud.internal.entities.Template tpt =
-			new com.google.educloud.internal.entities.Template();		
+			new com.google.educloud.internal.entities.Template();
 		tpt.setId(externalMachine.getTemplate().getId());
-		
+
 		vm.setTemplate(tpt);
 		vm.setName(externalMachine.getName());
 		vm.setState(com.google.educloud.internal.entities.VirtualMachine.VMState.DONE);
@@ -148,10 +152,10 @@ public class VMRest extends CloudResource {
 		vm = vmManager.scheduleStopVM(vm);
 		externalMachine.setState(VMState.valueOf(vm.getState().name()));
 
-		// return the stoped virtual machine
+		// return a new created virtual machine
 		return Response.ok(gson.toJson(externalMachine), MediaType.APPLICATION_JSON).build();
 	}
-	
+
 	/**
 	 * this method will schedule a task to remove a virtual machine.
 	 *
@@ -181,15 +185,15 @@ public class VMRest extends CloudResource {
 			return Response.status(400).entity(gson.toJson(error)).build();
 		}
 
-		com.google.educloud.internal.entities.VirtualMachine vm = 
+		com.google.educloud.internal.entities.VirtualMachine vm =
 			new com.google.educloud.internal.entities.VirtualMachine();
 		vm.setId(externalMachine.getId());
-		
+
 		//Recupera a máquina virtual a ser removida questão.
 		vm = VirtualMachineDao.getInstance().findById(vm.getId());
 
 		if( vm.getState() == com.google.educloud.internal.entities.VirtualMachine.VMState.DONE )
-		{		
+		{
 			/* vm start logic */
 			VMManager vmManager = new VMManager();
 			vmManager.scheduleRemoveVM(vm);
@@ -202,9 +206,9 @@ public class VMRest extends CloudResource {
 			error.setText("Apparently you are trying to stop a nonexistent virtual machine");
 
 			// return error message
-			return Response.status(400).entity(gson.toJson(error)).build();			
+			return Response.status(400).entity(gson.toJson(error)).build();
 		}
-		
+
 		// return ok.
 		return Response.ok().build();
 	}
@@ -221,7 +225,7 @@ public class VMRest extends CloudResource {
 
 		LOG.debug("Application will list all machines");
 
-		//Recupera a lista de máquinas virtuais da base de dados.
+		//Recupera a lista de maquinas virtuais da base de dados.
 		List<com.google.educloud.internal.entities.VirtualMachine> listaVirtualMachines =
 			VirtualMachineDao.getInstance().getAll();
 
@@ -231,7 +235,7 @@ public class VMRest extends CloudResource {
 		//Para controle do indice do array
 		int indice = 0;
 
-		//Coloca a lista interna no array de máquinas externas
+		//Coloca a lista interna no array de maquinas externas
 		for( com.google.educloud.internal.entities.VirtualMachine vmInterna : listaVirtualMachines )
 		{
 			VirtualMachine vmRetorno = new VirtualMachine();
@@ -249,7 +253,62 @@ public class VMRest extends CloudResource {
 			indice++;
 		}
 
-		//Retorna o array de máquinas virtuais.
+		//Retorna o array de maquinas virtuais.
 		return Response.ok(gson.toJson(virtualMachines), MediaType.APPLICATION_JSON).build();
 	}
+
+	/**
+	 * this method will return a virtual machine.
+	 *
+	 * @param machine
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/get/{id: [0-9]*}")
+	public Response getVM(@PathParam("id") String vmId) {
+
+		int id = Integer.valueOf(vmId);
+
+		com.google.educloud.internal.entities.VirtualMachine vm = VirtualMachineDao.getInstance().findById(id);
+
+		HttpSession session = request.getSession();
+		CloudSession cloudSession = (CloudSession)session.getAttribute(CloudSession.HTTP_ATTR_NAME);
+
+		/* validations */
+		if (vm == null) {
+			EduCloudErrorMessage error = new EduCloudErrorMessage();
+			error.setCode("CS-303");
+			error.setHint("Set virtual machine id and try again");
+			error.setText("Apparently you are trying to get a nonexistent virtual machine");
+
+			// return error message
+			return Response.status(400).entity(gson.toJson(error)).build();
+		}
+
+		if (cloudSession.getUser().getType() != User.UserType.ADMIN && vm.getUserId() != cloudSession.getUser().getId()) {
+			EduCloudErrorMessage error = new EduCloudErrorMessage();
+			error.setCode("CS-500");
+			error.setHint("");
+			error.setText("You do not have permission to access this feature");
+
+			// return error message
+			return Response.status(400).entity(gson.toJson(error)).build();
+		}
+
+		com.google.educloud.api.entities.Template template = new com.google.educloud.api.entities.Template();
+		template.setId(vm.getTemplate().getId());
+		template.setName(vm.getTemplate().getName());
+		template.setOsType(vm.getTemplate().getOsType());
+
+		VirtualMachine virtualMachine = new VirtualMachine();
+		virtualMachine.setId(id);
+		virtualMachine.setName(vm.getName());
+		virtualMachine.setState(VMState.valueOf(vm.getState().name()));
+		virtualMachine.setTemplate(template);
+
+		// return virtual machine
+		return Response.ok(gson.toJson(virtualMachine), MediaType.APPLICATION_JSON).build();
+	}
+
 }

@@ -42,7 +42,7 @@ public class NodeRest extends CloudResource {
 		//Para controle do indice do array
 		int indice = 0;
 
-		//Coloca a lista interna no array de máquinas externas
+		// build external virtual machine list
 		for( com.google.educloud.internal.entities.Node nodoInterno : listaNodos )
 		{
 			Node nodoRetorno = new Node();

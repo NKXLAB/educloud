@@ -15,8 +15,8 @@
 	<classpathentry kind="lib" path="lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/jersey-client-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/vboxClient.jar"/>
 	<classpathentry kind="lib" path="lib/jaxb-impl.jar"/>
+	<classpathentry kind="lib" path="lib/vboxClient.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/educloud-entities"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -12,7 +12,7 @@ import com.google.educloud.internal.entities.VirtualMachine;
 import com.google.educloud.internal.entities.VirtualMachine.VMState;
 
 /**
- * Classe para representar uma tarefa de parada de máquina virtual.
+ * Classe para representar uma tarefa de parada de maquina virtual.
  *
  */
 public class StopVMTask extends AbstractTask{
