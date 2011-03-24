@@ -12,10 +12,16 @@ import com.sun.jersey.api.client.WebResource;
 
 
 public class EduCloudVMClient extends AbstractClient {
-	
-	//Cria uma máquina virtual
+
+	/**
+	 * Create a new virtual machine
+	 *
+	 * @param machine
+	 * @return
+	 * @throws EduCloudServerException
+	 */
 	public VirtualMachine createVM(VirtualMachine machine) throws EduCloudServerException {
-		
+
 		WebResource service = getWebResouce();
 
 		String json = gson.toJson(machine);
@@ -28,11 +34,17 @@ public class EduCloudVMClient extends AbstractClient {
 		handleError(status, entity);
 
 		response.close();
-		
+
 		return gson.fromJson(entity, VirtualMachine.class);
 	}
 
-	//Inicia a execução de uma máquina virtual.
+	/**
+	 * Start a new virtual machine
+	 *
+	 * @param machine
+	 * @return
+	 * @throws EduCloudServerException
+	 */
 	public VirtualMachine startVM(VirtualMachine machine) throws EduCloudServerException {
 		WebResource service = getWebResouce();
 
@@ -48,9 +60,14 @@ public class EduCloudVMClient extends AbstractClient {
 		response.close();
 
 		return gson.fromJson(entity, VirtualMachine.class);
-	}	
+	}
 
-	//Para a execução de uma máquina virtual.
+	/**
+	 * Stop a virtual machine
+	 *
+	 * @param machine
+	 * @throws EduCloudServerException
+	 */
 	public void stopVM(VirtualMachine machine) throws EduCloudServerException {
 		WebResource service = getWebResouce();
 
@@ -66,7 +83,12 @@ public class EduCloudVMClient extends AbstractClient {
 		response.close();
 	}
 
-	//Remove uma máquina virtual.
+	/**
+	 * remove a virtual machine
+	 *
+	 * @return
+	 * @throws EduCloudServerException
+	 */
 	public void removeVM( VirtualMachine machine ) throws EduCloudServerException{
 		WebResource service = getWebResouce();
 
@@ -79,10 +101,15 @@ public class EduCloudVMClient extends AbstractClient {
 
 		handleError(status, entity);
 
-		response.close();		
+		response.close();
 	}
-	
-	//Recupera todas as instâncias de máquinas virtuais.
+
+	/**
+	 * Return list of virtual machines
+	 *
+	 * @return
+	 * @throws EduCloudServerException
+	 */
 	public List<VirtualMachine> describeInstances() throws EduCloudServerException {
 		WebResource service = getWebResouce();
 
@@ -109,6 +136,27 @@ public class EduCloudVMClient extends AbstractClient {
 		}
 
 		return listaVirtualMachines;
+	}
+
+	/**
+	 * Return a virtual machines
+	 *
+	 * @return
+	 * @throws EduCloudServerException
+	 */
+	public VirtualMachine getVirtualMachine(int id) throws EduCloudServerException {
+		WebResource service = getWebResouce();
+
+		ClientResponse response = service.path("vm").path("get").path(String.valueOf(id)).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+
+		int status = response.getStatus();
+		String entity = response.getEntity(String.class);
+
+		handleError(status, entity);
+
+		response.close();
+
+		return gson.fromJson(entity, VirtualMachine.class);
 	}
 
 }

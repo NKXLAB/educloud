@@ -99,7 +99,7 @@ public class VirtualMachineDao extends AbstractDao {
 		try {
 			ps = getConnection().prepareStatement("SELECT * FROM MACHINE");
 			rs = ps.executeQuery();
-			if (rs.next()) {
+			while (rs.next()) {
 				VirtualMachine vm = new VirtualMachine();
 				vm.setId(rs.getInt("machine_id"));
 				vm.setBootableMedium(rs.getString("bootable_medium"));

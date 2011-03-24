@@ -125,6 +125,15 @@ public class EduCloudVMClientTest {
 		}
 	}
 
+	@Test
+	public void testGetVirtualMachine() throws EduCloudServerException {
+		VirtualMachine virtualMachine = vmClient.getVirtualMachine(1);
+
+		String name = virtualMachine.getName();
+
+		System.out.println(name);
+	}
+
 	public void testStartVMValidationError() {
 		// setup new virtual machine
 		Template template = new Template();

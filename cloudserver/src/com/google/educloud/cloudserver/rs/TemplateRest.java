@@ -42,7 +42,7 @@ public class TemplateRest extends CloudResource {
 		//Para controle do indice do array
 		int indice = 0;
 
-		//Coloca a lista interna no array de máquinas externas
+		//Coloca a lista interna no array de maquinas externas
 		for( com.google.educloud.internal.entities.Template templateInterno : listaTemplates )
 		{
 			Template templateRetorno = new Template();

@@ -1,0 +1,117 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+body {
+	font: 12px Arial;
+}
+
+h1 {
+	font: 60px Arial;
+	padding: 10px;
+}
+
+#container {
+	
+}
+
+#header {
+	
+}
+
+#footer {
+	
+}
+
+#tabMenu div {
+	text-align: left;
+}
+
+#tabMenu ul {
+	background: #d6d6d6;
+	height: 32px;
+	border-bottom: 1px solid #333;
+}
+
+#tabMenu ul li a.selected {
+	background: #ebebeb;
+	padding-top: 6px;
+	padding-bottom: 11px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-top: 1px solid #333;
+	border-left: 1px solid #333;
+	border-right: 1px solid #333;
+}
+
+#tabMenu ul a {
+	color: #333333;
+}
+
+#tabMenu li {
+	line-height: 2.5;
+	padding: 10px;
+	display: inline;
+	list-style-type: none;
+}
+
+#tabMenu .submenu {
+	line-height: 2.5;
+	display: block;
+	list-style-type: none;
+	border-bottom: 1px solid #333;
+	background: #ebebeb;
+	padding-left: 10px;
+}
+
+.clear {
+	clear: both;
+}
+
+form {
+	margin: 170px auto 0;
+}
+
+legend {
+	display: none;
+}
+
+fieldset {
+	border: 0;
+}
+
+label {
+	width: 115px;
+	text-align: right;
+	float: left;
+	margin: 0 10px 0 0;
+	padding: 9px 0 0 0;
+	font-size: 16px;
+}
+
+input {
+	width: 220px;
+	display: block;
+	padding: 4px;
+	margin: 0 0 10px 0;
+	font-size: 18px;
+	color: #3a3a3a;
+}
+
+.button {
+	repeat-x top center;
+	border: 1px solid #999;
+	-moz-border-radius: 5px;
+	padding: 5px;
+	color: black;
+	font-weight: bold;
+	-webkit-border-radius: 5px;
+	font-size: 13px;
+	width: 70px;
+}
+
+.button:hover {
+	background: white;
+	color: black;
+}
