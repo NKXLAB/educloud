@@ -17,7 +17,7 @@
 	<classpathentry kind="lib" path="lib/jersey-client-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/ant-1.6.5.jar"/>
 	<classpathentry kind="lib" path="lib/core-3.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/jsp-2.1-glassfish-2.1.v20091210.jar"/>
+	<classpathentry kind="lib" path="lib/jsp-2.1-glassfish-2.1.v20091210.jar" sourcepath="C:/Documents and Settings/tremperd/.m2/repository/org/mortbay/jetty/jsp-2.1-glassfish/2.1.v20091210/jsp-2.1-glassfish-2.1.v20091210-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jsp-2.1-jetty-6.1.26.jar"/>
 	<classpathentry kind="lib" path="lib/jsp-api-2.1-glassfish-2.1.v20091210.jar"/>
 	<classpathentry kind="lib" path="lib/hsqldb.jar"/>

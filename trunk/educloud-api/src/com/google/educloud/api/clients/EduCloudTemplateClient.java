@@ -41,4 +41,26 @@ public class EduCloudTemplateClient extends AbstractClient {
 		return listaTemplates;
 	}
 
+	/**
+	 * Return a cloud template
+	 *
+	 * @return
+	 * @throws EduCloudServerException
+	 */
+	public Template getTemplate(int id) throws EduCloudServerException {
+		WebResource service = getWebResouce();
+
+		ClientResponse response = service.path("template").path("get").path(String.valueOf(id)).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+
+		int status = response.getStatus();
+		String entity = response.getEntity(String.class);
+
+		handleError(status, entity);
+
+		response.close();
+
+		return gson.fromJson(entity, Template.class);
+	}
+
+
 }

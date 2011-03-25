@@ -16,7 +16,7 @@
 		<servlet-name>vmDetailServlet</servlet-name>
 		<servlet-class>com.google.educloud.gui.servlet.VMDetailServlet</servlet-class>
 	</servlet>
-
+	
 	<servlet-mapping>
 		<servlet-name>vmDetailServlet</servlet-name>
 		<url-pattern>

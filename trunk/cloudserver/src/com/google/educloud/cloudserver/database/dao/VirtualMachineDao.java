@@ -39,11 +39,12 @@ public class VirtualMachineDao extends AbstractDao {
 			if (rs.next()) {
 				key = rs.getInt(1);
 
-				ps = getConnection().prepareStatement("INSERT INTO MACHINE (MACHINE_ID, TEMPLATE_ID, NAME, STATE) VALUES (?, ?, ?, ?)");
+				ps = getConnection().prepareStatement("INSERT INTO MACHINE (MACHINE_ID, TEMPLATE_ID, USER_ID, NAME, STATE) VALUES (?, ?, ?, ?, ?)");
 				ps.setInt(1, key);
 				ps.setInt(2, machine.getTemplate().getId());
-				ps.setString(3, machine.getName());
-				ps.setString(4, machine.getState().name());
+				ps.setInt(3, machine.getUserId());
+				ps.setString(4, machine.getName());
+				ps.setString(5, machine.getState().name());
 				ps.execute();
 
 				machine.setId(key);
