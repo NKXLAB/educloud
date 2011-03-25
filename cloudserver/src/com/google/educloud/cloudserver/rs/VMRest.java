@@ -41,7 +41,9 @@ public class VMRest extends CloudResource {
 	public Response createVM(String machine) {
 
 		LOG.debug("Application will create a new VM");
-		LOG.debug(machine);
+
+		HttpSession session = request.getSession();
+		CloudSession cloudSession = (CloudSession) session.getAttribute(CloudSession.HTTP_ATTR_NAME);
 
 		VirtualMachine externalMachine = gson.fromJson(machine, VirtualMachine.class);
 
@@ -57,6 +59,7 @@ public class VMRest extends CloudResource {
 		vm.setTemplate(tpt);
 		vm.setName(externalMachine.getName());
 		vm.setState(com.google.educloud.internal.entities.VirtualMachine.VMState.DONE);
+		vm.setUserId(cloudSession.getUser().getId());
 
 		/* vm start logic */
 		VMManager vmManager = new VMManager();

@@ -39,7 +39,7 @@ public class MenuControl {
 	}
 
 	public String getCSSSubMenuClass(String page) {
-		if ("/ui/vms.jsp".equals(this.urlPath)) {
+		if ("/ui/vms.jsp".equals(this.urlPath) || "/ui/newvm.jsp".equals(this.urlPath)) {
 			if (page.equals("vms")) {
 				return "block";
 			} else {

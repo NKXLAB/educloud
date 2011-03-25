@@ -14,6 +14,10 @@ public class ServerConfig {
 
 	private static long scheduleInterval;
 
+	private static boolean useUIExpanded = false;
+
+	private static String expandedUI;
+
 	public static void setup() throws InvalidConfigurationException {
 
 		LOG.debug("Server will load system properties...");
@@ -28,6 +32,9 @@ public class ServerConfig {
 
 		int port = 8000;
 		long interval = 1000;
+
+		useUIExpanded = Boolean.valueOf(props.getProperty("ui.useExpanded"));
+		expandedUI = props.getProperty("ui.expandedDir");
 
 		try {
 			port = Integer.parseInt(props.getProperty("server.port"));
@@ -52,6 +59,14 @@ public class ServerConfig {
 
 	public static long getScheduleInterval() {
 		return scheduleInterval;
+	}
+
+	public static boolean useUIExpanded() {
+		return useUIExpanded;
+	}
+
+	public static String getExpandedUI() {
+		return expandedUI;
 	}
 
 }
