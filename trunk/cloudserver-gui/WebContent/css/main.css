@@ -70,7 +70,7 @@ h1 {
 }
 
 form {
-	margin: 170px auto 0;
+	margin: 10px;
 }
 
 legend {
@@ -91,6 +91,24 @@ label {
 }
 
 input {
+	width: 220px;
+	display: block;
+	padding: 4px;
+	margin: 0 0 10px 0;
+	font-size: 18px;
+	color: #3a3a3a;
+}
+
+textarea {
+	width: 220px;
+	display: block;
+	padding: 4px;
+	margin: 0 0 10px 0;
+	font-size: 18px;
+	color: #3a3a3a;
+}
+
+select {
 	width: 220px;
 	display: block;
 	padding: 4px;

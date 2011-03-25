@@ -12,7 +12,7 @@
       <li><a href="users.jsp" class="<%=menuControl.getCSSMenuClass("users") %>">Users</a></li>
     </ul>
     <div id="tab1" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("home") %>;">Dashboard</div>
-    <div id="tab2" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("vms") %>;">New Virtual Machine</div>
+    <div id="tab2" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("vms") %>;"><a href="newvm.jsp">New Virtual Machine</a></div>
     <div id="tab3" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("nodes") %>;">All resources</div>
     <div id="tab4" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("templates") %>;">New Template</div>
     <div id="tab5" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("users") %>;">New user</div>

@@ -11,10 +11,10 @@ import com.google.educloud.internal.entities.VirtualMachine;
 import com.google.educloud.internal.entities.VirtualMachine.VMState;
 
 public class VMManager {
-	
+
 	public void CreateVM(VirtualMachine vm) {
-		
-		VirtualMachineDao.getInstance().insert(vm);		
+
+		VirtualMachineDao.getInstance().insert(vm);
 	}
 
 	public VirtualMachine scheduleStartVM(VirtualMachine vm) {
@@ -50,18 +50,19 @@ public class VMManager {
 		return vm;
 	}
 
-	//Escalona uma tarefa de remoção de máquina virtual.
+	//Escalona uma tarefa de remocao de maquina virtual.
 	public void scheduleRemoveVM(VirtualMachine vm) {
-		
+
 		vm = VirtualMachineDao.getInstance().findById(vm.getId());
 
 		AbstractTask removeVmTask = new RemoveVmTask();
 		removeVmTask.setStatus(Status.PENDING);
 		removeVmTask.setParameter(RemoveVmTask.VM_ID, String.valueOf(vm.getId()));
 
-		//Criamos um status para remoção?
+		// Robson: Criamos um status para remocao?
+		// Tremper: Sim. :)
 		//VirtualMachineDao.getInstance().changeState(vm);
 
-		TaskDao.getInstance().insert(removeVmTask);		
-	}	
+		TaskDao.getInstance().insert(removeVmTask);
+	}
 }
