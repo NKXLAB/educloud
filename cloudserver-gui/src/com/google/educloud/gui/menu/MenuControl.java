@@ -13,7 +13,7 @@ public class MenuControl {
 	}
 
 	public String getCSSMenuClass(String page) {
-		if ("/ui/vms.jsp".equals(this.urlPath)) {
+		if ("/ui/vms.jsp".equals(this.urlPath) || "/ui/newvm.jsp".equals(this.urlPath)) {
 			if (page.equals("vms")) {
 				return "selected";
 			}

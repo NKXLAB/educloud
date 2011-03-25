@@ -189,7 +189,7 @@ public class VMRest extends CloudResource {
 			new com.google.educloud.internal.entities.VirtualMachine();
 		vm.setId(externalMachine.getId());
 
-		//Recupera a máquina virtual a ser removida questão.
+		//Recupera a maquina virtual a ser removida questao.
 		vm = VirtualMachineDao.getInstance().findById(vm.getId());
 
 		if( vm.getState() == com.google.educloud.internal.entities.VirtualMachine.VMState.DONE )

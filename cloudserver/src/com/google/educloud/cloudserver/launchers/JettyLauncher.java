@@ -54,7 +54,7 @@ public class JettyLauncher {
 
 		/* configure gui application */
 		String warUrlString;
-		if (true) {
+		if (false) {
 	        final URL warUrl = JettyLauncher.class.getClassLoader().getResource("lib/educloud-gui.war");
 	        warUrlString = warUrl.toExternalForm();
 		} else {

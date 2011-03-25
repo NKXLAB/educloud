@@ -58,25 +58,25 @@ public class StopVmTask extends AbstractTask {
 		machine.unregister(CleanupMode.FULL);
 		machine.delete(new ArrayList<IMedium>());
 		machine.release();
-		
+
 		// 3) put the virtual machine back to machine storage dir
 		String separador = System.getProperty("file.separator");
 		File arquivoOrigem = new File(NodeConfig.getMachinesDir() + separador + vm.getBootableMedium());
 		File arquivoDestino = new File( NodeConfig.getStorageDir() + separador + vm.getBootableMedium());
-		
+
 		if( arquivoOrigem.exists() ){
-			
+
 			if( arquivoDestino.exists() ){
 				//Remove o arquivo de destino.
 				arquivoDestino.delete();
 			}
-			
+
 			//Move para o storage.
 			arquivoOrigem.renameTo(arquivoDestino);
 		}
 		else
 		{
-			//Arquivo de origem não existe.
+			// Arquivo de origem nao existe.
 		}
 
 		// 4) notify server that machine was dropped

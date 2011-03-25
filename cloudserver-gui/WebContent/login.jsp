@@ -48,6 +48,9 @@ if (session.getAttribute("AUTHENTICATION_ERROR") != null) {
 		<br /> 
 	<%
 }
+
+String redirect = request.getParameter("redirect");
+if (null == redirect) redirect = "/ui/";
 %>
 		<fieldset> 
 		
@@ -59,7 +62,7 @@ if (session.getAttribute("AUTHENTICATION_ERROR") != null) {
 			
 			<label for="password">password</label> 
 			<input type="password" id="password" name="password"/> 
-			<input type="hidden" id="redirect" name="redirect" value="<%=request.getParameter("redirect")%>"/>
+			<input type="hidden" id="redirect" name="redirect" value="<%=redirect%>"/>
 			<div class="clear"></div> 
 			
 			<br /> 
