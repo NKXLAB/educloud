@@ -49,7 +49,6 @@ public class EduCloudVMClientTest {
 		template.setName("lamp-server");
 		template.setOsType("Ubuntu");
 		template.setId(1);
-		template.setSize(8589934592L);
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);
@@ -109,7 +108,6 @@ public class EduCloudVMClientTest {
 		Template template = new Template();
 		template.setName("lamp-server");
 		template.setOsType("Ubuntu");
-		template.setSize(8589934592L);
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);
@@ -139,7 +137,6 @@ public class EduCloudVMClientTest {
 		Template template = new Template();
 		template.setName("lamp-server");
 		template.setOsType("Ubuntu");
-		template.setSize(8589934592L);
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);

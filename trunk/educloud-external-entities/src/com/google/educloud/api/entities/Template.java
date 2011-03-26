@@ -8,7 +8,7 @@ public class Template {
 
 	private String name;
 
-	private long size;
+	private String filename;
 
 	public int getId() {
 		return id;
@@ -34,12 +34,12 @@ public class Template {
 		this.name = name;
 	}
 
-	public long getSize() {
-		return size;
+	public String getFilename() {
+		return filename;
 	}
 
-	public void setSize(long size) {
-		this.size = size;
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 
 }

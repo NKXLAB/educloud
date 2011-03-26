@@ -14,7 +14,7 @@
     <div id="tab1" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("home") %>;">Dashboard</div>
     <div id="tab2" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("vms") %>;"><a href="newvm.jsp">New Virtual Machine</a></div>
     <div id="tab3" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("nodes") %>;">All resources</div>
-    <div id="tab4" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("templates") %>;">New Template</div>
+    <div id="tab4" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("templates") %>;"><a href="newtemplate.jsp">New Template</a></div>
     <div id="tab5" class="submenu" style="display: <%=menuControl.getCSSSubMenuClass("users") %>;">New user</div>
   </div>
 </div>

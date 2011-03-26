@@ -39,7 +39,6 @@ public class EduCloudRestartVMClientTest {
 		template.setName("lamp-server");
 		template.setOsType("Ubuntu");
 		template.setId(VariaveisCompartilhadas.VM_ID);
-		template.setSize(8589934592L);
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);
