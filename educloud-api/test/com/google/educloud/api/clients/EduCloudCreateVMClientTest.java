@@ -42,7 +42,6 @@ public class EduCloudCreateVMClientTest {
 		template.setName("lamp-server");
 		template.setOsType("Ubuntu");
 		template.setId(1);
-		template.setSize(8589934592L);
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);

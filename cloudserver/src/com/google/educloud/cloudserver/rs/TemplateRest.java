@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -54,7 +55,6 @@ public class TemplateRest extends CloudResource {
 			templateRetorno.setName(templateInterno.getName());
 			templateRetorno.setFilename(templateInterno.getFilename());
 			templateRetorno.setOsType(templateInterno.getOsType());
-			templateRetorno.setSize(templateInterno.getSize());
 			templates[indice] = templateRetorno;
 
 			indice++;
@@ -62,6 +62,28 @@ public class TemplateRest extends CloudResource {
 
 		//Retorna o array de templates.
 		return Response.ok(gson.toJson(templates), MediaType.APPLICATION_JSON).build();
+	}
+
+	/**
+	 * this method will create a new template
+	 *
+	 * @return
+	 */
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/create")
+	public Response createTemplate(String jsonTemplate) {
+
+		com.google.educloud.api.entities.Template extTemplate = gson.fromJson(jsonTemplate, com.google.educloud.api.entities.Template.class);
+
+		Template template = new Template();
+		template.setFilename(extTemplate.getFilename());
+		template.setName(extTemplate.getName());
+		template.setOsType(extTemplate.getOsType());
+
+		TemplateDao.getInstance().insert(template);
+
+		return Response.ok(gson.toJson(template), MediaType.APPLICATION_JSON).build();
 	}
 
 	/**

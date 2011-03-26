@@ -60,10 +60,9 @@ public class VirtualMachineBean {
 		vmClient.createVM(virtualMachine);
 	}
 
-	public List<Template> getTemplates(HttpSession session) throws EduCloudServerException {
+	public List<VirtualMachine> getVirtualMachines(HttpSession session) throws EduCloudServerException {
 		EduCloudAuthorization auth = (EduCloudAuthorization)session.getAttribute("CLOUD_AUTHENTICATION");
-		EduCloudTemplateClient templateClient = EduCloudFactory.createTemplateClient(auth);
-		return templateClient.describeTemplates();
+		EduCloudVMClient createVMClient = EduCloudFactory.createVMClient(auth);
+		return createVMClient.describeInstances();
 	}
-
 }

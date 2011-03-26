@@ -62,5 +62,25 @@ public class EduCloudTemplateClient extends AbstractClient {
 		return gson.fromJson(entity, Template.class);
 	}
 
+	/**
+	 * Create a new template in the cloud
+	 */
+	public Template createTemplate(Template template) throws EduCloudServerException {
+		WebResource service = getWebResouce();
+
+		String json = gson.toJson(template);
+
+		ClientResponse response = service.path("template").path("create").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, json);
+
+		int status = response.getStatus();
+		String entity = response.getEntity(String.class);
+
+		handleError(status, entity);
+
+		response.close();
+
+		return gson.fromJson(entity, Template.class);
+	}
+
 
 }

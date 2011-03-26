@@ -4,6 +4,7 @@
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:useBean id="virtualMachineBean" class="com.google.educloud.gui.beans.VirtualMachineBean" />
+<jsp:useBean id="templateBean" class="com.google.educloud.gui.beans.TemplateBean" />
 <jsp:setProperty name="virtualMachineBean" property="*" />
 <html>
 <head>
@@ -38,7 +39,7 @@
 		<select id="template" name="template">
 			<option value="">Chose a template...</option>
 			<%
-			List<Template> templates = virtualMachineBean.getTemplates(session);
+			List<Template> templates = templateBean.getTemplates(session);
 			
 			for (Template tpl : templates) {
 			%>

@@ -1,14 +1,10 @@
-<%@page import="com.google.educloud.api.entities.Node"%>
 <%@page import="com.google.educloud.api.entities.VirtualMachine"%>
-<%@page import="com.google.educloud.api.clients.EduCloudVMClient"%>
 <%@page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@page import="com.google.educloud.api.entities.Template"%>
 <%@page import="java.util.List"%>
-<%@page import="com.google.educloud.api.EduCloudFactory"%>
-<jsp:useBean id="cloudBean" scope="session"
-	class="com.google.educloud.gui.beans.CloudAPIBean" />
+<jsp:useBean id="virtualMachineBean" class="com.google.educloud.gui.beans.VirtualMachineBean" />
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"></meta>
@@ -48,8 +44,7 @@
 	<div id="side">
 		<ol id="selectable">
 		<%
-			EduCloudVMClient vmClient = cloudBean.getVMClient();
-			List<VirtualMachine> vms = vmClient.describeInstances();
+			List<VirtualMachine> vms = virtualMachineBean.getVirtualMachines(session);
 			int i = 0;
 			String clazz = "unselected";
 			int firstId = 0;
