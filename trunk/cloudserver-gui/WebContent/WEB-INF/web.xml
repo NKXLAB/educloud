@@ -25,6 +25,30 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>controlVmServlet</servlet-name>
+		<servlet-class>com.google.educloud.gui.servlet.ControlVirtualMachineServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>controlVmServlet</servlet-name>
+		<url-pattern>
+          /controlVirtualMachine
+      </url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>deleteTemplateServlet</servlet-name>
+		<servlet-class>com.google.educloud.gui.servlet.DeleteTemplateServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>deleteTemplateServlet</servlet-name>
+		<url-pattern>
+          /deleteTemplates
+      </url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>loginServlet</servlet-name>
 		<servlet-class>com.google.educloud.gui.servlet.LoginServlet</servlet-class>
 	</servlet>

@@ -1,5 +1,7 @@
 package com.google.educloud.cloudserver.rs;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -17,6 +19,7 @@ import com.google.educloud.api.entities.EduCloudErrorMessage;
 import com.google.educloud.cloudserver.database.dao.TemplateDao;
 import com.google.educloud.cloudserver.entity.CloudSession;
 import com.google.educloud.internal.entities.Template;
+import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.spi.container.servlet.PerSession;
 
 @PerSession
@@ -123,4 +126,25 @@ public class TemplateRest extends CloudResource {
 		// return template
 		return Response.ok(gson.toJson(template), MediaType.APPLICATION_JSON).build();
 	}
+
+	/**
+	 * this method will delete a template
+	 *
+	 * @return
+	 */
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/delete")
+	public Response deleteTemplates(String jsonTemplates) {
+
+		Type type = new TypeToken<ArrayList<Integer>>(){}.getType();
+		List<Integer> templates = gson.fromJson(jsonTemplates, type);
+
+		for (Integer tplId : templates) {
+			TemplateDao.getInstance().remove(tplId);
+		}
+
+		return Response.ok().build();
+	}
+
 }
