@@ -91,9 +91,9 @@ label {
 }
 
 input {
-	width: 220px;
+	width: auto;
 	display: block;
-	padding: 4px;
+	padding: auto;
 	margin: 0 0 10px 0;
 	font-size: 18px;
 	color: #3a3a3a;

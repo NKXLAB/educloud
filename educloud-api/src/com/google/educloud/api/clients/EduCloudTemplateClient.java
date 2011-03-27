@@ -82,5 +82,18 @@ public class EduCloudTemplateClient extends AbstractClient {
 		return gson.fromJson(entity, Template.class);
 	}
 
+	public void delete(ArrayList<Integer> arrayList) throws EduCloudServerException {
+		WebResource service = getWebResouce();
+
+		String json = gson.toJson(arrayList);
+
+		ClientResponse response = service.path("template").path("delete").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, json);
+
+		int status = response.getStatus();
+		String entity = response.getEntity(String.class);
+
+		handleError(status, entity);
+	}
+
 
 }

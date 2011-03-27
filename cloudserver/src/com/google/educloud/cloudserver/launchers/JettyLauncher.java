@@ -62,6 +62,7 @@ public class JettyLauncher {
 		}
 
         WebAppContext webAppContext = new WebAppContext(warUrlString, "/ui");
+        webAppContext.getInitParams().put("useFileMappedBuffer", false);
 		server.setHandler(webAppContext);
 
         /* configure external restfull services */

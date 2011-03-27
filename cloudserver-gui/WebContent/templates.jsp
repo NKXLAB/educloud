@@ -22,7 +22,6 @@ table {
 	width: 100%;
 	text-align: left;
 	border-collapse: collapse;
-	margin: 10px;
 }
 
 .cloudgrid th {
@@ -40,13 +39,68 @@ table {
 	padding: 8px;
 	background: #ebebeb;
 }
+
+input {
+	width: auto;
+	display: block;
+	padding: auto;
+	margin: 0 0 0 0;
+	font-size: 18px;
+	color: #3a3a3a;
+	
+}
+select {
+	width: auto;
+	display: block;
+	padding: auto;
+	margin: 0 0 0 0;
+	font-size: 12px;
+	color: #3a3a3a;
+	padding: 0px;
+}
 </style>
+<script type="text/javascript">
+function checkAll(selection) {
+	var b = selection == 'select' ? true : false;
+	$('input[name^="tpl_"]').each(function (index) {
+		$(this).attr('checked', b);
+	});
+}
+
+function executeAction(o) {
+	if ($(o).val() == 'delete') {
+		var selected = [], i=0;
+		$('input[name^="tpl_"]').each(function (index) {
+			if ($(this).is(':checked')) {
+				selected[i++] = $(this).val();
+			}
+		});
+		
+		$.post("deleteTemplates", {'templates':selected.join(';')}, function(data) {
+			window.location = "templates.jsp";
+		}, 'json')
+		.error(function() {
+			alert("error");
+		});
+	}
+}
+</script>
 </head>
 <body>
 <div id="container"><jsp:include page="header.jsp" />
 <div id="content">
-<table class="cloudgrid">
+<div style="margin:10px">
+<div>
+<div style="background:#ebebeb;padding:5px;">
+Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="checkAll('unselect')">None</a>
+<select style="display:inline;" onclick="executeAction(this)">
+	<option value="">Actions...</option>
+	<option value="delete">Delete</option>
+</select>
+</div>
+<table id="templatesTable" class="cloudgrid">
 	<tr>
+		<th>-</th>
 		<th>ID</th>
 		<th>Name</th>
 		<th>OS Type</th>
@@ -57,6 +111,9 @@ table {
 		for (Template tpl : templates) {
 	%>
 	<tr>
+		<td width="10px">
+			<input type="checkbox" name="tpl_<%=tpl.getId()%>" id="tpl_<%=tpl.getId()%>" value="<%=tpl.getId()%>" />
+		</td>
 		<td><%=tpl.getId()%></td>
 		<td><%=tpl.getName()%></td>
 		<td><%=tpl.getOsType()%></td>
@@ -65,6 +122,8 @@ table {
 		}
 	%>
 </table>
+</div>
+</div>
 </div>
 <jsp:include page="footer.jsp" /></div>
 </body>
