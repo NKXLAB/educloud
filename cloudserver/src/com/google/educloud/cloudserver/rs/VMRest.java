@@ -41,15 +41,15 @@ public class VMRest extends CloudResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/create")
 	public Response createVM(String machine) {
-		
+
 		LOG.debug("Application will create a new VM");
-		
+
 		//Recupera a cloud session.
-		CloudSession cloudSession = 
+		CloudSession cloudSession =
 			(CloudSession)request.getSession().getAttribute(CloudSession.HTTP_ATTR_NAME);
-		
+
 		//Recupera o usuario logado.
-		User usuario = cloudSession.getUser();		
+		User usuario = cloudSession.getUser();
 
 		VirtualMachine externalMachine = gson.fromJson(machine, VirtualMachine.class);
 
@@ -61,33 +61,33 @@ public class VMRest extends CloudResource {
 		com.google.educloud.internal.entities.Template tpt =
 			new com.google.educloud.internal.entities.Template();
 		tpt.setId(externalMachine.getTemplate().getId());
-		
+
 		//Recupera o template
 		tpt = TemplateDao.getInstance().findById(tpt.getId());
-		
+
 		if( tpt == null ){
-			
+
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
 			error.setCode("CS-001");
 			error.setHint("Set template id and try again");
 			error.setText("Apparently you are trying to start a nonexistent template");
 
 			// return error message
-			return Response.status(400).entity(gson.toJson(error)).build();			
-		}		
+			return Response.status(400).entity(gson.toJson(error)).build();
+		}
 
-		//Ajusta os valores da máquina virtual.
+		//Ajusta os valores da maquina virtual.
 		vm.setTemplate(tpt);
 		vm.setName(externalMachine.getName());
-		
+
 		if( usuario.getType() == UserType.ADMIN )
 			vm.setUserId(externalMachine.getUserId());
 		else
 			vm.setUserId(usuario.getId());
-		
-		vm.setState(com.google.educloud.internal.entities.VirtualMachine.VMState.DONE);		
 
-		//Logica de inicialização da VM.
+		vm.setState(com.google.educloud.internal.entities.VirtualMachine.VMState.DONE);
+
+		//Logica de inicializacao da VM.
 		VMManager vmManager = new VMManager();
 		vmManager.CreateVM(vm);
 
@@ -112,11 +112,11 @@ public class VMRest extends CloudResource {
 
 		LOG.debug("Application will start a new VM");
 		LOG.debug(machine);
-		
+
 		//Recupera a cloud session.
-		CloudSession cloudSession = 
+		CloudSession cloudSession =
 			(CloudSession)request.getSession().getAttribute(CloudSession.HTTP_ATTR_NAME);
-		
+
 		//Recupera o usuario logado.
 		User usuario = cloudSession.getUser();
 
@@ -140,33 +140,33 @@ public class VMRest extends CloudResource {
 		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
 		vm.setId(externalMachine.getId());
 		vm.setUserId(externalMachine.getUserId());
-		
+
 		//Recupera a instancia da maquina virtual de acordo com o usuario.
 		if( usuario.getType() == UserType.ADMIN )
 			vm = VirtualMachineDao.getInstance().findById(vm.getId());
 		else
 			vm = VirtualMachineDao.getInstance().findByIdAndUser(vm);
-		
+
 		if( vm == null ){
-			
+
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
 			error.setCode("CS-006");
 			error.setHint("That machine does not exists or the user has not access");
 			error.setText("That machine does not exists or the user has not access");
 
 			// return error message
-			return Response.status(400).entity(gson.toJson(error)).build();			
+			return Response.status(400).entity(gson.toJson(error)).build();
 		}
-		else if( vm.getState() != 
+		else if( vm.getState() !=
 			com.google.educloud.internal.entities.VirtualMachine.VMState.DONE ){
-			
+
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
 			error.setCode("CS-006");
 			error.setHint("Invalid state to start this virtual machine");
 			error.setText("Invalid state to start this virtual machine");
 
 			// return error message
-			return Response.status(400).entity(gson.toJson(error)).build();			
+			return Response.status(400).entity(gson.toJson(error)).build();
 		}
 
 		/* vm start logic */
@@ -194,11 +194,11 @@ public class VMRest extends CloudResource {
 
 		LOG.debug("Application will stop a VM");
 		LOG.debug(machine);
-		
+
 		//Recupera a cloud session.
-		CloudSession cloudSession = 
+		CloudSession cloudSession =
 			(CloudSession)request.getSession().getAttribute(CloudSession.HTTP_ATTR_NAME);
-		
+
 		//Recupera o usuario logado.
 		User usuario = cloudSession.getUser();
 
@@ -220,33 +220,33 @@ public class VMRest extends CloudResource {
 		com.google.educloud.internal.entities.VirtualMachine vm = new com.google.educloud.internal.entities.VirtualMachine();
 		vm.setId(externalMachine.getId());
 		vm.setUserId(externalMachine.getUserId());
-		
+
 		//Recupera a instancia da maquina virtual de acordo com o usuario.
 		if( usuario.getType() == UserType.ADMIN )
 			vm = VirtualMachineDao.getInstance().findById(vm.getId());
 		else
 			vm = VirtualMachineDao.getInstance().findByIdAndUser(vm);
-		
+
 		if( vm == null ){
-			
+
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
 			error.setCode("CS-006");
 			error.setHint("That machine does not exists or the user has not access");
 			error.setText("That machine does not exists or the user has not access");
 
 			// return error message
-			return Response.status(400).entity(gson.toJson(error)).build();			
+			return Response.status(400).entity(gson.toJson(error)).build();
 		}
-		else if( vm.getState() != 
+		else if( vm.getState() !=
 			com.google.educloud.internal.entities.VirtualMachine.VMState.RUNNING ){
-			
+
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
 			error.setCode("CS-006");
 			error.setHint("Invalid state to stop this virtual machine");
 			error.setText("Invalid state to stop this virtual machine");
 
 			// return error message
-			return Response.status(400).entity(gson.toJson(error)).build();			
+			return Response.status(400).entity(gson.toJson(error)).build();
 		}
 
 		/* vm start logic */
@@ -271,11 +271,11 @@ public class VMRest extends CloudResource {
 
 		LOG.debug("Application will remove a VM");
 		LOG.debug(machine);
-		
+
 		//Recupera a cloud session.
-		CloudSession cloudSession = 
+		CloudSession cloudSession =
 			(CloudSession)request.getSession().getAttribute(CloudSession.HTTP_ATTR_NAME);
-		
+
 		//Recupera o usuario logado.
 		User usuario = cloudSession.getUser();
 
@@ -304,32 +304,32 @@ public class VMRest extends CloudResource {
 			vm = VirtualMachineDao.getInstance().findById(vm.getId());
 		else
 			vm = VirtualMachineDao.getInstance().findByIdAndUser(vm);
-		
+
 		if( vm == null ){
-			
+
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
 			error.setCode("CS-006");
 			error.setHint("That machine does not exists or the user has not access");
 			error.setText("That machine does not exists or the user has not access");
 
 			// return error message
-			return Response.status(400).entity(gson.toJson(error)).build();			
+			return Response.status(400).entity(gson.toJson(error)).build();
 		}
-		else if( vm.getState() != 
+		else if( vm.getState() !=
 			com.google.educloud.internal.entities.VirtualMachine.VMState.DONE ){
-			
+
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
 			error.setCode("CS-006");
 			error.setHint("Invalid state to remove this virtual machine");
 			error.setText("Invalid state to remove this virtual machine");
 
 			// return error message
-			return Response.status(400).entity(gson.toJson(error)).build();			
+			return Response.status(400).entity(gson.toJson(error)).build();
 		}
-		
+
 		/* vm start logic */
 		VMManager vmManager = new VMManager();
-		vmManager.scheduleRemoveVM(vm);		
+		vmManager.scheduleRemoveVM(vm);
 
 		// return ok.
 		return Response.ok().build();
@@ -346,22 +346,22 @@ public class VMRest extends CloudResource {
 	public Response describeInstances() {
 
 		LOG.debug("Application will list all machines");
-		
+
 		//Recupera a cloud session.
-		CloudSession cloudSession = 
+		CloudSession cloudSession =
 			(CloudSession)request.getSession().getAttribute(CloudSession.HTTP_ATTR_NAME);
-		
+
 		//Recupera o usuario logado.
 		User usuario = cloudSession.getUser();
 
 		//Recupera a lista de maquinas virtuais da base de dados.
 		List<com.google.educloud.internal.entities.VirtualMachine> listaVirtualMachines = null;
-		
-		//Recupera as instâncias de maquina virtuais de acordo com o usuario.
+
+		//Recupera as instancias de maquina virtuais de acordo com o usuario.
 		if( usuario.getType() == UserType.ADMIN )
 			listaVirtualMachines = VirtualMachineDao.getInstance().getAll();
 		else
-			listaVirtualMachines = VirtualMachineDao.getInstance().getAllByUser(usuario.getId());			
+			listaVirtualMachines = VirtualMachineDao.getInstance().getAllByUser(usuario.getId());
 
 		//Array para retorno
 		VirtualMachine[] virtualMachines = new VirtualMachine[listaVirtualMachines.size()];
@@ -434,7 +434,7 @@ public class VMRest extends CloudResource {
 		template.setId(vm.getTemplate().getId());
 		template.setName(vm.getTemplate().getName());
 		template.setOsType(vm.getTemplate().getOsType());
- 
+
 		VirtualMachine virtualMachine = new VirtualMachine();
 		virtualMachine.setId(id);
 		virtualMachine.setName(vm.getName());
