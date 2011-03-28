@@ -6,6 +6,8 @@ public class VirtualMachine {
 	public enum VMState {PENDING, BOOT, RUNNING, SHUTDOWN, DONE};
 
 	private int id;
+	
+	private int userId;
 
 	private Template template;
 
@@ -43,5 +45,13 @@ public class VirtualMachine {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public int getUserId(){
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 }

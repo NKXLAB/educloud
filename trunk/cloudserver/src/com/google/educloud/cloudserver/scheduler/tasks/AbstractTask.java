@@ -11,7 +11,7 @@ import com.google.educloud.cloudserver.database.dao.TaskDao;
 
 public abstract class AbstractTask implements CloudTask {
 
-	private static Logger LOG = Logger.getLogger(StartVmTask.class);
+	private static Logger LOG = Logger.getLogger(AbstractTask.class);
 
 	private int id;
 

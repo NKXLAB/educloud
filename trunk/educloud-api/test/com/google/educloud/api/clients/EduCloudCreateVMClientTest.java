@@ -45,7 +45,8 @@ public class EduCloudCreateVMClientTest {
 
 		VirtualMachine machine = new VirtualMachine();
 		machine.setTemplate(template);
-		machine.setName("ubuntu-machine");
+		machine.setName("Maquina virtual dos casos de testes");
+		machine.setUserId(1);
 
 		// create machine
 		VirtualMachine vmCriada = vmClient.createVM(machine);

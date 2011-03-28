@@ -19,7 +19,6 @@ public class VMManager {
 
 	public VirtualMachine scheduleStartVM(VirtualMachine vm) {
 
-		vm = VirtualMachineDao.getInstance().findById(vm.getId());
 		vm.setState(VMState.PENDING);
 
 		AbstractTask startVmTask = new StartVmTask();
@@ -34,8 +33,6 @@ public class VMManager {
 	}
 
 	public VirtualMachine scheduleStopVM(VirtualMachine vm) {
-
-		vm = VirtualMachineDao.getInstance().findById(vm.getId());
 
 		vm.setState(VMState.SHUTDOWN);
 
@@ -52,8 +49,6 @@ public class VMManager {
 
 	//Escalona uma tarefa de remocao de maquina virtual.
 	public void scheduleRemoveVM(VirtualMachine vm) {
-
-		vm = VirtualMachineDao.getInstance().findById(vm.getId());
 
 		AbstractTask removeVmTask = new RemoveVmTask();
 		removeVmTask.setStatus(Status.PENDING);

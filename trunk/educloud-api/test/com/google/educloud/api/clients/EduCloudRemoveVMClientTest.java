@@ -21,7 +21,7 @@ public class EduCloudRemoveVMClientTest {
 		config.setHost("localhost");
 		config.setPort(8000);
 		config.setLogin("admin");
-		config.setPass("123");
+		config.setPass("admin");
 
 		EduCloudAuthorization auth = EduCloudFactory.createAuthorization(config);
 		vmClient = EduCloudFactory.createVMClient(auth);
@@ -35,6 +35,7 @@ public class EduCloudRemoveVMClientTest {
 	public void testRemoveVM() throws EduCloudServerException {
 		VirtualMachine machine = new VirtualMachine();
 		machine.setId(VariaveisCompartilhadas.VM_ID);
+		machine.setUserId(1);
 
 		// remove machine
 		vmClient.removeVM(machine);	
