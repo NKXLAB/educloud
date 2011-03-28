@@ -35,6 +35,7 @@ public class EduCloudStopVMClientTest {
 	public void testStopVM() {
 		VirtualMachine machine = new VirtualMachine();
 		machine.setId(VariaveisCompartilhadas.VM_ID);
+		machine.setUserId(1);
 
 		// stop machine
 		try {

@@ -58,7 +58,23 @@ public class StartVmTask extends AbstractTask {
 			mediumLocation = cloneTemplate(vbox);
 		} else {
 			String property = System.getProperty("file.separator");
-			mediumLocation = NodeConfig.getMachinesDir() + property + bootableMedium;
+			
+			File arquivoOrigem = new File( NodeConfig.getStorageDir() + property + bootableMedium );
+			File arquivoDestino = new File( NodeConfig.getMachinesDir() + property + bootableMedium );
+			
+			if( arquivoOrigem.exists() )
+			{
+				if( !arquivoDestino.exists() ){
+					//Copia do diretorio de storage para o diretorio de maquinas.
+					arquivoOrigem.renameTo(arquivoDestino);
+				}
+			}
+			else
+			{
+				//Arquivo da máquina não existe.
+			}
+			
+			mediumLocation = arquivoDestino.getAbsolutePath();
 		}
 
 		// 2) create a virtual machine
@@ -101,11 +117,12 @@ public class StartVmTask extends AbstractTask {
 			String name = iMachine.getName();
 			if (name.equals(vm.getName())) {
 				LOG.warn("Virtual machine '" + vm.getName() + "' already exists, cloudnode will remove");
+				
 				iMachine.unregister(CleanupMode.FULL);
 				iMachine.delete(new ArrayList<IMedium>());
 			}
 			iMachine.release();
-		}
+		}		
 
 		machine = vbox.createMachine(null, vm.getName(), vm.getTemplate().getOsType(), UUID.randomUUID(), false);
 

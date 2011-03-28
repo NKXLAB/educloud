@@ -28,14 +28,19 @@ public class RemoveVmTask extends AbstractTask {
 
 		// 2) select the node of respective VM
 		Node node = NodeDao.getInstance().findNodeById(vm.getNodeId());
-		LOG.debug("Selected node of the virtual machine: #" + node.getId());
+		
+		//Manda remover do nodo, apenas se a maquina existir no mesmo.
+		if( node != null )
+		{
+			LOG.debug("Selected node of the virtual machine: #" + node.getId());
 
-		// 3) send requisition for host
-		VMNodeClient nodeClient = ClientFactory.createVMNodeClient(node);
-		try {
-			nodeClient.removeVM(vm);
-		} catch (NodeComunicationException e) {
-			LOG.error("An error when remove virtual machine: #" + vm.getId(), e);
+			// 3) send requisition for host
+			VMNodeClient nodeClient = ClientFactory.createVMNodeClient(node);
+			try {
+				nodeClient.removeVM(vm);
+			} catch (NodeComunicationException e) {
+				LOG.error("An error when remove virtual machine: #" + vm.getId(), e);
+			}
 		}
 
 		//vm.setState(VMState.DONE);

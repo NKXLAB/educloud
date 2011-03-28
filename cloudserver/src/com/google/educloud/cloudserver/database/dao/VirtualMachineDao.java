@@ -62,7 +62,7 @@ public class VirtualMachineDao extends AbstractDao {
 			cleanUp(ps, rs);
 		}
 	}
-
+	
 	public VirtualMachine findById(int id) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -70,6 +70,7 @@ public class VirtualMachineDao extends AbstractDao {
 		try {
 			ps = getConnection().prepareStatement("SELECT * FROM MACHINE WHERE MACHINE_ID = ?");
 			ps.setInt(1, id);
+			
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				VirtualMachine vm = new VirtualMachine();
@@ -79,6 +80,38 @@ public class VirtualMachineDao extends AbstractDao {
 				vm.setNodeId(rs.getInt("node_id"));
 				vm.setState(VMState.valueOf(rs.getString("state")));
 				vm.setTemplate(TemplateDao.getInstance().findById(rs.getInt("template_id")));
+				vm.setUserId(rs.getInt("user_id"));
+				vm.setUUID(rs.getString("uuid"));
+				vm.setVboxSession(rs.getString("vbox_uuid"));
+				return vm;
+			}
+		} catch (SQLException e) {
+			LOG.debug(e);
+		} finally {
+			cleanUp(ps, rs);
+		}
+
+		return null;
+	}
+
+	public VirtualMachine findByIdAndUser(VirtualMachine machine) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = getConnection().prepareStatement("SELECT * FROM MACHINE WHERE MACHINE_ID = ? AND USER_ID = ?");
+			ps.setInt(1, machine.getId());
+			ps.setInt(2, machine.getUserId());
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				VirtualMachine vm = new VirtualMachine();
+				vm.setId(rs.getInt("machine_id"));
+				vm.setBootableMedium(rs.getString("bootable_medium"));
+				vm.setName(rs.getString("name"));
+				vm.setNodeId(rs.getInt("node_id"));
+				vm.setState(VMState.valueOf(rs.getString("state")));
+				vm.setTemplate(TemplateDao.getInstance().findById(rs.getInt("template_id")));
+				vm.setUserId(rs.getInt("user_id"));
 				vm.setUUID(rs.getString("uuid"));
 				vm.setVboxSession(rs.getString("vbox_uuid"));
 				return vm;
@@ -101,6 +134,37 @@ public class VirtualMachineDao extends AbstractDao {
 			ps = getConnection().prepareStatement("SELECT * FROM MACHINE");
 			rs = ps.executeQuery();
 			while (rs.next()) {
+				VirtualMachine vm = new VirtualMachine();
+				vm.setId(rs.getInt("machine_id"));
+				vm.setBootableMedium(rs.getString("bootable_medium"));
+				vm.setName(rs.getString("name"));
+				vm.setNodeId(rs.getInt("node_id"));
+				vm.setState(VMState.valueOf(rs.getString("state")));
+				vm.setTemplate(TemplateDao.getInstance().findById(rs.getInt("template_id")));
+				vm.setUUID(rs.getString("uuid"));
+				vm.setVboxSession(rs.getString("vbox_uuid"));
+				machines.add(vm);
+			}
+		} catch (SQLException e) {
+			LOG.debug(e);
+		} finally {
+			cleanUp(ps, rs);
+		}
+
+		return machines;
+
+	}
+	
+	public List<VirtualMachine> getAllByUser(int userId) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		List<VirtualMachine> machines = new ArrayList<VirtualMachine>();
+		try {
+			ps = getConnection().prepareStatement("SELECT * FROM MACHINE WHERE USER_ID = ?");
+			ps.setInt(1, userId);
+			rs = ps.executeQuery();
+			if (rs.next()) {
 				VirtualMachine vm = new VirtualMachine();
 				vm.setId(rs.getInt("machine_id"));
 				vm.setBootableMedium(rs.getString("bootable_medium"));
@@ -190,5 +254,5 @@ public class VirtualMachineDao extends AbstractDao {
 		} finally {
 			cleanUp(ps, rs);
 		}
-	}
+	}	
 }
