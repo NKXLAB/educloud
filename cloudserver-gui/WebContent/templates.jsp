@@ -76,12 +76,14 @@ function executeAction(o) {
 			}
 		});
 		
-		$.post("deleteTemplates", {'templates':selected.join(';')}, function(data) {
-			window.location = "templates.jsp";
-		}, 'json')
-		.error(function() {
-			alert("error");
-		});
+		if (selected.length > 0) {
+			$.post("deleteTemplates", {'templates':selected.join(';')}, function(data) {
+				window.location = "templates.jsp";
+			}, 'json')
+			.error(function() {
+				alert("error");
+			});
+		}
 	}
 }
 </script>
@@ -93,7 +95,7 @@ function executeAction(o) {
 <div>
 <div style="background:#ebebeb;padding:5px;">
 Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="checkAll('unselect')">None</a>
-<select style="display:inline;" onclick="executeAction(this)">
+<select style="display:inline;" onchange="executeAction(this)">
 	<option value="">Actions...</option>
 	<option value="delete">Delete</option>
 </select>

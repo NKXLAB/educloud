@@ -62,7 +62,7 @@ public class VirtualMachineDao extends AbstractDao {
 			cleanUp(ps, rs);
 		}
 	}
-	
+
 	public VirtualMachine findById(int id) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -70,7 +70,7 @@ public class VirtualMachineDao extends AbstractDao {
 		try {
 			ps = getConnection().prepareStatement("SELECT * FROM MACHINE WHERE MACHINE_ID = ?");
 			ps.setInt(1, id);
-			
+
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				VirtualMachine vm = new VirtualMachine();
@@ -152,9 +152,8 @@ public class VirtualMachineDao extends AbstractDao {
 		}
 
 		return machines;
-
 	}
-	
+
 	public List<VirtualMachine> getAllByUser(int userId) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -254,5 +253,5 @@ public class VirtualMachineDao extends AbstractDao {
 		} finally {
 			cleanUp(ps, rs);
 		}
-	}	
+	}
 }

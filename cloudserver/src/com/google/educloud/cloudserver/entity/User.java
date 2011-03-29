@@ -2,7 +2,7 @@ package com.google.educloud.cloudserver.entity;
 
 public class User {
 
-	public enum UserType {ADMIN, USER};
+	public enum UserType {USER, ADMIN};
 
 	private int id;
 

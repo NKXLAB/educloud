@@ -7,8 +7,10 @@ import javax.ws.rs.core.UriBuilder;
 
 import com.google.educloud.api.clients.EduCloudNodeClient;
 import com.google.educloud.api.clients.EduCloudTemplateClient;
+import com.google.educloud.api.clients.EduCloudUserClient;
 import com.google.educloud.api.clients.EduCloudVMClient;
 import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.api.entities.User;
 import com.google.educloud.api.entities.exceptions.EduCloudServerException;
 import com.google.gson.Gson;
 import com.sun.jersey.api.client.ClientResponse;
@@ -45,11 +47,15 @@ public class EduCloudFactory {
 			.accept(MediaType.APPLICATION_JSON)
 			.get(ClientResponse.class);
 
-		handleError(response.getStatus(), response.getEntity(String.class));
+		String entity = response.getEntity(String.class);
+		handleError(response.getStatus(), entity);
+
+		User user = gson.fromJson(entity, User.class);
 
 		EduCloudAuthorization eduCloudAuthorization = new EduCloudAuthorization();
 		eduCloudAuthorization.config = eduCloudConfig;
 		eduCloudAuthorization.client = client;
+		eduCloudAuthorization.setUser(user);
 		eduCloudAuthorization.uri = uri;
 
 		return eduCloudAuthorization;
@@ -92,5 +98,13 @@ public class EduCloudFactory {
 			EduCloudErrorMessage message = gson.fromJson(entity, EduCloudErrorMessage.class);
 			throw new EduCloudServerException(message);
 		}
+	}
+
+	public static EduCloudUserClient createUserClient(EduCloudAuthorization auth) {
+		EduCloudUserClient client = new EduCloudUserClient();
+		client.setClient(auth.client);
+		client.setBaseURI(auth.uri);
+
+		return client;
 	}
 }
