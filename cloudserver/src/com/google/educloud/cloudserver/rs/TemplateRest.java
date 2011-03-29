@@ -29,7 +29,7 @@ public class TemplateRest extends CloudResource {
 	private static Logger LOG = Logger.getLogger(TemplateRest.class);
 
 	/**
-	 * this method will retrive all templates
+	 * this method will retrieve all templates
 	 *
 	 * @return
 	 */
