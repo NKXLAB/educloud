@@ -17,7 +17,7 @@ public class MenuControl {
 			if (page.equals("vms")) {
 				return "selected";
 			}
-		} else if ("/ui/resources.jsp".equals(this.urlPath)) {
+		} else if ("/ui/nodes.jsp".equals(this.urlPath)) {
 			if (page.equals("nodes")) {
 				return "selected";
 			}
@@ -45,7 +45,7 @@ public class MenuControl {
 			} else {
 				return "none";
 			}
-		} else if ("/ui/resources.jsp".equals(this.urlPath)) {
+		} else if ("/ui/nodes.jsp".equals(this.urlPath)) {
 			if (page.equals("nodes")) {
 				return "block";
 			} else {

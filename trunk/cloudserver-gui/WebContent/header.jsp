@@ -15,7 +15,7 @@
 		class="<%=menuControl.getCSSMenuClass("home")%>">EduCloud Home</a></li>
 	<li><a href="vms.jsp"
 		class="<%=menuControl.getCSSMenuClass("vms")%>">Virtual Machines</a></li>
-	<li><a href="resources.jsp"
+	<li><a href="nodes.jsp"
 		class="<%=menuControl.getCSSMenuClass("nodes")%>">Cloud Resources</a></li>
 	<li><a href="templates.jsp"
 		class="<%=menuControl.getCSSMenuClass("templates")%>">Templates</a></li>
