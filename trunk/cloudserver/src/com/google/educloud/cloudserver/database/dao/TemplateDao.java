@@ -131,6 +131,4 @@ public class TemplateDao extends AbstractDao {
 			cleanUp(ps, null);
 		}
 	}
-
-
 }

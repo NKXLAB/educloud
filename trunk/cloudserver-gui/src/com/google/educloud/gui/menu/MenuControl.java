@@ -25,7 +25,7 @@ public class MenuControl {
 			if (page.equals("templates")) {
 				return "selected";
 			}
-		} else if ("/ui/users.jsp".equals(this.urlPath)) {
+		} else if ("/ui/users.jsp".equals(this.urlPath) || "newuser.jsp".equals(this.urlPath)) {
 			if (page.equals("users")) {
 				return "selected";
 			}
@@ -57,7 +57,7 @@ public class MenuControl {
 			} else {
 				return "none";
 			}
-		} else if ("/ui/users.jsp".equals(this.urlPath)) {
+		} else if ("/ui/users.jsp".equals(this.urlPath) || "newuser.jsp".equals(this.urlPath)) {
 			if (page.equals("users")) {
 				return "block";
 			} else {
