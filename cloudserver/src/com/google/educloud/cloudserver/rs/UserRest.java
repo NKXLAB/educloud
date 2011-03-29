@@ -171,7 +171,9 @@ public class UserRest extends CloudResource {
 		List<Integer> users = gson.fromJson(jsonUsers, type);
 
 		for (Integer userId : users) {
-			UserDao.getInstance().remove(userId);
+			if (userId != cloudSession.getUser().getId()) {
+				UserDao.getInstance().remove(userId);
+			}
 		}
 
 		return Response.ok().build();

@@ -56,6 +56,7 @@ public class VirtualMachineBean {
 		VirtualMachine virtualMachine = new VirtualMachine();
 		virtualMachine.setName(name);
 		virtualMachine.setTemplate(loadedTemplate);
+		virtualMachine.setUserId(auth.getUser().getId());
 
 		vmClient.createVM(virtualMachine);
 	}

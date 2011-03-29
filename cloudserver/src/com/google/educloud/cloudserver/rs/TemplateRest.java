@@ -4,7 +4,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -17,7 +16,6 @@ import org.apache.log4j.Logger;
 
 import com.google.educloud.api.entities.EduCloudErrorMessage;
 import com.google.educloud.cloudserver.database.dao.TemplateDao;
-import com.google.educloud.cloudserver.entity.CloudSession;
 import com.google.educloud.internal.entities.Template;
 import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.spi.container.servlet.PerSession;
@@ -98,14 +96,11 @@ public class TemplateRest extends CloudResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/get/{id: [0-9]*}")
-	public Response getVM(@PathParam("id") int tplId) {
+	public Response getTemplate(@PathParam("id") int tplId) {
 
 		int id = Integer.valueOf(tplId);
 
 		Template loadedTemplate = TemplateDao.getInstance().findById(id);
-
-		HttpSession session = request.getSession();
-		CloudSession cloudSession = (CloudSession)session.getAttribute(CloudSession.HTTP_ATTR_NAME);
 
 		/* validations */
 		if (loadedTemplate == null) {

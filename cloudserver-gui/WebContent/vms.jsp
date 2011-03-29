@@ -78,7 +78,7 @@ function executeAction(o) {
 		});
 		
 		if (selected.length > 0) {
-			$.post("deleteVms", {'vms':selected.join(';')}, function(data) {
+			$.post("deleteVirtualMachines", {'vms':selected.join(';')}, function(data) {
 				window.location = "vms.jsp";
 			}, 'json')
 			.error(function() {
