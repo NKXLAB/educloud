@@ -82,6 +82,12 @@ public class EduCloudTemplateClient extends AbstractClient {
 		return gson.fromJson(entity, Template.class);
 	}
 
+	/**
+	 * Delete a list of templates
+	 *
+	 * @param arrayList
+	 * @throws EduCloudServerException
+	 */
 	public void delete(ArrayList<Integer> arrayList) throws EduCloudServerException {
 		WebResource service = getWebResouce();
 
@@ -94,6 +100,5 @@ public class EduCloudTemplateClient extends AbstractClient {
 
 		handleError(status, entity);
 	}
-
 
 }

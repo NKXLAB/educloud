@@ -54,4 +54,8 @@ public class User {
 		this.type = type;
 	}
 
+	public boolean isAdmin() {
+		return type == UserType.ADMIN;
+	}
+
 }

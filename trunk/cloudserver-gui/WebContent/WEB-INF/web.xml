@@ -49,6 +49,18 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>deleteVirtualMachineServlet</servlet-name>
+		<servlet-class>com.google.educloud.gui.servlet.DeleteVirtualMachineServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>deleteVirtualMachineServlet</servlet-name>
+		<url-pattern>
+          /deleteVirtualMachines
+      </url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>deleteUserServlet</servlet-name>
 		<servlet-class>com.google.educloud.gui.servlet.DeleteUserServlet</servlet-class>
 	</servlet>

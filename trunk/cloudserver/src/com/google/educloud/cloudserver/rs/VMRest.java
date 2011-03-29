@@ -1,5 +1,7 @@
 package com.google.educloud.cloudserver.rs;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -23,6 +25,7 @@ import com.google.educloud.cloudserver.entity.User;
 import com.google.educloud.cloudserver.entity.User.UserType;
 import com.google.educloud.cloudserver.managers.VMManager;
 import com.google.educloud.internal.entities.Template;
+import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.spi.container.servlet.PerSession;
 
 @PerSession
@@ -443,6 +446,38 @@ public class VMRest extends CloudResource {
 
 		// return virtual machine
 		return Response.ok(gson.toJson(virtualMachine), MediaType.APPLICATION_JSON).build();
+	}
+
+	/**
+	 * this method will delete a virtual machine
+	 *
+	 * @return
+	 */
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/delete")
+	public Response deleteVirtualMachine(String jsonVms) {
+
+		Type type = new TypeToken<ArrayList<Integer>>(){}.getType();
+		List<Integer> vms = gson.fromJson(jsonVms, type);
+
+		CloudSession cloudSession =
+			(CloudSession)request.getSession().getAttribute(CloudSession.HTTP_ATTR_NAME);
+
+		User user = cloudSession.getUser();
+
+		for (Integer vmId : vms) {
+			if (!user.isAdmin()) {
+				com.google.educloud.internal.entities.VirtualMachine vm = VirtualMachineDao.getInstance().findById(vmId);
+				if (vm != null && vm.getUserId() == user.getId()) {
+					VirtualMachineDao.getInstance().remove(vmId);
+				}
+			} else {
+				VirtualMachineDao.getInstance().remove(vmId);
+			}
+		}
+
+		return Response.ok().build();
 	}
 
 }

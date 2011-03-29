@@ -254,4 +254,25 @@ public class VirtualMachineDao extends AbstractDao {
 			cleanUp(ps, rs);
 		}
 	}
+
+	public void remove(Integer id) {
+		PreparedStatement ps = null;
+
+		try {
+				ps = getConnection().prepareStatement("DELETE FROM MACHINE WHERE MACHINE_ID=?");
+				ps.setInt(1, id);
+				ps.execute();
+
+				getConnection().commit();
+		} catch (SQLException e) {
+			LOG.debug(e);
+			try {
+				getConnection().rollback();
+			} catch (SQLException e1) {
+				LOG.debug(e1);
+			}
+		} finally {
+			cleanUp(ps, null);
+		}
+	}
 }
