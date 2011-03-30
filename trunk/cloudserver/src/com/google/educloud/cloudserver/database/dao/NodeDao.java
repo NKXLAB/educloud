@@ -64,11 +64,18 @@ public class NodeDao extends AbstractDao {
 	public Node findRandomicNode() {
 		List<Node> all = getAllOnline();
 
-		if (all.isEmpty()) return null;
+		ArrayList<Node> arrayList = new ArrayList<Node>();
+		for (Node node : all) {
+			if (node.isConnectedToVBox()) {
+				arrayList.add(node);
+			}
+		}
 
-		Collections.shuffle(all);
+		if (arrayList.isEmpty()) return null;
 
-		return all.get(0);
+		Collections.shuffle(arrayList);
+
+		return arrayList.get(0);
 	}
 
 	public Node findNodeById(int nodeId){
@@ -84,6 +91,8 @@ public class NodeDao extends AbstractDao {
 				node.setId(rs.getInt("node_id"));
 				node.setHostname(rs.getString("hostname"));
 				node.setPort(rs.getInt("port"));
+				node.setConnectedToVBox(rs.getBoolean("vbox_connected"));
+				node.setVboxVersion(rs.getString("vbox_version"));
 				return node;
 			}
 		} catch (SQLException e) {
@@ -131,6 +140,8 @@ public class NodeDao extends AbstractDao {
 				node.setPort(rs.getInt("port"));
 				node.setStartTime(rs.getTimestamp("start_time"));
 				node.setLastPing(rs.getTimestamp("last_ping"));
+				node.setConnectedToVBox(rs.getBoolean("vbox_connected"));
+				node.setVboxVersion(rs.getString("vbox_version"));
 				nodes.add(node);
 			}
 		} catch (SQLException e) {
@@ -147,9 +158,11 @@ public class NodeDao extends AbstractDao {
 		ResultSet rs = null;
 
 		try {
-			ps = getConnection().prepareStatement("UPDATE NODE SET LAST_PING=? WHERE NODE_ID = ?");
+			ps = getConnection().prepareStatement("UPDATE NODE SET LAST_PING=?, VBOX_VERSION=?, VBOX_CONNECTED=? WHERE NODE_ID = ?");
 			ps.setTimestamp(1, new Timestamp(node.getLastPing().getTime()));
-			ps.setInt(2, node.getId());
+			ps.setString(2, node.getVboxVersion());
+			ps.setBoolean(3, node.isConnectedToVBox());
+			ps.setInt(4, node.getId());
 			ps.execute();
 			getConnection().commit();
 		} catch (SQLException e) {
@@ -178,6 +191,8 @@ public class NodeDao extends AbstractDao {
 				node.setId(rs.getInt("node_id"));
 				node.setHostname(rs.getString("hostname"));
 				node.setPort(rs.getInt("port"));
+				node.setConnectedToVBox(rs.getBoolean("vbox_connected"));
+				node.setVboxVersion(rs.getString("vbox_version"));
 				nodes.add(node);
 			}
 		} catch (SQLException e) {

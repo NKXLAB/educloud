@@ -7,8 +7,14 @@ package com.google.educloud.api.entities;
 public class Node {
 
 	private int id;
-	private String ip;
+
+	private String hostname;
+
 	private int port;
+
+	private boolean connectedToVBox;
+
+	private String vboxVersion;
 
 	/**
 	 * @param id the id to set
@@ -26,13 +32,13 @@ public class Node {
 	 * @param ip the ip to set
 	 */
 	public void setHostname(String ip) {
-		this.ip = ip;
+		this.hostname = ip;
 	}
 	/**
 	 * @return the ip
 	 */
 	public String getHostName() {
-		return ip;
+		return hostname;
 	}
 	/**
 	 * @param port the port to set
@@ -45,5 +51,17 @@ public class Node {
 	 */
 	public int getPort() {
 		return port;
+	}
+	public boolean isConnectedToVBox() {
+		return connectedToVBox;
+	}
+	public void setConnectedToVBox(boolean connectedToVBox) {
+		this.connectedToVBox = connectedToVBox;
+	}
+	public String getVboxVersion() {
+		return vboxVersion;
+	}
+	public void setVboxVersion(String vboxVersion) {
+		this.vboxVersion = vboxVersion;
 	}
 }

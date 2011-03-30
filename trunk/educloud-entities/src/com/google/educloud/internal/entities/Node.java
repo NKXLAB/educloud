@@ -14,6 +14,10 @@ public class Node {
 
 	private Date startTime;
 
+	private boolean connectedToVBox;
+
+	private String vboxVersion;
+
 	public int getId() {
 		return id;
 	}
@@ -52,6 +56,22 @@ public class Node {
 
 	public Date getLastPing() {
 		return this.lastPing;
+	}
+
+	public boolean isConnectedToVBox() {
+		return connectedToVBox;
+	}
+
+	public void setConnectedToVBox(boolean connectedToVBox) {
+		this.connectedToVBox = connectedToVBox;
+	}
+
+	public String getVboxVersion() {
+		return vboxVersion;
+	}
+
+	public void setVboxVersion(String vboxVersion) {
+		this.vboxVersion = vboxVersion;
 	}
 
 }

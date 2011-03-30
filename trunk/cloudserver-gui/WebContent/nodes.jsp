@@ -71,6 +71,8 @@ select {
 		<th>ID</th>
 		<th>Hostname</th>
 		<th>Port</th>
+		<th>Connected to Vbox</th>
+		<th>Vbox version</th>
 	</tr>
 	<%
 		List<Node> nodes = nodeBean.getNodes(session);
@@ -81,6 +83,8 @@ select {
 		<td><%=node.getId()%></td>
 		<td><%=node.getHostName()%></td>
 		<td><%=node.getPort()%></td>
+		<td><%=node.isConnectedToVBox()%></td>
+		<td><%=node.getVboxVersion()%></td>
 	</tr>
 	<%
 		}

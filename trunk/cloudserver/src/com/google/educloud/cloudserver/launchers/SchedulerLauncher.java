@@ -12,7 +12,10 @@ public class SchedulerLauncher {
 
 		LOG.debug("Starting cloud server scheduler");
 
-		new Thread(new Scheduler()).start();
+		Scheduler target = new Scheduler();
+		Thread thread = new Thread(target);
+		thread.setName("SCHEDULE-THREAD");
+		thread.start();
 
 		LOG.debug("scheduler cloud server was started");
 	}

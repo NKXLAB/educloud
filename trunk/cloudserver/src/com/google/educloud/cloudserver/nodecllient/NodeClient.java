@@ -24,6 +24,8 @@ public class NodeClient extends AbstractNodeClient {
 			throw new NodeComunicationException("Error on check node");
 		}
 
+		node = gson.fromJson(response.getEntity(String.class), Node.class);
+
 		return node;
 	}
 

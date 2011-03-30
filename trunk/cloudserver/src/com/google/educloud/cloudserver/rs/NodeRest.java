@@ -49,6 +49,8 @@ public class NodeRest extends CloudResource {
 			nodoRetorno.setId(nodoInterno.getId());
 			nodoRetorno.setHostname(nodoInterno.getHostname());
 			nodoRetorno.setPort(nodoInterno.getPort());
+			nodoRetorno.setConnectedToVBox(nodoInterno.isConnectedToVBox());
+			nodoRetorno.setVboxVersion(nodoInterno.getVboxVersion());
 			nodes[indice] = nodoRetorno;
 
 			indice++;

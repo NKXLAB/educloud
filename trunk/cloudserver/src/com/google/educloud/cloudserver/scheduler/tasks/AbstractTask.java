@@ -72,6 +72,7 @@ public abstract class AbstractTask implements CloudTask {
 	protected void reschedule(Date time) {
 		this.setStatus(Status.PENDING);
 		TaskDao.getInstance().updateStatus(this, time);
-		LOG.debug("Task #" + this.id + " was rescheduled");
+		LOG.debug("Task #" + this.id + " was rescheduled to " + time);
 	}
+
 }
