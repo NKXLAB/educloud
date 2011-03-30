@@ -2,7 +2,7 @@ package com.google.educloud.internal.entities;
 
 public class VirtualMachine {
 
-	public enum VMState {PENDING, BOOT, RUNNING, SHUTDOWN, DONE};
+	public enum VMState {PENDING, BOOT, RUNNING, SHUTDOWN, DONE, UNKNOWN};
 
 	private int id;
 

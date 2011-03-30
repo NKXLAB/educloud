@@ -44,8 +44,6 @@ public class StartVmTask extends AbstractTask {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
 		LOG.debug("Running start virtual machine task");
 
 		// 1) clone template disk

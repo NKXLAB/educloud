@@ -3,10 +3,10 @@ package com.google.educloud.api.entities;
 
 public class VirtualMachine {
 
-	public enum VMState {PENDING, BOOT, RUNNING, SHUTDOWN, DONE};
+	public enum VMState {PENDING, BOOT, RUNNING, SHUTDOWN, DONE, UNKNOWN};
 
 	private int id;
-	
+
 	private int userId;
 
 	private Template template;
@@ -46,7 +46,7 @@ public class VirtualMachine {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public int getUserId(){
 		return userId;
 	}

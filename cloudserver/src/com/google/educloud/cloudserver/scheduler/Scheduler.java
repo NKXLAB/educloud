@@ -3,6 +3,8 @@ package com.google.educloud.cloudserver.scheduler;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
@@ -18,8 +20,10 @@ public class Scheduler implements Runnable {
 
 	private ExecutorService es;
 
+	private static int currentTaskIdFactory;
+
 	public Scheduler() {
-		es = Executors.newCachedThreadPool();
+		es = Executors.newCachedThreadPool(new ScheduleThreadFactory());
 	}
 
 	@Override
@@ -47,6 +51,31 @@ public class Scheduler implements Runnable {
 	private void consume(CloudTask task) {
 		LOG.debug("Scheduler will consume a new task");
 
+		currentTaskIdFactory = task.getId();
+
 		es.execute(task);
 	}
+
+	/**
+     * The schedule thread factory
+     */
+    static class ScheduleThreadFactory implements ThreadFactory {
+        final ThreadGroup group;
+        final AtomicInteger threadNumber = new AtomicInteger(1);
+
+        ScheduleThreadFactory() {
+            SecurityManager s = System.getSecurityManager();
+            group = (s != null)? s.getThreadGroup() :
+                                 Thread.currentThread().getThreadGroup();
+        }
+
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(group, r, "task-" + currentTaskIdFactory + "-thread-" + threadNumber.getAndIncrement(), 0);
+            if (t.isDaemon())
+                t.setDaemon(false);
+            if (t.getPriority() != Thread.NORM_PRIORITY)
+                t.setPriority(Thread.NORM_PRIORITY);
+            return t;
+        }
+    }
 }

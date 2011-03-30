@@ -5,9 +5,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.ws.WebServiceException;
 
 import org.apache.log4j.Logger;
+import org.virtualbox.service.IVirtualBox;
 
+import com.google.educloud.cloudnode.configuration.NodeConfig;
+import com.google.educloud.cloudnode.virtualbox.VirtualBoxConnector;
 import com.google.educloud.internal.entities.Node;
 import com.google.gson.Gson;
 import com.sun.jersey.spi.resource.Singleton;
@@ -28,6 +32,22 @@ public class ApplicationRest {
 		LOG.debug("Returning application status");
 
 		Node node = gson.fromJson(jsonNode, Node.class);
+
+		try {
+			IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
+			String version = vbox.getVersion();
+			node.setVboxVersion(version);
+			node.setConnectedToVBox(true);
+			vbox.release();
+		} catch (WebServiceException e) {
+			LOG.error("Error on connect on vbox services", e);
+			node.setVboxVersion(null);
+			node.setConnectedToVBox(false);
+		} catch (Error e) {
+			LOG.error("Error on connect on vbox services", e);
+			node.setVboxVersion(null);
+			node.setConnectedToVBox(false);
+		}
 
 		return Response.ok(gson.toJson(node), MediaType.APPLICATION_JSON).build();
 	}
