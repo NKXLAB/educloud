@@ -94,37 +94,6 @@ public class VirtualMachineDao extends AbstractDao {
 		return null;
 	}
 
-	public VirtualMachine findByIdAndUser(VirtualMachine machine) {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-
-		try {
-			ps = getConnection().prepareStatement("SELECT * FROM MACHINE WHERE MACHINE_ID = ? AND USER_ID = ?");
-			ps.setInt(1, machine.getId());
-			ps.setInt(2, machine.getUserId());
-			rs = ps.executeQuery();
-			if (rs.next()) {
-				VirtualMachine vm = new VirtualMachine();
-				vm.setId(rs.getInt("machine_id"));
-				vm.setBootableMedium(rs.getString("bootable_medium"));
-				vm.setName(rs.getString("name"));
-				vm.setNodeId(rs.getInt("node_id"));
-				vm.setState(VMState.valueOf(rs.getString("state")));
-				vm.setTemplate(TemplateDao.getInstance().findById(rs.getInt("template_id")));
-				vm.setUserId(rs.getInt("user_id"));
-				vm.setUUID(rs.getString("uuid"));
-				vm.setVboxSession(rs.getString("vbox_uuid"));
-				return vm;
-			}
-		} catch (SQLException e) {
-			LOG.debug(e);
-		} finally {
-			cleanUp(ps, rs);
-		}
-
-		return null;
-	}
-
 	public List<VirtualMachine> getAll() {
 		PreparedStatement ps = null;
 		ResultSet rs = null;

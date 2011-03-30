@@ -144,27 +144,28 @@ public class VMRest extends CloudResource {
 		vm.setId(externalMachine.getId());
 		vm.setUserId(externalMachine.getUserId());
 
-		//Recupera a instancia da maquina virtual de acordo com o usuario.
-		if( usuario.getType() == UserType.ADMIN )
-			vm = VirtualMachineDao.getInstance().findById(vm.getId());
-		else
-			vm = VirtualMachineDao.getInstance().findByIdAndUser(vm);
+		vm = VirtualMachineDao.getInstance().findById(vm.getId());
 
-		if( vm == null ){
+		//Recupera a instancia da maquina virtual de acordo com o usuario.
+		if(usuario.getType() != UserType.ADMIN) {
+			if (usuario.getId() != vm.getUserId()) {
+				vm = null;
+			}
+		}
+
+		if (vm == null) {
 
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
-			error.setCode("CS-006");
+			error.setCode("CS-0076");
 			error.setHint("That machine does not exists or the user has not access");
 			error.setText("That machine does not exists or the user has not access");
 
 			// return error message
 			return Response.status(400).entity(gson.toJson(error)).build();
-		}
-		else if( vm.getState() !=
-			com.google.educloud.internal.entities.VirtualMachine.VMState.DONE ){
+		} else if (vm.getState() != com.google.educloud.internal.entities.VirtualMachine.VMState.DONE) {
 
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
-			error.setCode("CS-006");
+			error.setCode("CS-047");
 			error.setHint("Invalid state to start this virtual machine");
 			error.setText("Invalid state to start this virtual machine");
 
@@ -224,16 +225,18 @@ public class VMRest extends CloudResource {
 		vm.setId(externalMachine.getId());
 		vm.setUserId(externalMachine.getUserId());
 
-		//Recupera a instancia da maquina virtual de acordo com o usuario.
-		if( usuario.getType() == UserType.ADMIN )
-			vm = VirtualMachineDao.getInstance().findById(vm.getId());
-		else
-			vm = VirtualMachineDao.getInstance().findByIdAndUser(vm);
+		vm = VirtualMachineDao.getInstance().findById(vm.getId());
 
-		if( vm == null ){
+		if (!usuario.isAdmin()) {
+			if (usuario.getId() != vm.getUserId()) {
+				vm = null;
+			}
+		}
+
+		if (vm == null) {
 
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
-			error.setCode("CS-006");
+			error.setCode("CS-084");
 			error.setHint("That machine does not exists or the user has not access");
 			error.setText("That machine does not exists or the user has not access");
 
@@ -302,27 +305,27 @@ public class VMRest extends CloudResource {
 		vm.setId(externalMachine.getId());
 		vm.setUserId(externalMachine.getUserId());
 
-		//Recupera a instancia da maquina virtual de acordo com o usuario.
-		if( usuario.getType() == UserType.ADMIN )
-			vm = VirtualMachineDao.getInstance().findById(vm.getId());
-		else
-			vm = VirtualMachineDao.getInstance().findByIdAndUser(vm);
+		vm = VirtualMachineDao.getInstance().findById(vm.getId());
 
-		if( vm == null ){
+		if(!usuario.isAdmin()) {
+			if (usuario.getId() != vm.getUserId()) {
+				vm = null;
+			}
+		}
+
+		if (vm == null) {
 
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
-			error.setCode("CS-006");
+			error.setCode("CS-806");
 			error.setHint("That machine does not exists or the user has not access");
 			error.setText("That machine does not exists or the user has not access");
 
 			// return error message
 			return Response.status(400).entity(gson.toJson(error)).build();
-		}
-		else if( vm.getState() !=
-			com.google.educloud.internal.entities.VirtualMachine.VMState.DONE ){
+		} else if( vm.getState() != com.google.educloud.internal.entities.VirtualMachine.VMState.DONE) {
 
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
-			error.setCode("CS-006");
+			error.setCode("CS-106");
 			error.setHint("Invalid state to remove this virtual machine");
 			error.setText("Invalid state to remove this virtual machine");
 
