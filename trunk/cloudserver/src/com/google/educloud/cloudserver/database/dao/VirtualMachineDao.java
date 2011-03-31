@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.google.educloud.internal.entities.Template;
 import com.google.educloud.internal.entities.VirtualMachine;
 import com.google.educloud.internal.entities.VirtualMachine.VMState;
 
@@ -28,7 +29,7 @@ public class VirtualMachineDao extends AbstractDao {
 		return dao;
 	}
 
-	public void insert(VirtualMachine machine) {
+	public void insert(VirtualMachine machine, Template template) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
@@ -39,12 +40,13 @@ public class VirtualMachineDao extends AbstractDao {
 			if (rs.next()) {
 				key = rs.getInt(1);
 
-				ps = getConnection().prepareStatement("INSERT INTO MACHINE (MACHINE_ID, TEMPLATE_ID, USER_ID, NAME, STATE) VALUES (?, ?, ?, ?, ?)");
+				ps = getConnection().prepareStatement("INSERT INTO MACHINE (MACHINE_ID, USER_ID, NAME, DESCRIPTION, OS_TYPE, STATE) VALUES (?, ?, ?, ?, ?, ?)");
 				ps.setInt(1, key);
-				ps.setInt(2, machine.getTemplate().getId());
-				ps.setInt(3, machine.getUserId());
-				ps.setString(4, machine.getName());
-				ps.setString(5, machine.getState().name());
+				ps.setInt(2, machine.getUserId());
+				ps.setString(3, machine.getName());
+				ps.setString(4, machine.getDescription());
+				ps.setString(5, template.getOsType());
+				ps.setString(6, machine.getState().name());
 				ps.execute();
 
 				machine.setId(key);
@@ -52,11 +54,11 @@ public class VirtualMachineDao extends AbstractDao {
 				getConnection().commit();
 			}
 		} catch (SQLException e) {
-			LOG.debug(e);
+			LOG.error(e);
 			try {
 				getConnection().rollback();
 			} catch (SQLException e1) {
-				LOG.debug(e1);
+				LOG.error(e1);
 			}
 		} finally {
 			cleanUp(ps, rs);
@@ -77,16 +79,17 @@ public class VirtualMachineDao extends AbstractDao {
 				vm.setId(rs.getInt("machine_id"));
 				vm.setBootableMedium(rs.getString("bootable_medium"));
 				vm.setName(rs.getString("name"));
+				vm.setDescription(rs.getString("description"));
+				vm.setOsType(rs.getString("os_type"));
 				vm.setNodeId(rs.getInt("node_id"));
 				vm.setState(VMState.valueOf(rs.getString("state")));
-				vm.setTemplate(TemplateDao.getInstance().findById(rs.getInt("template_id")));
 				vm.setUserId(rs.getInt("user_id"));
 				vm.setUUID(rs.getString("uuid"));
 				vm.setVboxSession(rs.getString("vbox_uuid"));
 				return vm;
 			}
 		} catch (SQLException e) {
-			LOG.debug(e);
+			LOG.error(e);
 		} finally {
 			cleanUp(ps, rs);
 		}
@@ -107,15 +110,16 @@ public class VirtualMachineDao extends AbstractDao {
 				vm.setId(rs.getInt("machine_id"));
 				vm.setBootableMedium(rs.getString("bootable_medium"));
 				vm.setName(rs.getString("name"));
+				vm.setDescription(rs.getString("description"));
+				vm.setOsType(rs.getString("os_type"));
 				vm.setNodeId(rs.getInt("node_id"));
 				vm.setState(VMState.valueOf(rs.getString("state")));
-				vm.setTemplate(TemplateDao.getInstance().findById(rs.getInt("template_id")));
 				vm.setUUID(rs.getString("uuid"));
 				vm.setVboxSession(rs.getString("vbox_uuid"));
 				machines.add(vm);
 			}
 		} catch (SQLException e) {
-			LOG.debug(e);
+			LOG.error(e);
 		} finally {
 			cleanUp(ps, rs);
 		}
@@ -137,15 +141,16 @@ public class VirtualMachineDao extends AbstractDao {
 				vm.setId(rs.getInt("machine_id"));
 				vm.setBootableMedium(rs.getString("bootable_medium"));
 				vm.setName(rs.getString("name"));
+				vm.setDescription(rs.getString("description"));
+				vm.setOsType(rs.getString("os_type"));
 				vm.setNodeId(rs.getInt("node_id"));
 				vm.setState(VMState.valueOf(rs.getString("state")));
-				vm.setTemplate(TemplateDao.getInstance().findById(rs.getInt("template_id")));
 				vm.setUUID(rs.getString("uuid"));
 				vm.setVboxSession(rs.getString("vbox_uuid"));
 				machines.add(vm);
 			}
 		} catch (SQLException e) {
-			LOG.debug(e);
+			LOG.error(e);
 		} finally {
 			cleanUp(ps, rs);
 		}
@@ -164,11 +169,11 @@ public class VirtualMachineDao extends AbstractDao {
 
 				getConnection().commit();
 		} catch (SQLException e) {
-			LOG.debug(e);
+			LOG.error(e);
 			try {
 				getConnection().rollback();
 			} catch (SQLException e1) {
-				LOG.debug(e1);
+				LOG.error(e1);
 			}
 		} finally {
 			cleanUp(ps, null);
@@ -190,11 +195,11 @@ public class VirtualMachineDao extends AbstractDao {
 
 			getConnection().commit();
 		} catch (SQLException e) {
-			LOG.debug(e);
+			LOG.error(e);
 			try {
 				getConnection().rollback();
 			} catch (SQLException e1) {
-				LOG.debug(e1);
+				LOG.error(e1);
 			}
 		} finally {
 			cleanUp(ps, rs);
@@ -213,35 +218,15 @@ public class VirtualMachineDao extends AbstractDao {
 
 			getConnection().commit();
 		} catch (SQLException e) {
-			LOG.debug(e);
+			LOG.error(e);
 			try {
 				getConnection().rollback();
 			} catch (SQLException e1) {
-				LOG.debug(e1);
+				LOG.error(e1);
 			}
 		} finally {
 			cleanUp(ps, rs);
 		}
 	}
 
-	public void remove(Integer id) {
-		PreparedStatement ps = null;
-
-		try {
-				ps = getConnection().prepareStatement("DELETE FROM MACHINE WHERE MACHINE_ID=?");
-				ps.setInt(1, id);
-				ps.execute();
-
-				getConnection().commit();
-		} catch (SQLException e) {
-			LOG.debug(e);
-			try {
-				getConnection().rollback();
-			} catch (SQLException e1) {
-				LOG.debug(e1);
-			}
-		} finally {
-			cleanUp(ps, null);
-		}
-	}
 }

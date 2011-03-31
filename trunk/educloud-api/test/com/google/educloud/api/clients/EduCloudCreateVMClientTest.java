@@ -44,12 +44,11 @@ public class EduCloudCreateVMClientTest {
 		template.setId(1);
 
 		VirtualMachine machine = new VirtualMachine();
-		machine.setTemplate(template);
 		machine.setName("Maquina virtual dos casos de testes");
 		machine.setUserId(1);
 
 		// create machine
-		VirtualMachine vmCriada = vmClient.createVM(machine);
+		VirtualMachine vmCriada = vmClient.createVM(machine, template);
 
 		//Verifica apenas se criou um id e se o nome é o mesmo.
 		Assert.assertTrue(vmCriada.getId() > 0 &&

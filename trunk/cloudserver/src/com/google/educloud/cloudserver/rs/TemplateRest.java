@@ -56,6 +56,7 @@ public class TemplateRest extends CloudResource {
 			templateRetorno.setName(templateInterno.getName());
 			templateRetorno.setFilename(templateInterno.getFilename());
 			templateRetorno.setOsType(templateInterno.getOsType());
+			templateRetorno.setDescription(templateInterno.getDescription());
 			templates[indice] = templateRetorno;
 
 			indice++;
@@ -81,6 +82,7 @@ public class TemplateRest extends CloudResource {
 		template.setFilename(extTemplate.getFilename());
 		template.setName(extTemplate.getName());
 		template.setOsType(extTemplate.getOsType());
+		template.setDescription(extTemplate.getDescription());
 
 		TemplateDao.getInstance().insert(template);
 
@@ -117,6 +119,7 @@ public class TemplateRest extends CloudResource {
 		template.setId(loadedTemplate.getId());
 		template.setName(loadedTemplate.getName());
 		template.setOsType(loadedTemplate.getOsType());
+		template.setDescription(loadedTemplate.getDescription());
 
 		// return template
 		return Response.ok(gson.toJson(template), MediaType.APPLICATION_JSON).build();

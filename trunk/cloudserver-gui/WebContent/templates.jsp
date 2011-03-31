@@ -105,6 +105,7 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		<th>-</th>
 		<th>ID</th>
 		<th>Name</th>
+		<th>Description</th>
 		<th>OS Type</th>
 	</tr>
 	<%
@@ -118,6 +119,7 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		</td>
 		<td><%=tpl.getId()%></td>
 		<td><%=tpl.getName()%></td>
+		<td><%=tpl.getDescription()%></td>
 		<td><%=tpl.getOsType()%></td>
 	</tr>
 	<%

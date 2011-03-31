@@ -106,6 +106,7 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		<th>-</th>
 		<th>ID</th>
 		<th>Name</th>
+		<th>Description</th>
 		<th>State</th>
 		<th>OS Type</th>
 		<th>Actions</th>
@@ -115,7 +116,6 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		List<VirtualMachine> vms = virtualMachineBean.getVirtualMachines(session);
 
 		for (VirtualMachine vm : vms) {
-			Template tpl = vm.getTemplate();
 	%>
 	<tr>
 		<td width="10px">
@@ -123,8 +123,9 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		</td>
 		<td><%=vm.getId()%></td>
 		<td><%=vm.getName()%></td>
+		<td><%=vm.getDescription()%></td>
 		<td><%=vm.getState()%></td>
-		<td><%=tpl.getOsType()%></td>
+		<td><%=vm.getOsType()%></td>
 		<td width="60px">
 			<%
 				if (vm.isStartable()) {

@@ -55,10 +55,10 @@ public class VirtualMachineBean {
 
 		VirtualMachine virtualMachine = new VirtualMachine();
 		virtualMachine.setName(name);
-		virtualMachine.setTemplate(loadedTemplate);
+		virtualMachine.setDescription(description);
 		virtualMachine.setUserId(auth.getUser().getId());
 
-		vmClient.createVM(virtualMachine);
+		vmClient.createVM(virtualMachine, loadedTemplate);
 	}
 
 	public List<VirtualMachine> getVirtualMachines(HttpSession session) throws EduCloudServerException {

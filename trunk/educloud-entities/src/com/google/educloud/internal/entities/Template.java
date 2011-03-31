@@ -9,6 +9,8 @@ public class Template {
 
 	private String name;
 
+	private String description;
+
 	private String filename;
 
 	public int getId() {
@@ -33,6 +35,14 @@ public class Template {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getFilename() {

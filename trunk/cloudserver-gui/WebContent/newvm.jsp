@@ -47,7 +47,6 @@
 			<%
 			}
 			%>
-			<!-- put template options here -->
 		</select>
 		<div class="clear"></div> 
 		 

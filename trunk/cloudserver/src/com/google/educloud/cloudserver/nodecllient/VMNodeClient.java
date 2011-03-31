@@ -2,7 +2,9 @@ package com.google.educloud.cloudserver.nodecllient;
 
 import javax.ws.rs.core.MediaType;
 
+import com.google.educloud.internal.entities.Template;
 import com.google.educloud.internal.entities.VirtualMachine;
+import com.google.educloud.to.NewVirtualMachineTO;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 
@@ -45,7 +47,7 @@ public class VMNodeClient extends AbstractNodeClient {
 	}
 
 	public void removeVM(VirtualMachine machine) throws NodeComunicationException {
-		
+
 		String jsonMachine = gson.toJson(machine);
 
 		ClientResponse response;
@@ -59,6 +61,28 @@ public class VMNodeClient extends AbstractNodeClient {
 		if (response.getStatus() != 200) {
 			throw new NodeComunicationException("Error on remove the virtual machine from node");
 		}
-		
+
+	}
+
+	public void createVM(VirtualMachine vm, Template template) throws NodeComunicationException {
+
+		NewVirtualMachineTO newVirtualMachineTO = new NewVirtualMachineTO();
+		newVirtualMachineTO.setTemplate(template);
+		newVirtualMachineTO.setVirtualMachine(vm);
+
+		String jsonMachine = gson.toJson(newVirtualMachineTO);
+
+		ClientResponse response;
+
+		try {
+			response = getResouce().path("vm").path("create").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, jsonMachine);
+		} catch (ClientHandlerException e) {
+			throw new NodeComunicationException("Error on remove the virtual machine from node", e);
+		}
+
+		if (response.getStatus() != 200) {
+			throw new NodeComunicationException("Error on remove the virtual machine from node");
+		}
+
 	}
 }

@@ -38,11 +38,12 @@ public class TemplateDao extends AbstractDao {
 			if (rs.next()) {
 				key = rs.getInt(1);
 
-				ps = getConnection().prepareStatement("INSERT INTO TEMPLATE (TEMPLATE_ID, OS_TYPE, NAME, FILENAME) VALUES (?, ?, ?, ?)");
+				ps = getConnection().prepareStatement("INSERT INTO TEMPLATE (TEMPLATE_ID, OS_TYPE, NAME, FILENAME, DESCRIPTION) VALUES (?, ?, ?, ?, ?)");
 				ps.setInt(1, key);
 				ps.setString(2, template.getOsType());
 				ps.setString(3, template.getName());
 				ps.setString(4, template.getFilename());
+				ps.setString(5, template.getDescription());
 				ps.execute();
 
 				template.setId(key);
@@ -50,11 +51,11 @@ public class TemplateDao extends AbstractDao {
 				getConnection().commit();
 			}
 		} catch (SQLException e) {
-			LOG.debug(e);
+			LOG.error(e);
 			try {
 				getConnection().rollback();
 			} catch (SQLException e1) {
-				LOG.debug(e1);
+				LOG.error(e1);
 			}
 		} finally {
 			cleanUp(ps, rs);
@@ -78,7 +79,7 @@ public class TemplateDao extends AbstractDao {
 				return tpl;
 			}
 		} catch (SQLException e) {
-			LOG.debug(e);
+			LOG.error(e);
 		} finally {
 			cleanUp(ps, rs);
 		}
@@ -99,11 +100,12 @@ public class TemplateDao extends AbstractDao {
 				tpl.setId(rs.getInt("template_id"));
 				tpl.setFilename(rs.getString("filename"));
 				tpl.setName(rs.getString("name"));
+				tpl.setDescription(rs.getString("description"));
 				tpl.setOsType(rs.getString("os_type"));
 				templates.add(tpl);
 			}
 		} catch (SQLException e) {
-			LOG.debug(e);
+			LOG.error(e);
 		} finally {
 			cleanUp(ps, rs);
 		}
@@ -121,11 +123,11 @@ public class TemplateDao extends AbstractDao {
 
 				getConnection().commit();
 		} catch (SQLException e) {
-			LOG.debug(e);
+			LOG.error(e);
 			try {
 				getConnection().rollback();
 			} catch (SQLException e1) {
-				LOG.debug(e1);
+				LOG.error(e1);
 			}
 		} finally {
 			cleanUp(ps, null);

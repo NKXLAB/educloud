@@ -15,8 +15,9 @@ import org.apache.log4j.Logger;
 import com.google.educloud.cloudserver.scheduler.tasks.AbstractTask;
 import com.google.educloud.cloudserver.scheduler.tasks.CheckNodeTask;
 import com.google.educloud.cloudserver.scheduler.tasks.CloudTask;
-import com.google.educloud.cloudserver.scheduler.tasks.RemoveVmTask;
 import com.google.educloud.cloudserver.scheduler.tasks.CloudTask.Status;
+import com.google.educloud.cloudserver.scheduler.tasks.CreateVmTask;
+import com.google.educloud.cloudserver.scheduler.tasks.RemoveVmTask;
 import com.google.educloud.cloudserver.scheduler.tasks.StartVmTask;
 import com.google.educloud.cloudserver.scheduler.tasks.StopVMTask;
 
@@ -55,9 +56,11 @@ public class TaskDao extends AbstractDao {
 				} else if (type.equals("STOPVM")) {
 					task = new StopVMTask();
 				} else if (type.equals("CHECKNODE")) {
-					task = new CheckNodeTask();					
+					task = new CheckNodeTask();
 				} else if(type.equals("REMOVEVM")){
 					task = new RemoveVmTask();
+				} else if(type.equals("CREATEVM")){
+					task = new CreateVmTask();
 				}
 				else {
 					LOG.error("Unsupported task type");
@@ -89,7 +92,7 @@ public class TaskDao extends AbstractDao {
 			ps = getConnection().prepareStatement("SELECT * FROM TASK_PARAM WHERE TASK_ID = ?");
 			ps.setInt(1, task.getId());
 			rs = ps.executeQuery();
-			if (rs.next()) {
+			while (rs.next()) {
 				task.setParameter(rs.getString("name"), rs.getString("value"));
 			}
 		} catch (SQLException e) {
