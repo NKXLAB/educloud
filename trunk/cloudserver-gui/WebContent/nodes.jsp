@@ -84,7 +84,7 @@ select {
 		<td><%=node.getHostName()%></td>
 		<td><%=node.getPort()%></td>
 		<td><%=node.isConnectedToVBox()%></td>
-		<td><%=node.getVboxVersion()%></td>
+		<td><%=(node.getVboxVersion() != null ? node.getVboxVersion() : "")%></td>
 	</tr>
 	<%
 		}
