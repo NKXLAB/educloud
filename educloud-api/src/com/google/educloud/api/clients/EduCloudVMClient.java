@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
+import com.google.educloud.api.entities.Template;
 import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.exceptions.EduCloudServerException;
+import com.google.educloud.api.to.NewVirtualMachineTO;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
@@ -17,14 +19,19 @@ public class EduCloudVMClient extends AbstractClient {
 	 * Create a new virtual machine
 	 *
 	 * @param machine
+	 * @param template
 	 * @return
 	 * @throws EduCloudServerException
 	 */
-	public VirtualMachine createVM(VirtualMachine machine) throws EduCloudServerException {
+	public VirtualMachine createVM(VirtualMachine machine, Template template) throws EduCloudServerException {
+
+		NewVirtualMachineTO newVirtualMachineTO = new NewVirtualMachineTO();
+		newVirtualMachineTO.setTemplate(template);
+		newVirtualMachineTO.setVirtualMachine(machine);
 
 		WebResource service = getWebResouce();
 
-		String json = gson.toJson(machine);
+		String json = gson.toJson(newVirtualMachineTO);
 
 		ClientResponse response = service.path("vm").path("create").accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, json);
 

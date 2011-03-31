@@ -51,7 +51,6 @@ public class EduCloudVMClientTest {
 		template.setId(1);
 
 		VirtualMachine machine = new VirtualMachine();
-		machine.setTemplate(template);
 		machine.setName("ubuntu-machine-2");
 
 		// start machine
@@ -110,7 +109,6 @@ public class EduCloudVMClientTest {
 		template.setOsType("Ubuntu");
 
 		VirtualMachine machine = new VirtualMachine();
-		machine.setTemplate(template);
 		machine.setName("ubuntu-machine-2");
 		machine.setId(1);
 
@@ -139,7 +137,6 @@ public class EduCloudVMClientTest {
 		template.setOsType("Ubuntu");
 
 		VirtualMachine machine = new VirtualMachine();
-		machine.setTemplate(template);
 		machine.setName("ubuntu-machine");
 
 		machine.setId(77777); // introduce error

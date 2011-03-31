@@ -16,15 +16,16 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 
 import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.api.entities.Template;
 import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.VirtualMachine.VMState;
+import com.google.educloud.api.to.NewVirtualMachineTO;
 import com.google.educloud.cloudserver.database.dao.TemplateDao;
 import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
 import com.google.educloud.cloudserver.entity.CloudSession;
 import com.google.educloud.cloudserver.entity.User;
 import com.google.educloud.cloudserver.entity.User.UserType;
 import com.google.educloud.cloudserver.managers.VMManager;
-import com.google.educloud.internal.entities.Template;
 import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.spi.container.servlet.PerSession;
 
@@ -54,21 +55,21 @@ public class VMRest extends CloudResource {
 		//Recupera o usuario logado.
 		User usuario = cloudSession.getUser();
 
-		VirtualMachine externalMachine = gson.fromJson(machine, VirtualMachine.class);
+		NewVirtualMachineTO externalMachineTO = gson.fromJson(machine, NewVirtualMachineTO.class);
 
+		Template externalTemplate = externalMachineTO.getTemplate();
+		VirtualMachine externalMachine = externalMachineTO.getVirtualMachine();
 		//Cria uma entidade interna (Virtual Machine) baseada na recebida.
 		com.google.educloud.internal.entities.VirtualMachine vm =
 			new com.google.educloud.internal.entities.VirtualMachine();
 
 		//Cria uma entidade interna (Template) baseada na recebida
-		com.google.educloud.internal.entities.Template tpt =
-			new com.google.educloud.internal.entities.Template();
-		tpt.setId(externalMachine.getTemplate().getId());
+		com.google.educloud.internal.entities.Template tpt = null;
 
 		//Recupera o template
-		tpt = TemplateDao.getInstance().findById(tpt.getId());
+		tpt = TemplateDao.getInstance().findById(externalTemplate.getId());
 
-		if( tpt == null ){
+		if(tpt == null) {
 
 			EduCloudErrorMessage error = new EduCloudErrorMessage();
 			error.setCode("CS-001");
@@ -79,11 +80,10 @@ public class VMRest extends CloudResource {
 			return Response.status(400).entity(gson.toJson(error)).build();
 		}
 
-		//Ajusta os valores da maquina virtual.
-		vm.setTemplate(tpt);
 		vm.setName(externalMachine.getName());
+		vm.setDescription(externalMachine.getDescription());
 
-		if( usuario.getType() == UserType.ADMIN )
+		if(usuario.getType() == UserType.ADMIN)
 			vm.setUserId(externalMachine.getUserId());
 		else
 			vm.setUserId(usuario.getId());
@@ -92,7 +92,7 @@ public class VMRest extends CloudResource {
 
 		//Logica de inicializacao da VM.
 		VMManager vmManager = new VMManager();
-		vmManager.CreateVM(vm);
+		vmManager.CreateVM(vm, tpt);
 
 		//Atualiza o ID para retornar ao client.
 		externalMachine.setId(vm.getId());
@@ -382,12 +382,8 @@ public class VMRest extends CloudResource {
 			vmRetorno.setId(vmInterna.getId());
 			vmRetorno.setName(vmInterna.getName());
 			vmRetorno.setState(VMState.valueOf(vmInterna.getState().name()));
-			Template template = vmInterna.getTemplate();
-			com.google.educloud.api.entities.Template templateRetorno = new com.google.educloud.api.entities.Template();
-			templateRetorno.setId(template.getId());
-			templateRetorno.setName(template.getName());
-			templateRetorno.setOsType(template.getOsType());
-			vmRetorno.setTemplate(templateRetorno);
+			vmRetorno.setDescription(vmInterna.getDescription());
+			vmRetorno.setOsType(vmInterna.getOsType());
 			virtualMachines[indice] = vmRetorno;
 
 			indice++;
@@ -436,16 +432,12 @@ public class VMRest extends CloudResource {
 			return Response.status(400).entity(gson.toJson(error)).build();
 		}
 
-		com.google.educloud.api.entities.Template template = new com.google.educloud.api.entities.Template();
-		template.setId(vm.getTemplate().getId());
-		template.setName(vm.getTemplate().getName());
-		template.setOsType(vm.getTemplate().getOsType());
-
 		VirtualMachine virtualMachine = new VirtualMachine();
 		virtualMachine.setId(id);
 		virtualMachine.setName(vm.getName());
 		virtualMachine.setState(VMState.valueOf(vm.getState().name()));
-		virtualMachine.setTemplate(template);
+		virtualMachine.setDescription(vm.getDescription());
+		virtualMachine.setOsType(vm.getOsType());
 
 		// return virtual machine
 		return Response.ok(gson.toJson(virtualMachine), MediaType.APPLICATION_JSON).build();
@@ -469,16 +461,19 @@ public class VMRest extends CloudResource {
 
 		User user = cloudSession.getUser();
 
-		for (Integer vmId : vms) {
-			if (!user.isAdmin()) {
+			for (Integer vmId : vms) {
 				com.google.educloud.internal.entities.VirtualMachine vm = VirtualMachineDao.getInstance().findById(vmId);
-				if (vm != null && vm.getUserId() == user.getId()) {
-					VirtualMachineDao.getInstance().remove(vmId);
+
+				if (null != vm) {
+					if (!user.isAdmin()) {
+						if (vm.getUserId() == user.getId()) {
+							VirtualMachineDao.getInstance().remove(vm);
+						}
+					} else {
+						VirtualMachineDao.getInstance().remove(vm);
+					}
 				}
-			} else {
-				VirtualMachineDao.getInstance().remove(vmId);
 			}
-		}
 
 		return Response.ok().build();
 	}

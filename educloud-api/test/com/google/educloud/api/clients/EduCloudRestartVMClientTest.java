@@ -41,7 +41,6 @@ public class EduCloudRestartVMClientTest {
 		template.setId(VariaveisCompartilhadas.VM_ID);
 
 		VirtualMachine machine = new VirtualMachine();
-		machine.setTemplate(template);
 		machine.setName("ubuntu-machine");
 
 		// start machine

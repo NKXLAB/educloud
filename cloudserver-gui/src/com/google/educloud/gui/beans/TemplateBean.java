@@ -76,6 +76,7 @@ public class TemplateBean {
 		template.setName(name);
 		template.setOsType(ostype);
 		template.setFilename(filename);
+		template.setDescription(description);
 
 		templateClient.createTemplate(template);
 	}

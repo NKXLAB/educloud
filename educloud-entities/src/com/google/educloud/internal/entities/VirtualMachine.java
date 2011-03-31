@@ -6,8 +6,6 @@ public class VirtualMachine {
 
 	private int id;
 
-	private Template template;
-
 	private int userId;
 
 	private int nodeId;
@@ -22,20 +20,16 @@ public class VirtualMachine {
 
 	private String vbox;
 
+	private String osType;
+
+	private String description;
+
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Template getTemplate() {
-		return template;
-	}
-
-	public void setTemplate(Template template) {
-		this.template = template;
 	}
 
 	public int getUserId() {
@@ -102,4 +96,21 @@ public class VirtualMachine {
 		else
 			return ((VirtualMachine)obj).getId() == this.getId();
 	}
+
+	public String getOsType() {
+		return osType;
+	}
+
+	public void setOsType(String osType) {
+		this.osType = osType;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }

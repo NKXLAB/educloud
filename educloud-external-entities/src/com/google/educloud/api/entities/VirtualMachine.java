@@ -9,11 +9,13 @@ public class VirtualMachine {
 
 	private int userId;
 
-	private Template template;
-
 	private VMState state;
 
 	private String name;
+
+	private String osType;
+
+	private String description;
 
 	public int getId() {
 		return id;
@@ -21,14 +23,6 @@ public class VirtualMachine {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Template getTemplate() {
-		return template;
-	}
-
-	public void setTemplate(Template template) {
-		this.template = template;
 	}
 
 	public VMState getState() {
@@ -61,5 +55,21 @@ public class VirtualMachine {
 
 	public boolean isStoppable() {
 		return state == VMState.RUNNING;
+	}
+
+	public String getOsType() {
+		return osType;
+	}
+
+	public void setOsType(String osType) {
+		this.osType = osType;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

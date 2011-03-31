@@ -2,6 +2,7 @@ package com.google.educloud.cloudnode.scheduler.tasks;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.virtualbox.CleanupMode;
@@ -32,7 +33,8 @@ public class StopVmTask extends AbstractTask {
 		LOG.debug("Running stop virtual machine task");
 
 		// 1) Stop virtual machine process
-		IVirtualBox vbox = VirtualBoxConnector.restoreSession(vm.getVboxSession());
+		IVirtualBox vbox = VirtualBoxConnector.restoreSession(vm
+				.getVboxSession());
 		IWebsessionManager manager = new IWebsessionManager(vbox.port);
 
 		ISession session = manager.getSessionObject(vbox);
@@ -55,27 +57,33 @@ public class StopVmTask extends AbstractTask {
 
 		// 2) Detach virtual machine medium
 		IMachine machine = vbox.findMachine(vm.getUUID());
-		machine.unregister(CleanupMode.FULL);
+		List<IMedium> unregister = machine.unregister(CleanupMode.FULL);
+
+		// remove medium from storage registry of vbox
+		for (IMedium iMedium : unregister) {
+			iMedium.close();
+		}
+
 		machine.delete(new ArrayList<IMedium>());
 		machine.release();
 
 		// 3) put the virtual machine back to machine storage dir
 		String separador = System.getProperty("file.separator");
-		File arquivoOrigem = new File(NodeConfig.getMachinesDir() + separador + vm.getBootableMedium());
-		File arquivoDestino = new File( NodeConfig.getStorageDir() + separador + vm.getBootableMedium());
+		File arquivoOrigem = new File(NodeConfig.getMachinesDir() + separador
+				+ vm.getBootableMedium());
+		File arquivoDestino = new File(NodeConfig.getStorageDir() + separador
+				+ vm.getBootableMedium());
 
-		if( arquivoOrigem.exists() ){
+		if (arquivoOrigem.exists()) {
 
-			if( arquivoDestino.exists() ){
-				//Remove o arquivo de destino.
+			if (arquivoDestino.exists()) {
+				// Remove o arquivo de destino.
 				arquivoDestino.delete();
 			}
 
-			//Move para o storage.
+			// Move para o storage.
 			arquivoOrigem.renameTo(arquivoDestino);
-		}
-		else
-		{
+		} else {
 			// Arquivo de origem nao existe.
 		}
 
