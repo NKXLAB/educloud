@@ -125,7 +125,31 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		<td><%=vm.getName()%></td>
 		<td><%=vm.getState()%></td>
 		<td><%=tpl.getOsType()%></td>
-		<td width="60px"><a onclick="startVM(<%=vm.getId()%>)" href="#start_<%=vm.getId()%>">Start</a> | <a onclick="stopVM(<%=vm.getId()%>)" href="#stop_<%=vm.getId()%>">Stop</a></td>
+		<td width="60px">
+			<%
+				if (vm.isStartable()) {
+			%>
+				<a onclick="startVM(<%=vm.getId()%>)" href="#start_<%=vm.getId()%>">Start</a>
+			<%
+				} else {
+			%>
+					Start
+			<%
+				}
+			%>
+			 |
+			<%
+				if (vm.isStoppable()) {
+			%>
+				<a onclick="stopVM(<%=vm.getId()%>)" href="#stop_<%=vm.getId()%>">Stop</a>
+			<%
+				} else {
+			%>
+					Stop
+			<%
+				}
+			%>
+		</td>
 	</tr>
 	<%
 		}

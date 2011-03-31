@@ -54,4 +54,12 @@ public class VirtualMachine {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
+
+	public boolean isStartable() {
+		return state == VMState.DONE;
+	}
+
+	public boolean isStoppable() {
+		return state == VMState.RUNNING;
+	}
 }
