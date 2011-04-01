@@ -13,9 +13,9 @@ public class NodeConfig {
 	private static int nodePort;
 
 	private static String nodeMachineDir;
-	
+
 	private static String nodeTemplateDir;
-	
+
 	private static String nodeStorageDir;
 
 	private static String serverHost;
@@ -25,6 +25,8 @@ public class NodeConfig {
 	private static String virtualBoxWebservicesUrl;
 
 	private static String vboxFrontendType;
+
+	private static String nodeAddress;
 
 	public static void setup() throws InvalidConfigurationException {
 
@@ -60,11 +62,11 @@ public class NodeConfig {
 
 		serverHost = props.getProperty("cloudserver.host");
 		virtualBoxWebservicesUrl = props.getProperty("vbox.websrv.url");
+		nodeAddress = props.getProperty("hode.host");
 		nodeMachineDir = props.getProperty("node.machinedir");
 		nodeStorageDir = props.getProperty("node.storagedir");
 		nodeTemplateDir = props.getProperty("vbox.templatedir");
 		vboxFrontendType = props.getProperty("vbox.frontendType");
-
 	}
 
 	public static int getNodePort() {
@@ -86,7 +88,7 @@ public class NodeConfig {
 	public static String getMachinesDir() {
 		return nodeMachineDir;
 	}
-	
+
 	public static String getStorageDir(){
 		return nodeStorageDir;
 	}
@@ -97,5 +99,9 @@ public class NodeConfig {
 
 	public static String getVboxFrontendType() {
 		return vboxFrontendType;
+	}
+
+	public static String getNodeAddress() {
+		return nodeAddress;
 	}
 }
