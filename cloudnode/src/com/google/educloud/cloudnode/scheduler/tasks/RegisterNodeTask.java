@@ -1,8 +1,5 @@
 package com.google.educloud.cloudnode.scheduler.tasks;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import org.apache.log4j.Logger;
 
 import com.google.educloud.cloudnode.configuration.NodeConfig;
@@ -16,17 +13,8 @@ public class RegisterNodeTask extends AbstractTask {
 	@Override
 	public void run() {
 		/* register started node in the cloudserver */
-		InetAddress addr = null;
-		try {
-			addr = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			System.err.println("Unable to register new node in the cloudserver");
-			System.exit(-1);
-		}
-
-	    // Get IP Address
 		Node node = new Node();
-		node.setHostname(addr.getHostAddress());
+		node.setHostname(NodeConfig.getNodeAddress());
 		node.setPort(NodeConfig.getNodePort());
 
 		new RegistrationClient().register(node);
