@@ -12,6 +12,7 @@ import org.virtualbox.service.IVirtualBox;
 
 import com.google.educloud.cloudnode.configuration.NodeConfig;
 import com.google.educloud.cloudnode.virtualbox.VirtualBoxConnector;
+import com.google.educloud.internal.entities.MachineResourcesInfo;
 import com.google.educloud.internal.entities.Node;
 import com.google.gson.Gson;
 import com.sun.jersey.spi.resource.Singleton;
@@ -36,6 +37,13 @@ public class ApplicationRest {
 		try {
 			IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
 			String version = vbox.getVersion();
+			
+			MachineResourcesInfo mri = new MachineResourcesInfo();
+			mri.setTotalMemory(Runtime.getRuntime().maxMemory());
+			mri.setUsedMemory(Runtime.getRuntime().totalMemory());
+			//mri.setTotalDiskSpace(totalDiskSpace);
+			
+			node.setMachinesReourcesInfo(mri);			
 			node.setVboxVersion(version);
 			node.setConnectedToVBox(true);
 			vbox.release();

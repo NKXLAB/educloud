@@ -1,6 +1,7 @@
 package com.google.educloud.cloudnode.scheduler.tasks;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -36,7 +37,12 @@ public class CreateVmTask extends AbstractTask {
 		// 1) clone template disk
 		IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
 
-		cloneTemplate(vbox);
+		try {
+			cloneTemplate(vbox);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		vm.setState(VMState.DONE);
 
@@ -44,7 +50,7 @@ public class CreateVmTask extends AbstractTask {
 		new VirtualMachineClient().changeState(vm);
 	}
 
-	private void cloneTemplate(IVirtualBox vbox) {
+	private void cloneTemplate(IVirtualBox vbox) throws FileNotFoundException {
 
 		String property = System.getProperty("file.separator");
 
@@ -53,6 +59,10 @@ public class CreateVmTask extends AbstractTask {
 		String fileName = "disk-machine-"+idVm+"-template-"+ idTemplate + ".vdi";
 		String locationSrc = NodeConfig.getTemplateDir() + property + template.getFilename();
 		String locationTarget = NodeConfig.getStorageDir() + property + fileName;
+		
+		if( !new File(locationSrc).exists() ){
+			throw new FileNotFoundException("Arquivo de template " + locationSrc + " não encontrado.");
+		}			
 
 		vm.setBootableMedium(fileName);
 

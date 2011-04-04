@@ -10,6 +10,7 @@ import com.google.educloud.cloudserver.database.dao.VirtualMachineLogDao;
 import com.google.educloud.cloudserver.nodecllient.ClientFactory;
 import com.google.educloud.cloudserver.nodecllient.NodeComunicationException;
 import com.google.educloud.cloudserver.nodecllient.VMNodeClient;
+import com.google.educloud.cloudserver.selector.AbstractNodeSelector;
 import com.google.educloud.internal.entities.Node;
 import com.google.educloud.internal.entities.VirtualMachine;
 import com.google.educloud.internal.entities.VirtualMachine.VMState;
@@ -31,7 +32,8 @@ public class StartVmTask extends AbstractTask {
 		VirtualMachine vm = VirtualMachineDao.getInstance().findById(Integer.parseInt(vmId));
 
 		// 2) select a registered host
-		Node node = NodeDao.getInstance().findRandomicNode();
+		//Node node = NodeDao.getInstance().findRandomicNode();
+		Node node = AbstractNodeSelector.getInstance().getNext();
 
 		if (null == node) {
 			LOG.warn("The virtual machine #" + vmId + " cannot be started, no instance of cloudnode available");

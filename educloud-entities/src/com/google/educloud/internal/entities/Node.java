@@ -17,6 +17,8 @@ public class Node {
 	private boolean connectedToVBox;
 
 	private String vboxVersion;
+	
+	private MachineResourcesInfo machinesReourcesInfo;
 
 	public int getId() {
 		return id;
@@ -74,4 +76,20 @@ public class Node {
 		this.vboxVersion = vboxVersion;
 	}
 
+	public void setMachinesReourcesInfo(MachineResourcesInfo machinesReourcesInfo) {
+		this.machinesReourcesInfo = machinesReourcesInfo;
+	}
+
+	public MachineResourcesInfo getMachinesReourcesInfo() {
+		return machinesReourcesInfo;
+	}
+	
+	public boolean equals(Object obj){
+		if( obj == null )
+			return false;
+		else if( !(obj instanceof Node) )
+			return false;
+		else
+			return ((Node)obj).getId() == this.getId();
+	}
 }

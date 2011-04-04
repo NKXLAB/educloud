@@ -64,4 +64,13 @@ public class Node {
 	public void setVboxVersion(String vboxVersion) {
 		this.vboxVersion = vboxVersion;
 	}
+	
+	public boolean equals(Object obj){
+		if( obj == null )
+			return false;
+		else if( !(obj instanceof Node) )
+			return false;
+		else
+			return ((Node)obj).getId() == this.getId();
+	}
 }
