@@ -18,8 +18,6 @@ public class TemplateBean {
 
 	private String filename;
 
-	private String size;
-
 	private String ostype;
 
 	public String getName() {
@@ -44,14 +42,6 @@ public class TemplateBean {
 
 	public void setFilename(String filename) {
 		this.filename = filename;
-	}
-
-	public String getSize() {
-		return size;
-	}
-
-	public void setSize(String size) {
-		this.size = size;
 	}
 
 	public String getOstype() {

@@ -7,21 +7,24 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.virtualbox.AccessMode;
+import org.virtualbox.CPUPropertyType;
 import org.virtualbox.CleanupMode;
 import org.virtualbox.DeviceType;
 import org.virtualbox.IVRDEServerInfo;
 import org.virtualbox.LockType;
+import org.virtualbox.NetworkAdapterType;
 import org.virtualbox.StorageBus;
 import org.virtualbox.StorageControllerType;
+import org.virtualbox.service.IAudioAdapter;
 import org.virtualbox.service.IBIOSSettings;
 import org.virtualbox.service.IConsole;
 import org.virtualbox.service.IMachine;
 import org.virtualbox.service.IMedium;
+import org.virtualbox.service.INetworkAdapter;
 import org.virtualbox.service.IProgress;
 import org.virtualbox.service.ISession;
 import org.virtualbox.service.IStorageController;
-import org.virtualbox.service.ISystemProperties;
-import org.virtualbox.service.IVRDEServer;
+import org.virtualbox.service.IUSBController;
 import org.virtualbox.service.IVirtualBox;
 import org.virtualbox.service.IWebsessionManager;
 
@@ -89,6 +92,9 @@ public class StartVmTask extends AbstractTask {
 		boolean active = vrdeServerInfo.isActive();
 		int port = vrdeServerInfo.getPort();
 
+		LOG.debug("VRDE active " + active);
+		LOG.debug("VRDE port " + port);
+
 		// 5) notify server that machine was started
 		String vmUUID = machine.getId().toString();
 
@@ -129,8 +135,32 @@ public class StartVmTask extends AbstractTask {
 				StorageBus.SATA);
 		sc.setControllerType(StorageControllerType.INTEL_AHCI);
 		sc.setUseHostIOCache(false);
-		sc.setPortCount(30);
+		sc.setPortCount(1);
 		sc.release();
+
+//		ISystemProperties systemProperties = vbox.getSystemProperties();
+//		String defaultVRDEExtPack = systemProperties.getDefaultVRDEExtPack();
+//		/* add support for vrde server */
+//		IVRDEServer vrdeServer = machine.getVRDEServer();
+//		vrdeServer.setEnabled(true);
+//		vrdeServer.setAuthTimeout(5000);
+//		vrdeServer.setVRDEProperty("TCP/Ports", "3358-3380");
+//		vrdeServer.setVRDEExtPack(defaultVRDEExtPack);
+//		vrdeServer.release();
+
+		IBIOSSettings biosSettings = machine.getBIOSSettings();
+		biosSettings.setACPIEnabled(true);
+		biosSettings.release();
+
+		INetworkAdapter networkAdapter = machine.getNetworkAdapter(0);
+		networkAdapter.setMACAddress("080027121731");
+		networkAdapter.setHostInterface("Dell Wireless 1397 WLAN Mini-Card");
+		networkAdapter.setAdapterType(NetworkAdapterType.I_82540_EM);
+		networkAdapter.setCableConnected(true);
+		networkAdapter.setEnabled(true);
+
+		networkAdapter.attachToBridgedInterface();
+		networkAdapter.release();
 
 		machine.saveSettings();
 		vbox.registerMachine(machine);
@@ -139,19 +169,23 @@ public class StartVmTask extends AbstractTask {
 
 		machine = sessionObject.getMachine();
 
-		ISystemProperties systemProperties = vbox.getSystemProperties();
-		String defaultVRDEExtPack = systemProperties.getDefaultVRDEExtPack();
-		/* add support for vrde server */
-		IVRDEServer vrdeServer = machine.getVRDEServer();
-		vrdeServer.setEnabled(true);
-		vrdeServer.setAuthTimeout(5000);
-		vrdeServer.setVRDEProperty("TCP/Ports", "3358");
-		vrdeServer.setVRDEExtPack(defaultVRDEExtPack);
-		vrdeServer.release();
+		//machine.setExtraData("GUI/LastCloseAction", "powerOff");
+		machine.setExtraData("GUI/LastGuestSizeHint", "800,600");
+		machine.setExtraData("GUI/LastNormalWindowPosition", "232,109,800,640");
+		machine.setExtraData("GUI/MiniToolBarAlignment", "bottom");
+		machine.setExtraData("GUI/SaveMountedAtRuntime", "yes");
+		machine.setExtraData("GUI/ShowMiniToolBar", "yes");
 
-		IBIOSSettings biosSettings = machine.getBIOSSettings();
-		biosSettings.setACPIEnabled(true);
-		biosSettings.release();
+		IAudioAdapter audioAdapter = machine.getAudioAdapter();
+		audioAdapter.setEnabled(true);
+		audioAdapter.release();
+		machine.setRTCUseUTC(true);
+		IUSBController usbController = machine.getUSBController();
+		usbController.setEnabled(true);
+		usbController.release();
+
+		machine.setCPUProperty(CPUPropertyType.PAE, false);
+		machine.setMemorySize(192);
 
 		IMedium medium = getSrcMedium(vbox, mediumLocation);
 		machine.attachDevice(name, 0, 0, DeviceType.HARD_DISK, medium);
