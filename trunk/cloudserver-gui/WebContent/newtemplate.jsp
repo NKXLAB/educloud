@@ -39,10 +39,6 @@
 		<input type="text" id="filename" name="filename" value=""/> 
 		<div class="clear"></div>
 		
-		<label for="size">File size:</label>
-		<input type="text" id="size" name="size" value=""/> 
-		<div class="clear"></div>
-
 		<label for="ostype">OS Type:</label> 
 		<select id="ostype" name="ostype">
 			<option value="Other">Other/Unknown</option>

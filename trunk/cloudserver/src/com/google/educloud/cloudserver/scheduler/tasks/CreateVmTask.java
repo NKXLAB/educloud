@@ -4,13 +4,13 @@ import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 
-import com.google.educloud.cloudserver.database.dao.NodeDao;
 import com.google.educloud.cloudserver.database.dao.TemplateDao;
 import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
 import com.google.educloud.cloudserver.database.dao.VirtualMachineLogDao;
 import com.google.educloud.cloudserver.nodecllient.ClientFactory;
 import com.google.educloud.cloudserver.nodecllient.NodeComunicationException;
 import com.google.educloud.cloudserver.nodecllient.VMNodeClient;
+import com.google.educloud.cloudserver.selector.NodeSelectorManager;
 import com.google.educloud.internal.entities.Node;
 import com.google.educloud.internal.entities.Template;
 import com.google.educloud.internal.entities.VirtualMachine;
@@ -38,7 +38,7 @@ public class CreateVmTask extends AbstractTask {
 		Template template = TemplateDao.getInstance().findById(Integer.parseInt(tplId));
 
 		// 2) select a registered host
-		Node node = NodeDao.getInstance().findRandomicNode();
+		Node node = NodeSelectorManager.getSelector().getNext();
 
 		if (null == node) {
 			LOG.warn("The virtual machine #" + vmId + " cannot be created, no instance of cloudnode available");
