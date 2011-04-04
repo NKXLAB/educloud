@@ -4,39 +4,25 @@ package com.google.educloud.internal.entities;
 public class MachineResourcesInfo {
 	
 	private long totalMemory;
-	private long usedMemory;	
-	private long totalDiskSpace;
-	private long usedDiskSpace;
-	
+	private long availableMemory;	
+		
 	public void setTotalMemory(long totalMemory) {
 		this.totalMemory = totalMemory;
-	}	
-	public long getTotalMemory() {
-		return totalMemory;
-	}	
-	public void setUsedMemory(long usedMemory) {
-		this.usedMemory = usedMemory;
-	}	
-	public long getUsedMemory() {
-		return usedMemory;
-	}	
-	public long getAvaliableMemory() {
-		return totalMemory - usedMemory;
-	}
-	public void setTotalDiskSpace(int totalDiskSpace) {
-		this.totalDiskSpace = totalDiskSpace;
-	}
-	public long getTotalDiskSpace() {
-		return totalDiskSpace;
-	}
-	public void setUsedDiskSpace(long usedDiskSpace) {
-		this.usedDiskSpace = usedDiskSpace;
-	}
-	public long getUsedDiskSpace() {
-		return usedDiskSpace;
-	}
-	public long getAvailableDiskSpace(){
-		return totalDiskSpace - usedDiskSpace;
 	}
 	
+	public long getTotalMemory() {
+		return totalMemory;
+	}
+	
+	public long getUsedMemory() {
+		return totalMemory - availableMemory;
+	}
+	
+	public long setAvailableMemory( long availableMemory ) {
+		return this.availableMemory = availableMemory;
+	}
+	
+	public long getAvaliableMemory() {
+		return availableMemory;
+	}	
 }
