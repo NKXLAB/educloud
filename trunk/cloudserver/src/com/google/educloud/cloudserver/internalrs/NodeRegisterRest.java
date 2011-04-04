@@ -16,6 +16,7 @@ import com.google.educloud.cloudserver.database.dao.TaskDao;
 import com.google.educloud.cloudserver.scheduler.tasks.AbstractTask;
 import com.google.educloud.cloudserver.scheduler.tasks.CheckNodeTask;
 import com.google.educloud.cloudserver.scheduler.tasks.CloudTask.Status;
+import com.google.educloud.cloudserver.selector.AbstractNodeSelector;
 import com.google.educloud.internal.entities.Node;
 import com.google.gson.Gson;
 import com.sun.jersey.spi.resource.Singleton;
@@ -48,7 +49,8 @@ public class NodeRegisterRest {
 
 		// register new node from database
 		dao.insert(node);
-
+		
+		AbstractNodeSelector.getInstance().registerNode(node);
 
 		// start a new task for check node availability
 		AbstractTask checkNodeTask = new CheckNodeTask();
@@ -72,6 +74,8 @@ public class NodeRegisterRest {
 		LOG.debug("Cloud server will unregister node #" + node.getId());
 
 		NodeDao.getInstance().remove(node);
+		
+		AbstractNodeSelector.getInstance().unregisterNode(node);
 
 		return Response.ok(gson.toJson(true), MediaType.APPLICATION_JSON).build();
 	}

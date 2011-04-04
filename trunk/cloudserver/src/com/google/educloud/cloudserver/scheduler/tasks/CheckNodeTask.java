@@ -8,6 +8,7 @@ import com.google.educloud.cloudserver.database.dao.NodeDao;
 import com.google.educloud.cloudserver.nodecllient.ClientFactory;
 import com.google.educloud.cloudserver.nodecllient.NodeClient;
 import com.google.educloud.cloudserver.nodecllient.NodeComunicationException;
+import com.google.educloud.cloudserver.selector.AbstractNodeSelector;
 import com.google.educloud.internal.entities.Node;
 
 
@@ -29,6 +30,7 @@ public class CheckNodeTask extends AbstractTask {
 
 		// load node details from database
 		String parameter = getParameter(PARAM_NODE_ID);
+		
 		Node node = NodeDao.getInstance().findNodeById(Integer.parseInt(parameter));
 
 		LOG.debug("cloud server will try contact node #" + parameter);
@@ -39,8 +41,10 @@ public class CheckNodeTask extends AbstractTask {
 		// 1) Call node service
 		try {
 			node = nodeClient.checkNodeStatus(node);
+			AbstractNodeSelector.getInstance().registerNode(node);
 		} catch (NodeComunicationException e) {
 			markAsCompleted();
+			AbstractNodeSelector.getInstance().unregisterNode(node);
 			LOG.error("Error on try contact node #"+ parameter);
 			return;
 		}
