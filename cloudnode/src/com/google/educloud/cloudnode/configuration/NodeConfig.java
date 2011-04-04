@@ -62,7 +62,7 @@ public class NodeConfig {
 
 		serverHost = props.getProperty("cloudserver.host");
 		virtualBoxWebservicesUrl = props.getProperty("vbox.websrv.url");
-		nodeAddress = props.getProperty("hode.host");
+		nodeAddress = props.getProperty("node.host");
 		nodeMachineDir = props.getProperty("node.machinedir");
 		nodeStorageDir = props.getProperty("node.storagedir");
 		nodeTemplateDir = props.getProperty("vbox.templatedir");

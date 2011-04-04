@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.ws.WebServiceException;
 
 import org.apache.log4j.Logger;
+import org.virtualbox.service.IHost;
 import org.virtualbox.service.IVirtualBox;
 
 import com.google.educloud.cloudnode.configuration.NodeConfig;
@@ -38,11 +39,11 @@ public class ApplicationRest {
 			IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
 			String version = vbox.getVersion();
 			
+			IHost host = vbox.getHost();
 			MachineResourcesInfo mri = new MachineResourcesInfo();
-			mri.setTotalMemory(Runtime.getRuntime().maxMemory());
-			mri.setUsedMemory(Runtime.getRuntime().totalMemory());
-			//mri.setTotalDiskSpace(totalDiskSpace);
-			
+			mri.setTotalMemory(host.getMemorySize());
+			mri.setAvailableMemory(host.getMemoryAvailable());
+						
 			node.setMachinesReourcesInfo(mri);			
 			node.setVboxVersion(version);
 			node.setConnectedToVBox(true);
