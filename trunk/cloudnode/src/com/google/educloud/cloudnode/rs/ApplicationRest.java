@@ -38,13 +38,13 @@ public class ApplicationRest {
 		try {
 			IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
 			String version = vbox.getVersion();
-			
+
 			IHost host = vbox.getHost();
 			MachineResourcesInfo mri = new MachineResourcesInfo();
 			mri.setTotalMemory(host.getMemorySize());
 			mri.setAvailableMemory(host.getMemoryAvailable());
-						
-			node.setMachinesReourcesInfo(mri);			
+
+			node.setMachinesReourcesInfo(mri);
 			node.setVboxVersion(version);
 			node.setConnectedToVBox(true);
 			vbox.release();

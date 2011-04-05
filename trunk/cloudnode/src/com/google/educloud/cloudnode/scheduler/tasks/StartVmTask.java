@@ -24,7 +24,9 @@ import org.virtualbox.service.INetworkAdapter;
 import org.virtualbox.service.IProgress;
 import org.virtualbox.service.ISession;
 import org.virtualbox.service.IStorageController;
+import org.virtualbox.service.ISystemProperties;
 import org.virtualbox.service.IUSBController;
+import org.virtualbox.service.IVRDEServer;
 import org.virtualbox.service.IVirtualBox;
 import org.virtualbox.service.IWebsessionManager;
 
@@ -138,24 +140,24 @@ public class StartVmTask extends AbstractTask {
 		sc.setPortCount(1);
 		sc.release();
 
-//		ISystemProperties systemProperties = vbox.getSystemProperties();
-//		String defaultVRDEExtPack = systemProperties.getDefaultVRDEExtPack();
-//		/* add support for vrde server */
-//		IVRDEServer vrdeServer = machine.getVRDEServer();
-//		vrdeServer.setEnabled(true);
-//		vrdeServer.setAuthTimeout(5000);
-//		vrdeServer.setVRDEProperty("TCP/Ports", "3358-3380");
-//		vrdeServer.setVRDEExtPack(defaultVRDEExtPack);
-//		vrdeServer.release();
+		ISystemProperties systemProperties = vbox.getSystemProperties();
+		String defaultVRDEExtPack = systemProperties.getDefaultVRDEExtPack();
+		/* add support for vrde server */
+		IVRDEServer vrdeServer = machine.getVRDEServer();
+		vrdeServer.setEnabled(true);
+		vrdeServer.setAuthTimeout(5000);
+		vrdeServer.setVRDEProperty("TCP/Ports", "5040");
+		vrdeServer.setVRDEExtPack(null);
+		vrdeServer.release();
 
 		IBIOSSettings biosSettings = machine.getBIOSSettings();
 		biosSettings.setACPIEnabled(true);
 		biosSettings.release();
 
 		INetworkAdapter networkAdapter = machine.getNetworkAdapter(0);
-		networkAdapter.setMACAddress("080027121731");
+		networkAdapter.setMACAddress(networkAdapter.getMACAddress());
 		networkAdapter.setHostInterface("Dell Wireless 1397 WLAN Mini-Card");
-		networkAdapter.setAdapterType(NetworkAdapterType.I_82540_EM);
+		networkAdapter.setAdapterType(NetworkAdapterType.AM_79_C_973);
 		networkAdapter.setCableConnected(true);
 		networkAdapter.setEnabled(true);
 
@@ -168,13 +170,6 @@ public class StartVmTask extends AbstractTask {
 		machine.release();
 
 		machine = sessionObject.getMachine();
-
-		//machine.setExtraData("GUI/LastCloseAction", "powerOff");
-		machine.setExtraData("GUI/LastGuestSizeHint", "800,600");
-		machine.setExtraData("GUI/LastNormalWindowPosition", "232,109,800,640");
-		machine.setExtraData("GUI/MiniToolBarAlignment", "bottom");
-		machine.setExtraData("GUI/SaveMountedAtRuntime", "yes");
-		machine.setExtraData("GUI/ShowMiniToolBar", "yes");
 
 		IAudioAdapter audioAdapter = machine.getAudioAdapter();
 		audioAdapter.setEnabled(true);
