@@ -14,3 +14,5 @@
   # Import projects from java IDE. For eclipse users: import -> existing projects into workspace -> select root diretory -> educloud -> select all projects -> *uncheck Copy Projects into workspace* -> finish
 
 see also: [http://code.google.com/p/educloud/wiki/RepositoryOrganization Repository Organization]
+
+VirtualBox 4.0.4 Oracle VM VirtualBox Extension Pack [http://download.virtualbox.org/virtualbox/4.0.4/Oracle_VM_VirtualBox_Extension_Pack-4.0.4-70112.vbox-extpack All platforms]
