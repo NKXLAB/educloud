@@ -1,12 +1,14 @@
 package com.google.educloud.cloudnode.scheduler.tasks;
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.virtualbox.AccessMode;
+import org.virtualbox.AuthType;
 import org.virtualbox.CPUPropertyType;
 import org.virtualbox.CleanupMode;
 import org.virtualbox.DeviceType;
@@ -32,6 +34,7 @@ import org.virtualbox.service.IWebsessionManager;
 
 import com.google.educloud.cloudnode.configuration.NodeConfig;
 import com.google.educloud.cloudnode.serverclient.VirtualMachineClient;
+import com.google.educloud.cloudnode.virtualbox.SHAUtils;
 import com.google.educloud.cloudnode.virtualbox.VirtualBoxConnector;
 import com.google.educloud.internal.entities.VirtualMachine;
 import com.google.educloud.internal.entities.VirtualMachine.VMState;
@@ -101,8 +104,16 @@ public class StartVmTask extends AbstractTask {
 		String vmUUID = machine.getId().toString();
 
 		vm.setUUID(vmUUID);
-		vm.setVboxSession(vbox._this);
+		vm.setVboxSession(sessionObject._this);
+		//vm.setVboxSession(vbox._this);
 		vm.setState(VMState.RUNNING);
+
+		// free resources
+		console.release();
+		machine.release();
+		sessionObject.release();
+		process.release();
+		vbox.release();
 
 		new VirtualMachineClient().changeState(vm);
 
@@ -147,7 +158,21 @@ public class StartVmTask extends AbstractTask {
 		vrdeServer.setEnabled(true);
 		vrdeServer.setAuthTimeout(5000);
 		vrdeServer.setVRDEProperty("TCP/Ports", "5040");
+		vrdeServer.setAllowMultiConnection(true);
 		vrdeServer.setVRDEExtPack(null);
+
+		try {
+			String hash = null;
+			hash = SHAUtils.generateHash(vm.getVRDEPassword());
+			machine.setExtraData("VBoxAuthSimple/users/" + vm.getVRDEUsername(), hash);
+
+			vrdeServer.setVRDEExtPack(defaultVRDEExtPack);
+			vrdeServer.setAuthType(AuthType.EXTERNAL);
+			vrdeServer.setAuthLibrary("VBoxAuthSimple");
+		} catch (NoSuchAlgorithmException e) {
+			LOG.warn(e);
+		}
+
 		vrdeServer.release();
 
 		IBIOSSettings biosSettings = machine.getBIOSSettings();
@@ -156,8 +181,8 @@ public class StartVmTask extends AbstractTask {
 
 		INetworkAdapter networkAdapter = machine.getNetworkAdapter(0);
 		networkAdapter.setMACAddress(networkAdapter.getMACAddress());
-		networkAdapter.setHostInterface("Dell Wireless 1397 WLAN Mini-Card");
-		networkAdapter.setAdapterType(NetworkAdapterType.AM_79_C_973);
+		networkAdapter.setHostInterface(NodeConfig.getHostInterface());
+		networkAdapter.setAdapterType(NetworkAdapterType.I_82540_EM);
 		networkAdapter.setCableConnected(true);
 		networkAdapter.setEnabled(true);
 
@@ -166,7 +191,7 @@ public class StartVmTask extends AbstractTask {
 
 		machine.saveSettings();
 		vbox.registerMachine(machine);
-		machine.lockMachine(sessionObject, LockType.WRITE);
+		machine.lockMachine(sessionObject, LockType.SHARED);
 		machine.release();
 
 		machine = sessionObject.getMachine();

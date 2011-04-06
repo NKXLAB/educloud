@@ -24,6 +24,10 @@ public class VirtualMachine {
 
 	private String description;
 
+	private String vrdePassword;
+
+	private String vrdeUsername;
+
 	public int getId() {
 		return id;
 	}
@@ -111,6 +115,22 @@ public class VirtualMachine {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getVRDEPassword() {
+		return vrdePassword;
+	}
+
+	public void setVRDEPassword(String vrdePassword) {
+		this.vrdePassword = vrdePassword;
+	}
+
+	public String getVRDEUsername() {
+		return vrdeUsername;
+	}
+
+	public void setVRDEUsername(String vrdeUsername) {
+		this.vrdeUsername = vrdeUsername;
 	}
 
 }

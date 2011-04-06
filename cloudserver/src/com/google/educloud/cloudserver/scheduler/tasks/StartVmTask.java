@@ -30,6 +30,9 @@ public class StartVmTask extends AbstractTask {
 		String vmId = getParameter(PARAM_MACHINE_ID);
 		VirtualMachine vm = VirtualMachineDao.getInstance().findById(Integer.parseInt(vmId));
 
+		vm.setVRDEPassword("educloud");
+		vm.setVRDEUsername("educloud");
+
 		// 2) select a registered host
 		//Node node = NodeDao.getInstance().findRandomicNode();
 		Node node = NodeSelectorManager.getSelector().getNext();
