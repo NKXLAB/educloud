@@ -16,3 +16,11 @@
 see also: [http://code.google.com/p/educloud/wiki/RepositoryOrganization Repository Organization]
 
 VirtualBox 4.0.4 Oracle VM VirtualBox Extension Pack [http://download.virtualbox.org/virtualbox/4.0.4/Oracle_VM_VirtualBox_Extension_Pack-4.0.4-70112.vbox-extpack All platforms]
+
+
+= Run configs = 
+
+Name: Start Node
+Main-Class: com.google.educloud.cloudnode.App
+VM arguments: -Dlog4j.configuration=conf/log4j.properties
+Classpath: Add user entries->advanced->ok
