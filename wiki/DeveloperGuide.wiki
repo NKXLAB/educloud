@@ -21,6 +21,13 @@ VirtualBox 4.0.4 Oracle VM VirtualBox Extension Pack [http://download.virtualbox
 = Run configs = 
 
 Name: Start Node
+Project: cloudnode
 Main-Class: com.google.educloud.cloudnode.App
+VM arguments: -Dlog4j.configuration=conf/log4j.properties
+Classpath: Add user entries->advanced->ok
+
+Name: Start Node
+Project: cloudserver
+Main-Class: com.google.educloud.cloudserver.App
 VM arguments: -Dlog4j.configuration=conf/log4j.properties
 Classpath: Add user entries->advanced->ok
