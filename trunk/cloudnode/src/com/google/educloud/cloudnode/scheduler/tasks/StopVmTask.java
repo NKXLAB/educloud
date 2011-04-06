@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.virtualbox.CleanupMode;
+import org.virtualbox.LockType;
 import org.virtualbox.service.IConsole;
 import org.virtualbox.service.IMachine;
 import org.virtualbox.service.IMedium;
@@ -33,11 +34,28 @@ public class StopVmTask extends AbstractTask {
 		LOG.debug("Running stop virtual machine task");
 
 		// 1) Stop virtual machine process
-		IVirtualBox vbox = VirtualBoxConnector.restoreSession(vm
-				.getVboxSession());
+		IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
+
+//		IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
+//		ISession session = null;
+//
+//		try {
+//			String iWebsessionManagerGetSessionObject = vbox.port.iWebsessionManagerGetSessionObject(vm.getVboxSession());
+//			session = new ISession(iWebsessionManagerGetSessionObject, vbox.port);
+//		} catch (InvalidObjectFaultMsg e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		} catch (RuntimeFaultMsg e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		IWebsessionManager manager = new IWebsessionManager(vbox.port);
 
 		ISession session = manager.getSessionObject(vbox);
+
+		IMachine findMachine = vbox.findMachine(vm.getUUID());
+		findMachine.lockMachine(session, LockType.SHARED);
+
 		IConsole console = session.getConsole();
 
 		IProgress progress = console.powerDown();
@@ -56,7 +74,7 @@ public class StopVmTask extends AbstractTask {
 		console.release();
 
 		// 2) Detach virtual machine medium
-		IMachine machine = vbox.findMachine(vm.getUUID());
+		IMachine machine = findMachine;
 		List<IMedium> unregister = machine.unregister(CleanupMode.FULL);
 
 		// remove medium from storage registry of vbox

@@ -28,6 +28,8 @@ public class NodeConfig {
 
 	private static String nodeAddress;
 
+	private static String hostInterface;
+
 	public static void setup() throws InvalidConfigurationException {
 
 		LOG.debug("Node will load system properties...");
@@ -67,6 +69,7 @@ public class NodeConfig {
 		nodeStorageDir = props.getProperty("node.storagedir");
 		nodeTemplateDir = props.getProperty("vbox.templatedir");
 		vboxFrontendType = props.getProperty("vbox.frontendType");
+		hostInterface = props.getProperty("vbox.hostInterface");
 	}
 
 	public static int getNodePort() {
@@ -103,5 +106,9 @@ public class NodeConfig {
 
 	public static String getNodeAddress() {
 		return nodeAddress;
+	}
+
+	public static String getHostInterface() {
+		return hostInterface;
 	}
 }
