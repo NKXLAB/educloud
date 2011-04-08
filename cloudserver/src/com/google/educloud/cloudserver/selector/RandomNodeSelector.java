@@ -33,6 +33,11 @@ public class RandomNodeSelector implements INodeSelector {
 			nodes.remove(node);
 		}
 	}
+	
+	@Override
+	public List<Node> getRegisteredNodes() {
+		return nodes;
+	}
 
 	@Override
 	public Node getNext() {

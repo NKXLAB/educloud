@@ -53,11 +53,11 @@ public class NodeRegisterRest {
 		NodeSelectorManager.getSelector().registerNode(node);
 
 		// start a new task for check node availability
-		AbstractTask checkNodeTask = new CheckNodeTask();
-		checkNodeTask.setParameter(CheckNodeTask.PARAM_NODE_ID, String.valueOf(node.getId()));
-		checkNodeTask.setStatus(Status.PENDING);
-		checkNodeTask.setScheduleTime(Calendar.getInstance().getTime());
-		TaskDao.getInstance().insert(checkNodeTask);
+		//AbstractTask checkNodeTask = new CheckNodeTask();
+		//checkNodeTask.setParameter(CheckNodeTask.PARAM_NODE_ID, String.valueOf(node.getId()));
+		//checkNodeTask.setStatus(Status.PENDING);
+		//checkNodeTask.setScheduleTime(Calendar.getInstance().getTime());
+		//TaskDao.getInstance().insert(checkNodeTask);
 
 		jsonNode = gson.toJson(node);
 
