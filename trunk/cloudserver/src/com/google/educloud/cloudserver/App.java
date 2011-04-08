@@ -3,6 +3,7 @@ package com.google.educloud.cloudserver;
 import com.google.educloud.cloudserver.configuration.InvalidConfigurationException;
 import com.google.educloud.cloudserver.configuration.ServerConfig;
 import com.google.educloud.cloudserver.launchers.JettyLauncher;
+import com.google.educloud.cloudserver.launchers.MonitorsLaunchers;
 import com.google.educloud.cloudserver.launchers.SchedulerLauncher;
 
 public class App {
@@ -21,5 +22,8 @@ public class App {
 
 		/* try start jetty */
 		JettyLauncher.main(args);
+		
+		/* try start monitors */
+		MonitorsLaunchers.main(args);
 	}
 }

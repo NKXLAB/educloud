@@ -14,7 +14,7 @@ import com.google.educloud.internal.entities.Node;
  */
 public class BestFitNodeSelector implements INodeSelector {
 
-	private static Logger LOG = Logger.getLogger(StartVmTask.class);
+	private static Logger LOG = Logger.getLogger(BestFitNodeSelector.class);
 
 	private List<Node> nodes = new ArrayList<Node>();
 
@@ -40,6 +40,11 @@ public class BestFitNodeSelector implements INodeSelector {
 			nodes.remove(node);
 		}
 	}
+	
+	@Override
+	public List<Node> getRegisteredNodes() {
+		return nodes;
+	}
 
 	@Override
 	public Node getNext() {
@@ -61,6 +66,6 @@ public class BestFitNodeSelector implements INodeSelector {
 		}
 
 		return nodoSelecionado;
-	}
+	}	
 
 }

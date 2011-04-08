@@ -1,5 +1,7 @@
 package com.google.educloud.cloudserver.selector;
 
+import java.util.List;
+
 import com.google.educloud.internal.entities.Node;
 
 /**
@@ -16,6 +18,9 @@ public interface INodeSelector {
 
 	// Desregistra o nodo do manager.
 	public void unregisterNode(Node node);
+	
+	// Recupera os nodos registrados.
+	public List<Node> getRegisteredNodes();
 
 	/**
 	 * Will return the next node to allocate a virtual machine

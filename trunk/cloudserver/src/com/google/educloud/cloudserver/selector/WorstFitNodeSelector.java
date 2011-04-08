@@ -35,6 +35,11 @@ public class WorstFitNodeSelector implements INodeSelector {
 			nodes.remove(node);
 		}
 	}
+	
+	@Override
+	public List<Node> getRegisteredNodes() {
+		return nodes;
+	}
 
 	@Override
 	public Node getNext() {
