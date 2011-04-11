@@ -1,6 +1,5 @@
 package com.google.educloud.cloudserver.internalrs;
 
-import java.util.Calendar;
 import java.util.List;
 
 import javax.ws.rs.PUT;
@@ -12,10 +11,6 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 
 import com.google.educloud.cloudserver.database.dao.NodeDao;
-import com.google.educloud.cloudserver.database.dao.TaskDao;
-import com.google.educloud.cloudserver.scheduler.tasks.AbstractTask;
-import com.google.educloud.cloudserver.scheduler.tasks.CheckNodeTask;
-import com.google.educloud.cloudserver.scheduler.tasks.CloudTask.Status;
 import com.google.educloud.cloudserver.selector.NodeSelectorManager;
 import com.google.educloud.internal.entities.Node;
 import com.google.gson.Gson;
