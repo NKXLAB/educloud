@@ -5,11 +5,13 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.google.educloud.cloudserver.database.dao.NodeDao;
+import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
 import com.google.educloud.cloudserver.nodecllient.ClientFactory;
 import com.google.educloud.cloudserver.nodecllient.NodeClient;
 import com.google.educloud.cloudserver.nodecllient.NodeComunicationException;
 import com.google.educloud.cloudserver.selector.NodeSelectorManager;
 import com.google.educloud.internal.entities.Node;
+import com.google.educloud.internal.entities.VirtualMachine;
 
 public class NodeMonitor implements Runnable{
 	
@@ -39,8 +41,17 @@ public class NodeMonitor implements Runnable{
 					node = nodeClient.checkNodeStatus(node);
 					NodeSelectorManager.getSelector().updateNode(node);
 				} catch (NodeComunicationException e) {
-					NodeSelectorManager.getSelector().unregisterNode(node);
+					
 					LOG.error("Error on try contact node #"+ node.getId()+". server will unregister the node.");
+					
+					NodeSelectorManager.getSelector().unregisterNode(node);				
+					
+					//Retira o nodo de todas as maquinas
+					VirtualMachineDao.getInstance().clearNode(node.getId());
+					
+					//Remove o nodo da base de dados.
+					NodeDao.getInstance().remove(node);
+					
 					break;
 				}
 
