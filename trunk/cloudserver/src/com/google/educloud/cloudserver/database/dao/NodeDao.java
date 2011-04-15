@@ -152,6 +152,36 @@ public class NodeDao extends AbstractDao {
 
 		return nodes;
 	}
+	
+	public List<Node> getAll() {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		List<Node> nodes = new ArrayList<Node>();
+		try {
+			ps = getConnection().prepareStatement("SELECT * FROM NODE");
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				Node node = new Node();
+				node.setId(rs.getInt("node_id"));
+				node.setHostname(rs.getString("hostname"));
+				node.setPort(rs.getInt("port"));
+				node.setStartTime(rs.getTimestamp("start_time"));
+				node.setLastPing(rs.getTimestamp("last_ping"));
+				node.setConnectedToVBox(rs.getBoolean("vbox_connected"));
+				node.setVboxVersion(rs.getString("vbox_version"));
+				nodes.add(node);
+			}
+		} catch (SQLException e) {
+			LOG.debug(e);
+		} finally {
+			cleanUp(ps, rs);
+		}
+
+		return nodes;
+	}
+	
+	
 
 	public void updateLastPing(Node node) {
 		PreparedStatement ps = null;

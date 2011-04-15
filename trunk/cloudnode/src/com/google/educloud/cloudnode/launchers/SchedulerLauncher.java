@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.google.educloud.cloudnode.scheduler.Scheduler;
 import com.google.educloud.cloudnode.scheduler.tasks.RegisterNodeTask;
+import com.google.educloud.cloudnode.scheduler.tasks.RegistrationVmTask;
 
 public class SchedulerLauncher {
 
@@ -19,6 +20,9 @@ public class SchedulerLauncher {
 
 		// add register node task
 		scheduler.addTask(new RegisterNodeTask());
+		
+		// add register vm task
+		scheduler.addTask(new RegistrationVmTask());
 	}
 
 }
