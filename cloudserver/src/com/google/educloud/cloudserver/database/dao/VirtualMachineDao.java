@@ -96,6 +96,38 @@ public class VirtualMachineDao extends AbstractDao {
 
 		return null;
 	}
+	
+	public VirtualMachine findByUuid(String uuid) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = getConnection().prepareStatement("SELECT * FROM MACHINE WHERE UUID = ?");
+			ps.setString(1, uuid);
+
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				VirtualMachine vm = new VirtualMachine();
+				vm.setId(rs.getInt("machine_id"));
+				vm.setBootableMedium(rs.getString("bootable_medium"));
+				vm.setName(rs.getString("name"));
+				vm.setDescription(rs.getString("description"));
+				vm.setOsType(rs.getString("os_type"));
+				vm.setNodeId(rs.getInt("node_id"));
+				vm.setState(VMState.valueOf(rs.getString("state")));
+				vm.setUserId(rs.getInt("user_id"));
+				vm.setUUID(rs.getString("uuid"));
+				vm.setVboxSession(rs.getString("vbox_uuid"));
+				return vm;
+			}
+		} catch (SQLException e) {
+			LOG.error(e);
+		} finally {
+			cleanUp(ps, rs);
+		}
+
+		return null;
+	}
 
 	public List<VirtualMachine> getAll() {
 		PreparedStatement ps = null;

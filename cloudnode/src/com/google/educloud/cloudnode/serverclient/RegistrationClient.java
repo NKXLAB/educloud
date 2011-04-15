@@ -1,9 +1,12 @@
 package com.google.educloud.cloudnode.serverclient;
 
 
+import java.util.List;
+
 import javax.ws.rs.core.MediaType;
 
 import com.google.educloud.internal.entities.Node;
+import com.google.educloud.internal.entities.VirtualMachine;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -28,5 +31,4 @@ public class RegistrationClient extends AbstractServerClient {
 
 		return node;
 	}
-
 }
