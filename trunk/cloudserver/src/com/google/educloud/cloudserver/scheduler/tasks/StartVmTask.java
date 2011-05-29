@@ -4,8 +4,10 @@ import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 
+import com.google.educloud.cloudserver.database.dao.UserDao;
 import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
 import com.google.educloud.cloudserver.database.dao.VirtualMachineLogDao;
+import com.google.educloud.cloudserver.entity.User;
 import com.google.educloud.cloudserver.nodecllient.ClientFactory;
 import com.google.educloud.cloudserver.nodecllient.NodeComunicationException;
 import com.google.educloud.cloudserver.nodecllient.VMNodeClient;
@@ -30,11 +32,12 @@ public class StartVmTask extends AbstractTask {
 		String vmId = getParameter(PARAM_MACHINE_ID);
 		VirtualMachine vm = VirtualMachineDao.getInstance().findById(Integer.parseInt(vmId));
 
-		vm.setVRDEPassword("educloud");
-		vm.setVRDEUsername("educloud");
+		User user = UserDao.getInstance().findById(vm.getUserId());
+		vm.setVRDEPassword(user.getPass());
+		vm.setVRDEUsername(user.getLogin());
+		vm.setVRDEPort(VirtualMachineDao.getInstance().findNextPort(vm.getId()));
 
 		// 2) select a registered host
-		//Node node = NodeDao.getInstance().findRandomicNode();
 		Node node = NodeSelectorManager.getSelector().getNext();
 
 		if (null == node) {

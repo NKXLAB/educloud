@@ -1,7 +1,5 @@
 package com.google.educloud.cloudnode.rs;
 
-import java.util.List;
-
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -42,7 +40,8 @@ public class ApplicationRest {
 		Node node = gson.fromJson(jsonNode, Node.class);
 
 		try {
-			IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
+			IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig
+					.getVirtualBoxWebservicesUrl());
 			String version = vbox.getVersion();
 
 			IHost host = vbox.getHost();
@@ -64,9 +63,10 @@ public class ApplicationRest {
 			node.setConnectedToVBox(false);
 		}
 
-		return Response.ok(gson.toJson(node), MediaType.APPLICATION_JSON).build();
+		return Response.ok(gson.toJson(node), MediaType.APPLICATION_JSON)
+				.build();
 	}
-	
+
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/checkVm")
@@ -77,33 +77,34 @@ public class ApplicationRest {
 		VirtualMachine vm = gson.fromJson(jsonVm, VirtualMachine.class);
 
 		try {
-			IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
-			
-			IMachine machine = vbox.findMachine(vm.getName());
-			
-			if( machine != null ){
-				if( machine.getState() == MachineState.RUNNING ){
-					vm.setState(VMState.RUNNING);
-				}				
-				else if( machine.getState() == MachineState.STOPPING) {
-					vm.setState(VMState.SHUTDOWN);
-				}
-				else if( machine.getState() == MachineState.STARTING){
-					vm.setState(VMState.BOOT);
-				}
-				else if( machine.getState() == MachineState.POWERED_OFF ){
-					vm.setState(VMState.DONE);
-				}
-				else{					
-					vm.setState(VMState.UNKNOWN);					
+			IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig
+					.getVirtualBoxWebservicesUrl());
+
+			if (vm.getUUID() != null) {
+				IMachine machine = vbox.findMachine(vm.getUUID());
+
+				if (machine != null) {
+					if (machine.getState() == MachineState.RUNNING) {
+						vm.setState(VMState.RUNNING);
+					} else if (machine.getState() == MachineState.STOPPING) {
+						vm.setState(VMState.SHUTDOWN);
+					} else if (machine.getState() == MachineState.STARTING) {
+						vm.setState(VMState.BOOT);
+					} else if (machine.getState() == MachineState.POWERED_OFF) {
+						vm.setState(VMState.DONE);
+					} else {
+						vm.setState(VMState.UNKNOWN);
+					}
+
+					machine.release();
 				}
 			}
-			
+
 			vbox.release();
 		} catch (WebServiceException e) {
-			LOG.error("Error on connect on vbox services to check vm", e);			
+			LOG.error("Error on connect on vbox services to check vm", e);
 		} catch (Error e) {
-			LOG.error("Error on connect on vbox services to check vm", e);			
+			LOG.error("Error on connect on vbox services to check vm", e);
 		}
 
 		return Response.ok(gson.toJson(vm), MediaType.APPLICATION_JSON).build();

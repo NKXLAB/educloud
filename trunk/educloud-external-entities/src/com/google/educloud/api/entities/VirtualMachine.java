@@ -17,6 +17,8 @@ public class VirtualMachine {
 
 	private String description;
 
+	private RDPConfig rdpConfig;
+
 	public int getId() {
 		return id;
 	}
@@ -71,5 +73,13 @@ public class VirtualMachine {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public RDPConfig getRDPConfig() {
+		return rdpConfig;
+	}
+
+	public void setRDPConfig(RDPConfig rdpConfig) {
+		this.rdpConfig = rdpConfig;
 	}
 }

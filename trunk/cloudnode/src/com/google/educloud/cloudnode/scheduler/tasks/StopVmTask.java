@@ -36,19 +36,6 @@ public class StopVmTask extends AbstractTask {
 		// 1) Stop virtual machine process
 		IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
 
-//		IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
-//		ISession session = null;
-//
-//		try {
-//			String iWebsessionManagerGetSessionObject = vbox.port.iWebsessionManagerGetSessionObject(vm.getVboxSession());
-//			session = new ISession(iWebsessionManagerGetSessionObject, vbox.port);
-//		} catch (InvalidObjectFaultMsg e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		} catch (RuntimeFaultMsg e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
 		IWebsessionManager manager = new IWebsessionManager(vbox.port);
 
 		ISession session = manager.getSessionObject(vbox);
@@ -104,6 +91,8 @@ public class StopVmTask extends AbstractTask {
 		} else {
 			// Arquivo de origem nao existe.
 		}
+
+		LOG.debug("virtual machine was stopped");
 
 		// 4) notify server that machine was dropped
 		session.release();

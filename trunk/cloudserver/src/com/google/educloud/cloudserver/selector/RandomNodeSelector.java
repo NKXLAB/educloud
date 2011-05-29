@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.google.educloud.internal.entities.Node;
 
-//Classe para implementar a seleção randomica de nodo.
+//Classe para implementar a selecao randomica de nodo.
 public class RandomNodeSelector implements INodeSelector {
 
 	private List<Node> nodes = new ArrayList<Node>();
@@ -33,17 +33,17 @@ public class RandomNodeSelector implements INodeSelector {
 			nodes.remove(node);
 		}
 	}
-	
-	@Override
-	public List<Node> getRegisteredNodes() {
-		return nodes;
-	}
 
 	@Override
 	public Node getNext() {
-
 		Collections.shuffle(nodes);
 		return nodes.get(0);
+	}
+
+	@Override
+	public List<Node> getRegisteredNodes() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
