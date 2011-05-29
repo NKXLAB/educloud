@@ -59,10 +59,10 @@ public class CreateVmTask extends AbstractTask {
 		String fileName = "disk-machine-"+idVm+"-template-"+ idTemplate + ".vdi";
 		String locationSrc = NodeConfig.getTemplateDir() + property + template.getFilename();
 		String locationTarget = NodeConfig.getStorageDir() + property + fileName;
-		
+
 		if( !new File(locationSrc).exists() ){
-			throw new FileNotFoundException("Arquivo de template " + locationSrc + " não encontrado.");
-		}			
+			throw new FileNotFoundException("Invalid template location '" + locationSrc + "'.");
+		}
 
 		vm.setBootableMedium(fileName);
 

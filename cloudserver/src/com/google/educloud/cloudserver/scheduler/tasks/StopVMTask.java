@@ -44,7 +44,7 @@ public class StopVMTask extends AbstractTask{
 
 		vm.setState(VMState.DONE);
 
-		VirtualMachineDao.getInstance().changeState(vm);
+		VirtualMachineDao.getInstance().changeState(vm, true);
 
 		markAsCompleted();
 	}

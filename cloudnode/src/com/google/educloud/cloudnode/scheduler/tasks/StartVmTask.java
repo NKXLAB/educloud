@@ -94,19 +94,19 @@ public class StartVmTask extends AbstractTask {
 		IConsole console = sessionObject.getConsole();
 		IVRDEServerInfo vrdeServerInfo = console.getVRDEServerInfo();
 
-		boolean active = vrdeServerInfo.isActive();
 		int port = vrdeServerInfo.getPort();
-
-		LOG.debug("VRDE active " + active);
-		LOG.debug("VRDE port " + port);
 
 		// 5) notify server that machine was started
 		String vmUUID = machine.getId().toString();
 
+		LOG.debug("VM UUID: " + vmUUID);
+		LOG.debug("VBox sessionid: " + sessionObject._this);
+		LOG.debug("VRDE port: " + port);
+
 		vm.setUUID(vmUUID);
 		vm.setVboxSession(sessionObject._this);
-		//vm.setVboxSession(vbox._this);
 		vm.setState(VMState.RUNNING);
+		vm.setVRDEPort(port);
 
 		// free resources
 		console.release();
@@ -157,7 +157,8 @@ public class StartVmTask extends AbstractTask {
 		IVRDEServer vrdeServer = machine.getVRDEServer();
 		vrdeServer.setEnabled(true);
 		vrdeServer.setAuthTimeout(5000);
-		vrdeServer.setVRDEProperty("TCP/Ports", "5040");
+		vrdeServer.setVRDEProperty("TCP/Ports", String.valueOf(vm.getVRDEPort()));
+		vrdeServer.setVRDEProperty("TCP/Address", NodeConfig.getNodeAddress());
 		vrdeServer.setAllowMultiConnection(true);
 		vrdeServer.setVRDEExtPack(null);
 

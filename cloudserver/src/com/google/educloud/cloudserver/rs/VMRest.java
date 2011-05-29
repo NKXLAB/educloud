@@ -16,16 +16,19 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 
 import com.google.educloud.api.entities.EduCloudErrorMessage;
+import com.google.educloud.api.entities.RDPConfig;
 import com.google.educloud.api.entities.Template;
 import com.google.educloud.api.entities.VirtualMachine;
 import com.google.educloud.api.entities.VirtualMachine.VMState;
 import com.google.educloud.api.to.NewVirtualMachineTO;
+import com.google.educloud.cloudserver.database.dao.NodeDao;
 import com.google.educloud.cloudserver.database.dao.TemplateDao;
 import com.google.educloud.cloudserver.database.dao.VirtualMachineDao;
 import com.google.educloud.cloudserver.entity.CloudSession;
 import com.google.educloud.cloudserver.entity.User;
 import com.google.educloud.cloudserver.entity.User.UserType;
 import com.google.educloud.cloudserver.managers.VMManager;
+import com.google.educloud.internal.entities.Node;
 import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.spi.container.servlet.PerSession;
 
@@ -384,8 +387,8 @@ public class VMRest extends CloudResource {
 			vmRetorno.setState(VMState.valueOf(vmInterna.getState().name()));
 			vmRetorno.setDescription(vmInterna.getDescription());
 			vmRetorno.setOsType(vmInterna.getOsType());
+			loadRDPSettings(vmInterna, vmRetorno);
 			virtualMachines[indice] = vmRetorno;
-
 			indice++;
 		}
 
@@ -438,6 +441,7 @@ public class VMRest extends CloudResource {
 		virtualMachine.setState(VMState.valueOf(vm.getState().name()));
 		virtualMachine.setDescription(vm.getDescription());
 		virtualMachine.setOsType(vm.getOsType());
+		loadRDPSettings(vm, virtualMachine);
 
 		// return virtual machine
 		return Response.ok(gson.toJson(virtualMachine), MediaType.APPLICATION_JSON).build();
@@ -476,6 +480,21 @@ public class VMRest extends CloudResource {
 			}
 
 		return Response.ok().build();
+	}
+
+	private void loadRDPSettings(
+			com.google.educloud.internal.entities.VirtualMachine vm,
+			VirtualMachine extVm) {
+		Node node = NodeDao.getInstance().findNodeById(vm.getNodeId());
+
+		if (null != node) {
+			RDPConfig rdpConfig = new RDPConfig();
+			rdpConfig.setHost(node.getHostname());
+			rdpConfig.setPort(vm.getVRDEPort());
+			rdpConfig.setPort(vm.getVRDEPort());
+			rdpConfig.setUsername(vm.getVRDEUsername());
+			extVm.setRDPConfig(rdpConfig);
+		}
 	}
 
 }

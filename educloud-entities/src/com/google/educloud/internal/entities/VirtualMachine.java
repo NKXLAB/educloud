@@ -28,6 +28,8 @@ public class VirtualMachine {
 
 	private String vrdeUsername;
 
+	private int vrdePort;
+
 	public int getId() {
 		return id;
 	}
@@ -131,6 +133,14 @@ public class VirtualMachine {
 
 	public void setVRDEUsername(String vrdeUsername) {
 		this.vrdeUsername = vrdeUsername;
+	}
+
+	public void setVRDEPort(int port) {
+		this.vrdePort = port;
+	}
+
+	public int getVRDEPort() {
+		return vrdePort;
 	}
 
 }

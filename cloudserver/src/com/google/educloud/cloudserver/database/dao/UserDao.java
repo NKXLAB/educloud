@@ -137,4 +137,31 @@ public class UserDao extends AbstractDao {
 		}
 	}
 
+	public User findById(int id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			ps = getConnection().prepareStatement(
+					"SELECT * FROM CLOUD_USER WHERE USER_ID = ?");
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				User user = new User();
+				user.setId(rs.getInt("user_id"));
+				user.setLogin(rs.getString("login"));
+				user.setName(rs.getString("name"));
+				user.setType(UserType.valueOf(rs.getString("type")));
+				user.setPass(rs.getString("password"));
+				return user;
+			}
+		} catch (SQLException e) {
+			LOG.debug(e);
+		} finally {
+			cleanUp(ps, rs);
+		}
+
+		return null;
+	}
+
 }

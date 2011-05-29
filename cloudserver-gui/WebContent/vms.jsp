@@ -1,3 +1,4 @@
+<%@page import="com.google.educloud.api.entities.RDPConfig"%>
 <%@page import="com.google.educloud.api.entities.VirtualMachine"%>
 <%@page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -107,8 +108,9 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		<th>ID</th>
 		<th>Name</th>
 		<th>Description</th>
-		<th>State</th>
 		<th>OS Type</th>
+		<th>State</th>
+		<th>RDP Access</th>
 		<th>Actions</th>
 	</tr>
 	<%
@@ -124,8 +126,17 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		<td><%=vm.getId()%></td>
 		<td><%=vm.getName()%></td>
 		<td><%=vm.getDescription()%></td>
-		<td><%=vm.getState()%></td>
 		<td><%=vm.getOsType()%></td>
+		<td><%=vm.getState()%></td>
+		<td><%
+			RDPConfig rdpConfig = vm.getRDPConfig();
+		
+		if (null != rdpConfig && 0 != rdpConfig.getPort()) {
+			String rdpSettings = rdpConfig.getHost() + ':' + rdpConfig.getPort() + " / " + rdpConfig.getUsername();
+			out.print(rdpSettings);
+		}
+		
+		%></td>
 		<td width="60px">
 			<%
 				if (vm.isStartable()) {

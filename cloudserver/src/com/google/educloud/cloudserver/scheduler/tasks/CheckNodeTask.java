@@ -39,9 +39,16 @@ public class CheckNodeTask extends AbstractTask {
 
 		// 1) Call node service
 		try {
-			LOG.debug("will call node #"+ node.getId()+ ", hostname '" +node.getHostname()+ ':' +node.getPort()+"'");
-			node = nodeClient.checkNodeStatus(node);
-			NodeSelectorManager.getSelector().updateNode(node);
+			if (null != node) {
+				LOG.debug("will call node #"+ node.getId()+ ", hostname '" +node.getHostname()+ ':' +node.getPort()+"'");
+				node = nodeClient.checkNodeStatus(node);
+				NodeSelectorManager.getSelector().updateNode(node);
+			} else {
+				markAsCompleted();
+				NodeSelectorManager.getSelector().unregisterNode(node);
+				LOG.error("Error on try contact node #"+ parameter);
+				return;
+			}
 		} catch (NodeComunicationException e) {
 			markAsCompleted();
 			NodeSelectorManager.getSelector().unregisterNode(node);

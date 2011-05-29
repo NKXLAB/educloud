@@ -13,7 +13,7 @@ public class NodeSelectorManager {
 
 	private static INodeSelector nodeSelector;
 
-	// Cria a instancia do seletor de nodos de acordo com a configuração do
+	// Cria a instancia do seletor de nodos de acordo com a configuracao do
 	// server.
 	synchronized public static INodeSelector getSelector() {
 
