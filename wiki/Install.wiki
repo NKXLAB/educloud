@@ -29,6 +29,8 @@ Cloud Server:
     /opt/educloud/cloudserver/templatedir 10.0.2.1/24(rw,sync,no_subtree_check)
 
   $ /etc/init.d/nfs-kernel-server restart
+  $ cd /opt/educloud/cloudserver
+  $ ./cloudserver
 }}}    
 Cloud Node:
 {{{
