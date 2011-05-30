@@ -55,5 +55,6 @@ Cloud Node:
   Configure cloudnode.properties
 {{{
   $ cd /opt/educloud/cloudnode/
+  $ vboxwebsrv &
   $ ./cloudnode
 }}}
