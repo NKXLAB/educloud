@@ -133,7 +133,7 @@ public class NodeDao extends AbstractDao {
 		try {
 			ps = getConnection().prepareStatement("SELECT * FROM NODE WHERE TIMESTAMPDIFF(SQL_TSI_SECOND, LAST_PING, current_timestamp) <= 60");
 			rs = ps.executeQuery();
-			if (rs.next()) {
+			while (rs.next()) {
 				Node node = new Node();
 				node.setId(rs.getInt("node_id"));
 				node.setHostname(rs.getString("hostname"));
@@ -152,7 +152,7 @@ public class NodeDao extends AbstractDao {
 
 		return nodes;
 	}
-	
+
 	public List<Node> getAll() {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -161,7 +161,7 @@ public class NodeDao extends AbstractDao {
 		try {
 			ps = getConnection().prepareStatement("SELECT * FROM NODE");
 			rs = ps.executeQuery();
-			if (rs.next()) {
+			while (rs.next()) {
 				Node node = new Node();
 				node.setId(rs.getInt("node_id"));
 				node.setHostname(rs.getString("hostname"));
@@ -180,8 +180,8 @@ public class NodeDao extends AbstractDao {
 
 		return nodes;
 	}
-	
-	
+
+
 
 	public void updateLastPing(Node node) {
 		PreparedStatement ps = null;
@@ -207,14 +207,15 @@ public class NodeDao extends AbstractDao {
 		}
 	}
 
-	public List<Node> findNodeByHostname(String hostname) {
+	public List<Node> findNodeByHostname(String hostname, int port) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		List<Node> nodes = new ArrayList<Node>();
 		try {
-			ps = getConnection().prepareStatement("SELECT * FROM NODE WHERE HOSTNAME = ?");
+			ps = getConnection().prepareStatement("SELECT * FROM NODE WHERE HOSTNAME = ? AND PORT = ?");
 			ps.setString(1, hostname);
+			ps.setInt(2, port);
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				Node node = new Node();

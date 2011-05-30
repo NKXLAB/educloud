@@ -18,6 +18,8 @@ public class NodeConfig {
 
 	private static String nodeStorageDir;
 
+	private static String localStorageDir;
+
 	private static String serverHost;
 
 	private static int serverPort;
@@ -29,8 +31,6 @@ public class NodeConfig {
 	private static String nodeAddress;
 
 	private static String hostInterface;
-
-	private static String vrdeRange;
 
 	public static void setup() throws InvalidConfigurationException {
 
@@ -51,6 +51,7 @@ public class NodeConfig {
 		nodeMachineDir = null;
 		nodeTemplateDir = null;
 		nodeStorageDir = null;
+		localStorageDir = null;
 
 		try {
 			nodePort = Integer.parseInt(props.getProperty("node.port"));
@@ -69,10 +70,14 @@ public class NodeConfig {
 		nodeAddress = props.getProperty("node.host");
 		nodeMachineDir = props.getProperty("node.machinedir");
 		nodeStorageDir = props.getProperty("node.storagedir");
+		localStorageDir = props.getProperty("node.localstoragedir");
 		nodeTemplateDir = props.getProperty("vbox.templatedir");
 		vboxFrontendType = props.getProperty("vbox.frontendType");
 		hostInterface = props.getProperty("vbox.hostInterface");
-		vrdeRange = props.getProperty("vbox.vrdePortRange");
+	}
+
+	public static String getLocalStorageDir() {
+		return localStorageDir;
 	}
 
 	public static int getNodePort() {
@@ -115,7 +120,4 @@ public class NodeConfig {
 		return hostInterface;
 	}
 
-	public static String getVRDERange() {
-		return vrdeRange;
-	}
 }

@@ -39,7 +39,7 @@ public class VMRest {
 
 		return Response.ok(gson.toJson(machine), MediaType.APPLICATION_JSON).build();
 	}
-	
+
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/registerVms")
@@ -48,27 +48,27 @@ public class VMRest {
 		LOG.debug("Registering node Vms");
 
 		//Deserializa o objeto TO.
-		RegisterVirtualMachineTO register = gson.fromJson(jsonRegister, RegisterVirtualMachineTO.class); 
-		
+		RegisterVirtualMachineTO register = gson.fromJson(jsonRegister, RegisterVirtualMachineTO.class);
+
 		//Deserializa o nodo.
 		Node node = register.getNodo();
-		List<Node> listaNodos = NodeDao.getInstance().findNodeByHostname(node.getHostname());
-				
+		List<Node> listaNodos = NodeDao.getInstance().findNodeByHostname(node.getHostname(), node.getPort());
+
 		if( listaNodos.size() > 0 ){
-			
+
 			//Pega o primeiro nodo registrado para o host.
 			node = listaNodos.get(0);
 
 			for( VirtualMachine machine : register.getMachines() ){
 				VirtualMachine vm = VirtualMachineDao.getInstance().findByUuid(machine.getUUID());
-							
+
 				if( vm != null ){
 					vm.setNodeId(node.getId());
 					VirtualMachineDao.getInstance().updateNode(vm.getId(), node.getId());
-				}					
-			}		
+				}
+			}
 		}
-		
+
 		return Response.ok().build();
 	}
 }

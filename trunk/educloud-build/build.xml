@@ -70,7 +70,7 @@
 			<fileset dir="${server.dir}/conf"/>
 		</copy>
 		<copy file="${server.jar}" todir="${server.target}"/>
-					
+
 		<copy todir="${node.target}/lib">
 			<fileset dir="${node.dir}/lib"/>
 		</copy>
@@ -78,7 +78,15 @@
 			<fileset dir="${node.dir}/conf"/>
 		</copy>
 		<copy file="${node.jar}" todir="${node.target}"/>
-		
+
+		<mkdir dir="${server.target}/templatedir" />
+		<mkdir dir="${server.target}/storagedir" />
+
+		<mkdir dir="${node.target}/templatedir" />
+		<mkdir dir="${node.target}/storagedir" />
+		<mkdir dir="${node.target}/localstoragedir" />
+		<mkdir dir="${node.target}/machinedir" />
+
 	</target>
 
 	<target name="clean" depends="package">

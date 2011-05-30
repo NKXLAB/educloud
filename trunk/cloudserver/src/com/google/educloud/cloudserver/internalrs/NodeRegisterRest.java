@@ -33,18 +33,20 @@ public class NodeRegisterRest {
 
 		Node node = gson.fromJson(jsonNode, Node.class);
 
+		LOG.debug("detected node: #" + node.getHostname() + ":" + node.getPort());
 
 		NodeDao dao = NodeDao.getInstance();
 
 		// remove last occurrences of same node
-		List<Node> nodes = dao.findNodeByHostname(node.getHostname());
+		List<Node> nodes = dao.findNodeByHostname(node.getHostname(), node.getPort());
 		for (Node n : nodes) {
 			dao.remove(n);
 		}
 
+		LOG.debug("inserting node: #" + node.getHostname() + ":" + node.getPort() + " from database");
 		// register new node from database
 		dao.insert(node);
-		
+
 		NodeSelectorManager.getSelector().registerNode(node);
 
 		jsonNode = gson.toJson(node);
@@ -62,7 +64,7 @@ public class NodeRegisterRest {
 		LOG.debug("Cloud server will unregister node #" + node.getId());
 
 		NodeDao.getInstance().remove(node);
-		
+
 		NodeSelectorManager.getSelector().unregisterNode(node);
 
 		return Response.ok(gson.toJson(true), MediaType.APPLICATION_JSON).build();
