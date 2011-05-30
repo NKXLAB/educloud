@@ -19,7 +19,7 @@ Cloud Server:
   $ mkdir /opt/educloud
   $ mv cloudserver /opt/educloud/
   $ groupadd educloud
-  $ useradd -g educloud educloud
+  $ sudo useradd -d /opt/educloud -M -r -g educloud educloud
   $ chown -R educloud:educloud /opt/educloud
   $ sudo apt-get install nfs-kernel-server
   $ vi /etc/exports
@@ -44,6 +44,6 @@ Cloud Node:
   $ unzip cloudnode.zip
   $ sudo mv cloudnode /opt/educloud/
   $ groupadd educloud
-  $ useradd -g educloud educloud
+  $ sudo useradd -d /opt/educloud -M -r -g educloud educloud
   $ chown -R educloud:educloud /opt/educloud
 }}}
