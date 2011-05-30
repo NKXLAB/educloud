@@ -49,4 +49,11 @@ Cloud Node:
   $ groupadd educloud
   $ sudo useradd -d /opt/educloud -M -r -g educloud educloud
   $ chown -R educloud:educloud /opt/educloud
+  $ sudo mount 10.0.2.15:/opt/educloud/cloudserver/storagedir /opt/educloud/cloudnode/storagedir
+  $ sudo mount 10.0.2.15:/opt/educloud/cloudserver/templatedir /opt/educloud/cloudnode/templatedir
+}}}
+  Configure cloudnode.properties
+{{{
+  $ cd /opt/educloud/cloudnode/
+  $ ./cloudnode
 }}}
