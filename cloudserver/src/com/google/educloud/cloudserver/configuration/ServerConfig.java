@@ -17,8 +17,10 @@ public class ServerConfig {
 	private static boolean useUIExpanded = false;
 
 	private static String expandedUI;
-	
+
 	private static String police;
+
+	private static String vrdePortRange;
 
 	public static void setup() throws InvalidConfigurationException {
 
@@ -38,6 +40,7 @@ public class ServerConfig {
 		useUIExpanded = Boolean.valueOf(props.getProperty("ui.useExpanded"));
 		expandedUI = props.getProperty("ui.expandedDir");
 		police = props.getProperty("server.police");
+		vrdePortRange = props.getProperty("vbox.vrdePortRange");
 
 		try {
 			port = Integer.parseInt(props.getProperty("server.port"));
@@ -49,7 +52,7 @@ public class ServerConfig {
 			interval = Long.parseLong(props.getProperty("scheduler.interval"));
 		} catch (NumberFormatException e) {
 			LOG.warn("Invalid configuration server.port, " + interval + " will be assumed by default");
-		}		
+		}
 
 		serverPort = port;
 		scheduleInterval = interval;
@@ -71,9 +74,19 @@ public class ServerConfig {
 	public static String getExpandedUI() {
 		return expandedUI;
 	}
-	
+
 	public static String getPolice(){
-		return police;		
+		return police;
+	}
+
+	public static int getMinVRDEPort() {
+		String[] split = vrdePortRange.split("-");
+		return Integer.valueOf(split[0]);
+	}
+
+	public static int getMaxVRDEPort() {
+		String[] split = vrdePortRange.split("-");
+		return Integer.valueOf(split[1]);
 	}
 
 }

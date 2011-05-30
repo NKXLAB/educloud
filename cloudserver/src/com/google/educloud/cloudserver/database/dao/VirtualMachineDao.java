@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.google.educloud.cloudserver.configuration.ServerConfig;
 import com.google.educloud.internal.entities.Template;
 import com.google.educloud.internal.entities.VirtualMachine;
 import com.google.educloud.internal.entities.VirtualMachine.VMState;
@@ -303,15 +304,33 @@ public class VirtualMachineDao extends AbstractDao {
 	}
 
 	synchronized public int findNextPort(int vmId) {
+
+		int i = 0;
+		int max = ServerConfig.getMaxVRDEPort();
+		int port = 0;
+
+		for (i = ServerConfig.getMinVRDEPort(); i<=max; i++) {
+			if (!portIsUsed(i)) {
+				port = i;
+				updatePort(vmId, port);
+				break;
+			}
+		}
+
+		return port;
+	}
+
+	private boolean portIsUsed(int port) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		boolean exists = false;
 
-		int port = -1;
 		try {
-			ps = getConnection().prepareStatement("SELECT MAX(VRDE_PORT) port FROM MACHINE");
+			ps = getConnection().prepareStatement("SELECT 1 FROM MACHINE WHERE VRDE_PORT = ?");
+			ps.setInt(1, port);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				port = rs.getInt("port");
+				exists = true;
 			}
 		} catch (SQLException e) {
 			LOG.error(e);
@@ -319,13 +338,7 @@ public class VirtualMachineDao extends AbstractDao {
 			cleanUp(ps, rs);
 		}
 
-		if (port < 5000) {
-			port = 5000;
-		}
-
-		updatePort(vmId, port + 1);
-
-		return port;
+		return exists;
 	}
 
 	private void updatePort(int vmId, int port) {

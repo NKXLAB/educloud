@@ -43,6 +43,9 @@ public class StopVMTask extends AbstractTask{
 		}
 
 		vm.setState(VMState.DONE);
+		vm.setVRDEPassword(null);
+		vm.setVRDEPort(0);
+		vm.setVRDEUsername(null);
 
 		VirtualMachineDao.getInstance().changeState(vm, true);
 

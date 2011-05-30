@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.google.educloud.cloudserver.scheduler.tasks.StartVmTask;
 import com.google.educloud.internal.entities.Node;
 
 /**
@@ -28,6 +27,7 @@ public class BestFitNodeSelector implements INodeSelector {
 	@Override
 	public void registerNode(Node node) {
 		if (!nodes.contains(node)) {
+			LOG.debug("Register node: " + node.getHostname() + ':' + node.getPort() + " from " + this.getClass().getName());
 			// Adiciona o novo nodo.
 			nodes.add(node);
 		}
@@ -36,11 +36,12 @@ public class BestFitNodeSelector implements INodeSelector {
 	@Override
 	public void unregisterNode(Node node) {
 		if (nodes.contains(node)) {
+			LOG.debug("Unregister node: " + node.getHostname() + ':' + node.getPort() + " from " + this.getClass().getName());
 			// Remove o nodo.
 			nodes.remove(node);
 		}
 	}
-	
+
 	@Override
 	public List<Node> getRegisteredNodes() {
 		return nodes;
@@ -66,6 +67,6 @@ public class BestFitNodeSelector implements INodeSelector {
 		}
 
 		return nodoSelecionado;
-	}	
+	}
 
 }
