@@ -30,6 +30,7 @@ Cloud Server:
 
   $ /etc/init.d/nfs-kernel-server restart
   $ cd /opt/educloud/cloudserver
+  $ sudo su educloud
   $ ./cloudserver
 }}}    
 Cloud Node:
