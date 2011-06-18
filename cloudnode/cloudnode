@@ -1,0 +1,4 @@
+export JAVA_BIN=java
+
+$JAVA_BIN -server -XX:+UseParallelGC -XX:-UseThreadPriorities -Xms64m -Xmx786m -Dlog4j.configuration=conf/log4j.properties -jar cloudnode.jar &
+

@@ -1,6 +1,7 @@
 package com.google.educloud.cloudnode.scheduler.tasks;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.virtualbox.service.IWebsessionManager;
 
 import com.google.educloud.cloudnode.configuration.NodeConfig;
 import com.google.educloud.cloudnode.serverclient.VirtualMachineClient;
+import com.google.educloud.cloudnode.util.OsUtil;
 import com.google.educloud.cloudnode.virtualbox.SHAUtils;
 import com.google.educloud.cloudnode.virtualbox.VirtualBoxConnector;
 import com.google.educloud.internal.entities.VirtualMachine;
@@ -51,6 +53,8 @@ public class StartVmTask extends AbstractTask {
 
 	@Override
 	public void run() {
+		long start = System.nanoTime();
+
 		LOG.debug("Running start virtual machine task");
 
 		// 1) create new session from vbox
@@ -63,17 +67,7 @@ public class StartVmTask extends AbstractTask {
 		// 2) copy bootable medium to machine dir
 		String property = System.getProperty("file.separator");
 
-		File arquivoOrigem = new File(NodeConfig.getStorageDir() + property + bootableMedium);
-		File arquivoDestino = new File(NodeConfig.getMachinesDir() + property + bootableMedium);
-
-		if (arquivoOrigem.exists()) {
-			if (!arquivoDestino.exists()) {
-				// Copia do diretorio de storage para o diretorio de maquinas.
-				arquivoOrigem.renameTo(arquivoDestino);
-			}
-		} else {
-			// Arquivo da maquina nao existe.
-		}
+		File arquivoDestino = copyMediumToMachinesDir(bootableMedium, property);
 
 		mediumLocation = arquivoDestino.getAbsolutePath();
 
@@ -117,6 +111,26 @@ public class StartVmTask extends AbstractTask {
 
 		new VirtualMachineClient().changeState(vm);
 
+		long end = System.nanoTime();
+		double elapsedTime = ((end - start)) / 1000000000.0;
+		LOG.debug("Elapsed time to start a machine: '" + elapsedTime + "'");
+	}
+
+	private File copyMediumToMachinesDir(String bootableMedium, String property) {
+
+		String machineMedium = NodeConfig.getMachinesDir() + property + bootableMedium;
+
+		try {
+			String command = NodeConfig.getStorageToMachineScript() + " " + bootableMedium;
+			LOG.debug("Will run command: " + command);
+			OsUtil.runScript(command);
+		} catch (IOException e) {
+			LOG.error("Error on copy template to local");
+		} catch (InterruptedException e) {
+			LOG.error("Error on copy template to local");
+		}
+
+		return new File(machineMedium);
 	}
 
 	private IMachine createMachine(IVirtualBox vbox, String mediumLocation) {

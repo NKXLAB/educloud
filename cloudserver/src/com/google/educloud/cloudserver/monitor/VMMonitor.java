@@ -24,16 +24,20 @@ public class VMMonitor implements Runnable {
 			// create webservice client
 			NodeClient nodeClient = null;
 
-			//Recupera todas as maquinas virtuais.
+			// get all virtual machines
 			List<VirtualMachine> machines = VirtualMachineDao.getInstance().getAll();
 
 			for ( VirtualMachine vm : machines ) {
+
+				if (vm.getState() == VMState.DONE) {
+					continue; // skip machine on DONE state
+				}
 
 				int nodeId = vm.getNodeId();
 				Node node = new Node();
 				node.setId(nodeId);
 
-				//So vai verificar as maquinas que possuem nodos.
+				// check only machines allocated in a node
 				if (nodeId > 0 && vm.getUUID() != null) {
 
 					LOG.debug("cloud server will try contact machine #" + vm.getId() + " on node: " + nodeId);

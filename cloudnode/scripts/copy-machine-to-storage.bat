@@ -1,0 +1,1 @@
+COPY C:\tmp\machinedir\%1 C:\tmp\storagedir\%1

@@ -1,10 +1,11 @@
 package com.google.educloud.cloudnode.scheduler.tasks;
 
-import java.io.File;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
 import com.google.educloud.cloudnode.configuration.NodeConfig;
+import com.google.educloud.cloudnode.util.OsUtil;
 import com.google.educloud.internal.entities.VirtualMachine;
 
 public class RemoveVmTask extends AbstractTask {
@@ -22,23 +23,17 @@ public class RemoveVmTask extends AbstractTask {
 
 		LOG.debug("Running remove virtual machine task");
 
-		//Pega o separador de arquivos.
-		String separador = System.getProperty("file.separator");
+		String medium = vm.getBootableMedium();
 
-		//Gera o nome do arquivo da maquina virtual que deve ser removida.
-		String mediumLocation =
-			NodeConfig.getStorageDir() + separador + vm.getBootableMedium();
-
-		//Gera a referencia para o arquivo.
-		File arquivo = new File(mediumLocation);
-
-		if(arquivo.exists() ){
-			if( !arquivo.delete() ){
-				//nao conseguiu remover o arquivo
-			}
-		}
-		else {
-			// arquivo nao existe
+		// remove machine file
+		try {
+			String command = NodeConfig.getRemoveFromStorageScript() + " " + medium;
+			LOG.debug("will run command: '" + command + "'");
+			OsUtil.runScript(command);
+		} catch (IOException e) {
+			LOG.error("Error on remove file from storage", e);
+		} catch (InterruptedException e) {
+			LOG.error("Error on remove file from storage", e);
 		}
 	}
 }
