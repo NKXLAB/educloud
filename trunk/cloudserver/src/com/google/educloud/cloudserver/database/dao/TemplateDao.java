@@ -38,12 +38,13 @@ public class TemplateDao extends AbstractDao {
 			if (rs.next()) {
 				key = rs.getInt(1);
 
-				ps = getConnection().prepareStatement("INSERT INTO TEMPLATE (TEMPLATE_ID, OS_TYPE, NAME, FILENAME, DESCRIPTION) VALUES (?, ?, ?, ?, ?)");
+				ps = getConnection().prepareStatement("INSERT INTO TEMPLATE (TEMPLATE_ID, OS_TYPE, NAME, FILENAME, DESCRIPTION, MEMORY) VALUES (?, ?, ?, ?, ?, ?)");
 				ps.setInt(1, key);
 				ps.setString(2, template.getOsType());
 				ps.setString(3, template.getName());
 				ps.setString(4, template.getFilename());
 				ps.setString(5, template.getDescription());
+				ps.setLong(6, template.getMemorySize());
 				ps.execute();
 
 				template.setId(key);
@@ -74,6 +75,7 @@ public class TemplateDao extends AbstractDao {
 				Template tpl = new Template();
 				tpl.setId(rs.getInt("template_id"));
 				tpl.setFilename(rs.getString("filename"));
+				tpl.setMemorySize(rs.getLong("memory"));
 				tpl.setName(rs.getString("name"));
 				tpl.setOsType(rs.getString("os_type"));
 				return tpl;
@@ -99,6 +101,7 @@ public class TemplateDao extends AbstractDao {
 				Template tpl = new Template();
 				tpl.setId(rs.getInt("template_id"));
 				tpl.setFilename(rs.getString("filename"));
+				tpl.setMemorySize(rs.getLong("memory"));
 				tpl.setName(rs.getString("name"));
 				tpl.setDescription(rs.getString("description"));
 				tpl.setOsType(rs.getString("os_type"));

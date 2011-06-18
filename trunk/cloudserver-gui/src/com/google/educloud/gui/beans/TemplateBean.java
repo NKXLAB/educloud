@@ -20,6 +20,8 @@ public class TemplateBean {
 
 	private String ostype;
 
+	private String memorySize;
+
 	public String getName() {
 		return name;
 	}
@@ -52,6 +54,14 @@ public class TemplateBean {
 		this.ostype = ostype;
 	}
 
+	public String getMemorySize() {
+		return memorySize;
+	}
+
+	public void setMemorySize(String memorySize) {
+		this.memorySize = memorySize;
+	}
+
 	public List<Template> getTemplates(HttpSession session) throws EduCloudServerException {
 		EduCloudAuthorization auth = (EduCloudAuthorization)session.getAttribute("CLOUD_AUTHENTICATION");
 		EduCloudTemplateClient templateClient = EduCloudFactory.createTemplateClient(auth);
@@ -66,6 +76,7 @@ public class TemplateBean {
 		template.setName(name);
 		template.setOsType(ostype);
 		template.setFilename(filename);
+		template.setMemorySize(Long.valueOf(memorySize));
 		template.setDescription(description);
 
 		templateClient.createTemplate(template);

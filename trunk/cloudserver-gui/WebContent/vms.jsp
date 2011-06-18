@@ -108,6 +108,7 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		<th>ID</th>
 		<th>Name</th>
 		<th>Description</th>
+		<th>Memory Size</th>
 		<th>OS Type</th>
 		<th>State</th>
 		<th>RDP Access</th>
@@ -126,6 +127,7 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		<td><%=vm.getId()%></td>
 		<td><%=vm.getName()%></td>
 		<td><%=vm.getDescription()%></td>
+		<td><%=vm.getMemorySize()%> MB</td>
 		<td><%=vm.getOsType()%></td>
 		<td><%=vm.getState()%></td>
 		<td><%

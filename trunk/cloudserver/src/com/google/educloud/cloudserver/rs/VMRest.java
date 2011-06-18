@@ -92,6 +92,7 @@ public class VMRest extends CloudResource {
 			vm.setUserId(usuario.getId());
 
 		vm.setState(com.google.educloud.internal.entities.VirtualMachine.VMState.DONE);
+		vm.setMemorySize(tpt.getMemorySize());
 
 		//Logica de inicializacao da VM.
 		VMManager vmManager = new VMManager();
@@ -100,6 +101,7 @@ public class VMRest extends CloudResource {
 		//Atualiza o ID para retornar ao client.
 		externalMachine.setId(vm.getId());
 		externalMachine.setState(VMState.valueOf(vm.getState().name()));
+		externalMachine.setMemorySize(tpt.getMemorySize());
 
 		//Retorna a VirtualMachine criada.
 		return Response.ok(gson.toJson(externalMachine), MediaType.APPLICATION_JSON).build();
@@ -386,6 +388,7 @@ public class VMRest extends CloudResource {
 			vmRetorno.setName(vmInterna.getName());
 			vmRetorno.setState(VMState.valueOf(vmInterna.getState().name()));
 			vmRetorno.setDescription(vmInterna.getDescription());
+			vmRetorno.setMemorySize(vmInterna.getMemorySize());
 			vmRetorno.setOsType(vmInterna.getOsType());
 			loadRDPSettings(vmInterna, vmRetorno);
 			virtualMachines[indice] = vmRetorno;
@@ -440,6 +443,7 @@ public class VMRest extends CloudResource {
 		virtualMachine.setName(vm.getName());
 		virtualMachine.setState(VMState.valueOf(vm.getState().name()));
 		virtualMachine.setDescription(vm.getDescription());
+		virtualMachine.setMemorySize(vm.getMemorySize());
 		virtualMachine.setOsType(vm.getOsType());
 		loadRDPSettings(vm, virtualMachine);
 

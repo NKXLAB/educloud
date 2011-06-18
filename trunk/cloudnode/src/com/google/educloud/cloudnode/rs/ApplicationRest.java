@@ -1,5 +1,7 @@
 package com.google.educloud.cloudnode.rs;
 
+import java.util.List;
+
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -40,14 +42,18 @@ public class ApplicationRest {
 		Node node = gson.fromJson(jsonNode, Node.class);
 
 		try {
-			IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig
-					.getVirtualBoxWebservicesUrl());
+			IVirtualBox vbox = VirtualBoxConnector.connect(NodeConfig.getVirtualBoxWebservicesUrl());
 			String version = vbox.getVersion();
 
 			IHost host = vbox.getHost();
 			MachineResourcesInfo mri = new MachineResourcesInfo();
+
 			mri.setTotalMemory(host.getMemorySize());
-			mri.setAvailableMemory(host.getMemoryAvailable());
+
+			long totalMemory = NodeConfig.getAvailableMemory();
+			long usedMemory = countUsedMemory(vbox);
+
+			mri.setAvailableMemory(totalMemory - usedMemory);
 
 			node.setMachinesReourcesInfo(mri);
 			node.setVboxVersion(version);
@@ -65,6 +71,18 @@ public class ApplicationRest {
 
 		return Response.ok(gson.toJson(node), MediaType.APPLICATION_JSON)
 				.build();
+	}
+
+	private long countUsedMemory(IVirtualBox vbox) {
+		List<IMachine> machines = vbox.getMachines();
+
+		long usedMemory = 0;
+
+		for (IMachine iMachine : machines) {
+			usedMemory = usedMemory + iMachine.getMemorySize();
+		}
+
+		return usedMemory;
 	}
 
 	@PUT

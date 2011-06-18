@@ -3,6 +3,7 @@ package com.google.educloud.cloudserver.selector;
 import java.util.List;
 
 import com.google.educloud.internal.entities.Node;
+import com.google.educloud.internal.entities.VirtualMachine;
 
 /**
  * Interface para padronizar o gerenciador de nodos.
@@ -18,7 +19,7 @@ public interface INodeSelector {
 
 	// Desregistra o nodo do manager.
 	public void unregisterNode(Node node);
-	
+
 	// Recupera os nodos registrados.
 	public List<Node> getRegisteredNodes();
 
@@ -27,6 +28,6 @@ public interface INodeSelector {
 	 *
 	 * @return null if no node is available
 	 */
-	public Node getNext();
+	public Node getNext(VirtualMachine machine);
 
 }

@@ -12,6 +12,8 @@ public class Template {
 
 	private String filename;
 
+	private long memorySize;
+
 	public int getId() {
 		return id;
 	}
@@ -52,4 +54,11 @@ public class Template {
 		this.filename = filename;
 	}
 
+	public void setMemorySize(long memorySize) {
+		this.memorySize = memorySize;
+	}
+
+	public long getMemorySize() {
+		return memorySize;
+	}
 }

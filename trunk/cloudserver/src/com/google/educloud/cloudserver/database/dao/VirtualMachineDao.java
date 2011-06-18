@@ -41,13 +41,14 @@ public class VirtualMachineDao extends AbstractDao {
 			if (rs.next()) {
 				key = rs.getInt(1);
 
-				ps = getConnection().prepareStatement("INSERT INTO MACHINE (MACHINE_ID, USER_ID, NAME, DESCRIPTION, OS_TYPE, STATE) VALUES (?, ?, ?, ?, ?, ?)");
+				ps = getConnection().prepareStatement("INSERT INTO MACHINE (MACHINE_ID, USER_ID, NAME, DESCRIPTION, OS_TYPE, STATE, MEMORY) VALUES (?, ?, ?, ?, ?, ?, ?)");
 				ps.setInt(1, key);
 				ps.setInt(2, machine.getUserId());
 				ps.setString(3, machine.getName());
 				ps.setString(4, machine.getDescription());
 				ps.setString(5, template.getOsType());
 				ps.setString(6, machine.getState().name());
+				ps.setLong(7, machine.getMemorySize());
 				ps.execute();
 
 				machine.setId(key);
@@ -81,6 +82,7 @@ public class VirtualMachineDao extends AbstractDao {
 				vm.setBootableMedium(rs.getString("bootable_medium"));
 				vm.setName(rs.getString("name"));
 				vm.setDescription(rs.getString("description"));
+				vm.setMemorySize(rs.getLong("memory"));
 				vm.setOsType(rs.getString("os_type"));
 				vm.setNodeId(rs.getInt("node_id"));
 				vm.setState(VMState.valueOf(rs.getString("state")));
@@ -116,6 +118,7 @@ public class VirtualMachineDao extends AbstractDao {
 				vm.setBootableMedium(rs.getString("bootable_medium"));
 				vm.setName(rs.getString("name"));
 				vm.setDescription(rs.getString("description"));
+				vm.setMemorySize(rs.getLong("memory"));
 				vm.setOsType(rs.getString("os_type"));
 				vm.setNodeId(rs.getInt("node_id"));
 				vm.setState(VMState.valueOf(rs.getString("state")));
@@ -147,6 +150,7 @@ public class VirtualMachineDao extends AbstractDao {
 				vm.setBootableMedium(rs.getString("bootable_medium"));
 				vm.setName(rs.getString("name"));
 				vm.setDescription(rs.getString("description"));
+				vm.setMemorySize(rs.getLong("memory"));
 				vm.setOsType(rs.getString("os_type"));
 				vm.setNodeId(rs.getInt("node_id"));
 				vm.setState(VMState.valueOf(rs.getString("state")));
@@ -181,6 +185,7 @@ public class VirtualMachineDao extends AbstractDao {
 				vm.setBootableMedium(rs.getString("bootable_medium"));
 				vm.setName(rs.getString("name"));
 				vm.setDescription(rs.getString("description"));
+				vm.setMemorySize(rs.getLong("memory"));
 				vm.setOsType(rs.getString("os_type"));
 				vm.setNodeId(rs.getInt("node_id"));
 				vm.setState(VMState.valueOf(rs.getString("state")));

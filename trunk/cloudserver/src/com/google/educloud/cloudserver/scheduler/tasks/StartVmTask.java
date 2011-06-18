@@ -38,7 +38,7 @@ public class StartVmTask extends AbstractTask {
 		vm.setVRDEPort(VirtualMachineDao.getInstance().findNextPort(vm.getId()));
 
 		// 2) select a registered host
-		Node node = NodeSelectorManager.getSelector().getNext();
+		Node node = NodeSelectorManager.getSelector().getNext(vm);
 
 		if (null == node) {
 			LOG.warn("The virtual machine #" + vmId + " cannot be started, no instance of cloudnode available");

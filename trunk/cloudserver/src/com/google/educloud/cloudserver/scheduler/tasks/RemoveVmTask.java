@@ -27,7 +27,7 @@ public class RemoveVmTask extends AbstractTask {
 				Integer.parseInt(vmId));
 
 
-		Node node = NodeSelectorManager.getSelector().getNext();
+		Node node = NodeSelectorManager.getSelector().getNext(vm);
 
 		if (null != node) {
 			VMNodeClient nodeClient = ClientFactory.createVMNodeClient(node);

@@ -220,7 +220,7 @@ public class StartVmTask extends AbstractTask {
 		usbController.release();
 
 		machine.setCPUProperty(CPUPropertyType.PAE, false);
-		machine.setMemorySize(192);
+		machine.setMemorySize(vm.getMemorySize());
 
 		IMedium medium = getSrcMedium(vbox, mediumLocation);
 		machine.attachDevice(name, 0, 0, DeviceType.HARD_DISK, medium);

@@ -19,6 +19,8 @@ public class VirtualMachine {
 
 	private RDPConfig rdpConfig;
 
+	private long memorySize;
+
 	public int getId() {
 		return id;
 	}
@@ -81,5 +83,13 @@ public class VirtualMachine {
 
 	public void setRDPConfig(RDPConfig rdpConfig) {
 		this.rdpConfig = rdpConfig;
+	}
+
+	public void setMemorySize(long memorySize) {
+		this.memorySize = memorySize;
+	}
+
+	public long getMemorySize() {
+		return memorySize;
 	}
 }

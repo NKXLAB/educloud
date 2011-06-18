@@ -30,6 +30,8 @@ public class VirtualMachine {
 
 	private int vrdePort;
 
+	private long memorySize;
+
 	public int getId() {
 		return id;
 	}
@@ -141,6 +143,14 @@ public class VirtualMachine {
 
 	public int getVRDEPort() {
 		return vrdePort;
+	}
+
+	public void setMemorySize(long memorySize) {
+		this.memorySize= memorySize;
+	}
+
+	public long getMemorySize() {
+		return memorySize;
 	}
 
 }
