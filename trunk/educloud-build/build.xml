@@ -86,7 +86,7 @@
 		<mkdir dir="${node.target}/storagedir" />
 		<mkdir dir="${node.target}/localstoragedir" />
 		<mkdir dir="${node.target}/machinedir" />
-
+		
 	</target>
 
 	<target name="clean" depends="package">

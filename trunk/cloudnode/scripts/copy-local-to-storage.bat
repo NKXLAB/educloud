@@ -1,0 +1,1 @@
+COPY C:\tmp\localstoragedir\%1 C:\tmp\storagedir\%1

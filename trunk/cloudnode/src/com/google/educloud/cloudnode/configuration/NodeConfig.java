@@ -32,6 +32,16 @@ public class NodeConfig {
 
 	private static String hostInterface;
 
+	private static String templateToLocalScript;
+
+	private static String localToStorageScript;
+
+	private static String storageToMachineScript;
+
+	private static String machineToStorageScript;
+
+	private static String removeFromStorageScript;
+
 	public static void setup() throws InvalidConfigurationException {
 
 		LOG.debug("Node will load system properties...");
@@ -74,6 +84,13 @@ public class NodeConfig {
 		nodeTemplateDir = props.getProperty("vbox.templatedir");
 		vboxFrontendType = props.getProperty("vbox.frontendType");
 		hostInterface = props.getProperty("vbox.hostInterface");
+
+
+		templateToLocalScript = props.getProperty("node.scripts.templateToLocal");
+		localToStorageScript = props.getProperty("node.scripts.localToStorage");
+		storageToMachineScript = props.getProperty("node.scripts.storageToMachine");
+		machineToStorageScript = props.getProperty("node.scripts.machineToStorage");
+		removeFromStorageScript = props.getProperty("node.scripts.removeFromStorage");
 	}
 
 	public static String getLocalStorageDir() {
@@ -118,6 +135,46 @@ public class NodeConfig {
 
 	public static String getHostInterface() {
 		return hostInterface;
+	}
+
+	public static String getTemplateToLocalScript() {
+		return templateToLocalScript;
+	}
+
+	public static void setTemplateToLocalScript(String templateToLocalScript) {
+		NodeConfig.templateToLocalScript = templateToLocalScript;
+	}
+
+	public static String getLocalToStorageScript() {
+		return localToStorageScript;
+	}
+
+	public static void setLocalToStorageScript(String localToStorageScript) {
+		NodeConfig.localToStorageScript = localToStorageScript;
+	}
+
+	public static String getStorageToMachineScript() {
+		return storageToMachineScript;
+	}
+
+	public static void setStorageToMachineScript(String storageToMachineScript) {
+		NodeConfig.storageToMachineScript = storageToMachineScript;
+	}
+
+	public static String getMachineToStorageScript() {
+		return machineToStorageScript;
+	}
+
+	public static void setMachineToStorageScript(String machineToStorageScript) {
+		NodeConfig.machineToStorageScript = machineToStorageScript;
+	}
+
+	public static void getMachineToStorageScript(String removeFromStorageScript) {
+		NodeConfig.removeFromStorageScript = removeFromStorageScript;
+	}
+
+	public static String getRemoveFromStorageScript() {
+		return NodeConfig.removeFromStorageScript;
 	}
 
 }
