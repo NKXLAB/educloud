@@ -42,6 +42,8 @@ public class NodeConfig {
 
 	private static String removeFromStorageScript;
 
+	private static long availableMemory;
+
 	public static void setup() throws InvalidConfigurationException {
 
 		LOG.debug("Node will load system properties...");
@@ -66,7 +68,13 @@ public class NodeConfig {
 		try {
 			nodePort = Integer.parseInt(props.getProperty("node.port"));
 		} catch (NumberFormatException e) {
-			LOG.warn("Invalid configuration server.port, " + nodePort + " will be assumed by default");
+			LOG.warn("Invalid configuration node.port, " + nodePort + " will be assumed by default");
+		}
+
+		try {
+			availableMemory = Long.parseLong(props.getProperty("node.availableMemory"));
+		} catch (NumberFormatException e) {
+			LOG.warn("Invalid configuration node.availableMemory, " + availableMemory + " will be assumed by default");
 		}
 
 		try {
@@ -175,6 +183,10 @@ public class NodeConfig {
 
 	public static String getRemoveFromStorageScript() {
 		return NodeConfig.removeFromStorageScript;
+	}
+
+	public static long getAvailableMemory() {
+		return availableMemory;
 	}
 
 }

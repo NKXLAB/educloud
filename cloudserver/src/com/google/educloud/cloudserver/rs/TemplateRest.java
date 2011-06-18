@@ -55,6 +55,7 @@ public class TemplateRest extends CloudResource {
 			templateRetorno.setId(templateInterno.getId());
 			templateRetorno.setName(templateInterno.getName());
 			templateRetorno.setFilename(templateInterno.getFilename());
+			templateRetorno.setMemorySize(templateInterno.getMemorySize());
 			templateRetorno.setOsType(templateInterno.getOsType());
 			templateRetorno.setDescription(templateInterno.getDescription());
 			templates[indice] = templateRetorno;
@@ -79,6 +80,7 @@ public class TemplateRest extends CloudResource {
 		com.google.educloud.api.entities.Template extTemplate = gson.fromJson(jsonTemplate, com.google.educloud.api.entities.Template.class);
 
 		Template template = new Template();
+		template.setMemorySize(extTemplate.getMemorySize());
 		template.setFilename(extTemplate.getFilename());
 		template.setName(extTemplate.getName());
 		template.setOsType(extTemplate.getOsType());

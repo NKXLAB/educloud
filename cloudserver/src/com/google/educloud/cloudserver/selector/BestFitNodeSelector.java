@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.google.educloud.internal.entities.Node;
+import com.google.educloud.internal.entities.VirtualMachine;
 
 /**
  * Classe para implementar o algoritmo de bestfit.
@@ -48,17 +49,25 @@ public class BestFitNodeSelector implements INodeSelector {
 	}
 
 	@Override
-	public Node getNext() {
+	public Node getNext(VirtualMachine machine) {
 
 		// Para retorno.
 		Node nodoSelecionado = null;
 
 		for (Node n : nodes) {
+
+			if (!n.isConnectedToVBox()) {
+				continue;
+			}
+
+			if (n.getMachinesReourcesInfo().getAvaliableMemory() < machine.getMemorySize()) {
+				LOG.debug("Node #'" + n.getId() + "' hasn't sufficient memory to allocate machine #'" + machine.getId() + "'");
+				continue;
+			}
+
 			if (nodoSelecionado == null)
 				nodoSelecionado = n;
-			else if (nodoSelecionado.getMachinesReourcesInfo()
-					.getAvaliableMemory() < n.getMachinesReourcesInfo()
-					.getAvaliableMemory())
+			else if (nodoSelecionado.getMachinesReourcesInfo().getAvaliableMemory() < n.getMachinesReourcesInfo().getAvaliableMemory())
 				nodoSelecionado = n;
 		}
 

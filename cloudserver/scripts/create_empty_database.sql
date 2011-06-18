@@ -26,7 +26,8 @@ CREATE TABLE PUBLIC.TEMPLATE
     OS_TYPE     VARCHAR(100)  NOT NULL,
     DESCRIPTION VARCHAR(4000) NOT NULL,
     NAME        VARCHAR(100)  NOT NULL,
-    FILENAME    VARCHAR(400)  NOT NULL
+    FILENAME    VARCHAR(400)  NOT NULL,
+    MEMORY      BIGINT  NOT NULL
 );
 CREATE SEQUENCE PUBLIC.SEQ_TEMPLATE_ID START WITH 1 INCREMENT BY 1;
 
@@ -51,6 +52,7 @@ CREATE TABLE PUBLIC.MACHINE
     DESCRIPTION      VARCHAR(4000) NOT NULL,
     OS_TYPE          VARCHAR(100)  NOT NULL,
     STATE            VARCHAR(20)   NOT NULL,
+    MEMORY           BIGINT        NOT NULL,
     UUID             VARCHAR(36),
     BOOTABLE_MEDIUM  VARCHAR(400),
     VBOX_UUID        VARCHAR(36),
@@ -97,13 +99,13 @@ INSERT INTO CLOUD_USER (USER_ID, NAME, LOGIN, PASSWORD, TYPE)
      VALUES ((VALUES NEXT VALUE FOR SEQ_USER_ID), 'Guest', 'guest', 'guest', 'USER');
 
 -- create default template
-INSERT INTO TEMPLATE (TEMPLATE_ID, OS_TYPE, NAME, DESCRIPTION, FILENAME) 
-     VALUES ((VALUES NEXT VALUE FOR SEQ_TEMPLATE_ID), 'Ubuntu', 'Ubuntu minimal config', 'Ubuntu instalation without gnome', 'ubuntu-light.vdi');
+INSERT INTO TEMPLATE (TEMPLATE_ID, OS_TYPE, NAME, DESCRIPTION, FILENAME, MEMORY) 
+     VALUES ((VALUES NEXT VALUE FOR SEQ_TEMPLATE_ID), 'Ubuntu', 'Ubuntu minimal config', 'Ubuntu instalation without gnome', 'ubuntu-light.vdi', 192);
      
 -- create default virtual machine for admin
-INSERT INTO MACHINE (MACHINE_ID, USER_ID, NAME, DESCRIPTION, OS_TYPE, STATE) 
-     VALUES ((VALUES NEXT VALUE FOR SEQ_MACHINE_ID), 1, 'Virtual machine of admin', 'Ubuntu instalation without gnome', 'Ubuntu', 'DONE');
+INSERT INTO MACHINE (MACHINE_ID, USER_ID, NAME, DESCRIPTION, OS_TYPE, STATE, MEMORY) 
+     VALUES ((VALUES NEXT VALUE FOR SEQ_MACHINE_ID), 1, 'Virtual machine of admin', 'Ubuntu instalation without gnome', 'Ubuntu', 'DONE', 192);
      
 -- create default virtual machine for guest
-INSERT INTO MACHINE (MACHINE_ID, USER_ID, NAME, DESCRIPTION, OS_TYPE, STATE) 
-     VALUES ((VALUES NEXT VALUE FOR SEQ_MACHINE_ID), 2, 'Virtual machine of guest', 'Ubuntu instalation without gnome', 'Ubuntu', 'DONE');
+INSERT INTO MACHINE (MACHINE_ID, USER_ID, NAME, DESCRIPTION, OS_TYPE, STATE, MEMORY) 
+     VALUES ((VALUES NEXT VALUE FOR SEQ_MACHINE_ID), 2, 'Virtual machine of guest', 'Ubuntu instalation without gnome', 'Ubuntu', 'DONE', 192);

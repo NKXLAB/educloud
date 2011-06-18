@@ -38,7 +38,7 @@ public class CreateVmTask extends AbstractTask {
 		Template template = TemplateDao.getInstance().findById(Integer.parseInt(tplId));
 
 		// 2) select a registered host
-		Node node = NodeSelectorManager.getSelector().getNext();
+		Node node = NodeSelectorManager.getSelector().getNext(vm);
 
 		if (null == node) {
 			LOG.warn("The virtual machine #" + vmId + " cannot be created, no instance of cloudnode available");

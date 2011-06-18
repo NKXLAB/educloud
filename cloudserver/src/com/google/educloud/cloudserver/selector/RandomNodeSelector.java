@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.google.educloud.internal.entities.Node;
+import com.google.educloud.internal.entities.VirtualMachine;
 
 //Classe para implementar a selecao randomica de nodo.
 public class RandomNodeSelector implements INodeSelector {
+
+	private static Logger LOG = Logger.getLogger(RandomNodeSelector.class);
 
 	private List<Node> nodes = new ArrayList<Node>();
 
@@ -35,9 +40,10 @@ public class RandomNodeSelector implements INodeSelector {
 	}
 
 	@Override
-	public Node getNext() {
+	public Node getNext(VirtualMachine machine) {
 		Collections.shuffle(nodes);
-		return nodes.get(0);
+		Node node = nodes.get(0);
+		return node;
 	}
 
 	@Override

@@ -106,6 +106,7 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		<th>ID</th>
 		<th>Name</th>
 		<th>Description</th>
+		<th>Memory Size</th>
 		<th>OS Type</th>
 	</tr>
 	<%
@@ -120,6 +121,7 @@ Select: <a href="#" onclick="checkAll('select')">All</a> | <a href="#" onclick="
 		<td><%=tpl.getId()%></td>
 		<td><%=tpl.getName()%></td>
 		<td><%=tpl.getDescription()%></td>
+		<td><%=tpl.getMemorySize()%> MB</td>
 		<td><%=tpl.getOsType()%></td>
 	</tr>
 	<%
